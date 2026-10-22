@@ -1,0 +1,287 @@
+<title>Логістика УкроНацистів</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Розкладка: ⚠ → плитки → карта з'єднань у реальній географії (a, c) → таблиця пар → кроки → питання → запити */
+:root{
+  --bg:#eef0ee; --panel:#fbfcfb; --fg:#1b2420; --muted:#5d6a63; --line:#d3d9d5;
+  --belt:#2f8f4e; --pipe:#2a79b8; --rail:#7a4fb5; --hand:#c9731a; --none:#c8372d;
+  --ok:#2f8f4e; --warn:#c98a10; --bad:#c8372d; --idle:#8a958f;
+  --okbg:#e0f0e5; --warnbg:#f6ecd2; --badbg:#f7dcd9; --idlebg:#e4e8e5;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --panel:#1c2420; --fg:#e4ebe6; --muted:#97a69d; --line:#32403a;
+  --belt:#4cc272; --pipe:#5aa9e6; --rail:#a98ae0; --hand:#e8923a; --none:#f06a5e;
+  --ok:#4cc272; --warn:#e3ac3a; --bad:#f06a5e; --idle:#8a958f;
+  --okbg:#1e3427; --warnbg:#3a3017; --badbg:#3d201d; --idlebg:#27302b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --panel:#1c2420; --fg:#e4ebe6; --muted:#97a69d; --line:#32403a;
+  --belt:#4cc272; --pipe:#5aa9e6; --rail:#a98ae0; --hand:#e8923a; --none:#f06a5e;
+  --ok:#4cc272; --warn:#e3ac3a; --bad:#f06a5e; --idle:#8a958f;
+  --okbg:#1e3427; --warnbg:#3a3017; --badbg:#3d201d; --idlebg:#27302b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.5;
+  padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+h1{font-size:24px;line-height:1.2;margin:0;font-weight:600;text-wrap:balance}
+h2{font-size:16px;margin:0 0 10px;font-weight:600;text-wrap:balance}
+p{margin:0}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.mono{font-family:var(--mono);font-size:12px}
+.muted{color:var(--muted)}
+.alert{background:var(--badbg);border:1px solid var(--bad);border-radius:6px;padding:12px 14px}
+.alert h2{color:var(--bad);margin-bottom:6px}
+.alert ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px;min-width:0}
+.tile b{display:block;font-size:26px;line-height:1.1;font-weight:600;font-variant-numeric:tabular-nums}
+.tile span{color:var(--muted);font-size:12.5px}
+.tile.bad b{color:var(--bad)} .tile.warn b{color:var(--warn)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}
+.legend i.d{border-top-style:dashed}
+.legend em{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px;font-style:normal}
+.mapbox{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--bg)}
+svg.map{display:block;min-width:760px;width:100%;height:auto}
+svg text{font-family:var(--sans);fill:var(--fg)}
+.nd{cursor:pointer} .nd:focus{outline:none} .nd:focus circle,.nd:hover circle{stroke-width:4}
+.lbl{font-size:12px;font-weight:500} .lbl2{font-size:10.5px;fill:var(--muted)}
+.edge{fill:none;stroke-width:3} .edge.miss{stroke-dasharray:7 6} .elabel{font-size:10.5px;font-weight:500}
+.detail{margin-top:10px;font-size:13.5px;min-height:3.2em}
+.detail b{font-weight:600}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:13px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;background:var(--bg);position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--okbg);color:var(--ok)} .pill.warn{background:var(--warnbg);color:var(--warn)}
+.pill.bad{background:var(--badbg);color:var(--bad)} .pill.idle{background:var(--idlebg);color:var(--idle)}
+.by{display:inline-block;padding:0 6px;border-radius:3px;font-size:11.5px;font-weight:600;color:#fff;white-space:nowrap}
+.by.belt{background:var(--belt)} .by.pipe{background:var(--pipe)} .by.rail{background:var(--rail)} .by.hand{background:var(--hand)} .by.none{background:var(--none)}
+.steps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px 10px 46px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:12px;top:9px;width:24px;height:24px;border-radius:50%;background:var(--fg);color:var(--bg);font-weight:600;font-size:13px;display:grid;place-items:center}
+.steps b{font-weight:600} .steps small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.q{display:flex;flex-direction:column;gap:10px}
+.q h3{font-size:14.5px;margin:0;font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.opt{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--bg);min-width:0}
+.opt.rec{border-color:var(--ok);background:var(--okbg)}
+.opt h4{margin:0 0 4px;font-size:13.5px;font-weight:600}
+.opt ul{margin:4px 0 0;padding-left:18px;font-size:12.5px;display:flex;flex-direction:column;gap:2px}
+.opt .tag{font-size:11.5px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+.req{border-left:4px solid var(--rail);padding:8px 12px;background:var(--panel);border-radius:0 6px 6px 0;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.req dl{margin:6px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:2px 12px;font-size:13px}
+.req dt{color:var(--muted)} .req dd{margin:0;min-width:0}
+.ok{color:var(--ok);font-weight:600} .no{color:var(--bad);font-weight:600}
+@media (max-width:560px){.req dl{grid-template-columns:1fr}.req dt{margin-top:4px}}
+</style>
+
+<div class="wrap">
+<header>
+  <h1>Логістика · що і чим возимо між виробництвами</h1>
+  <p class="sub">Сейв <span class="mono">22.10, 03:58</span> (autosave_2). Тут лише перевезення між майданчиками: потяг, вантажівка, дрон, вручну. Стрічки, труби й живлення всередині виробництва — це налагодження, вони внизу в окремому списку.</p>
+</header>
+
+<section class="alert" aria-label="Терміново">
+  <h2>⚠ Терміново</h2>
+  <ol>
+    <li><b>Пластик не їде на стару базу.</b> У Нафтовому кластері лежить 31 921 пластику, Компʼютери й Суперкомпʼютери стоять без нього (7 з 16 на цикл). Зараз перевозити нічим, крім рук.</li>
+    <li><b>Склад-станція «Логістичний ХАБ» порожня:</b> її колія (55 ділянок) окремо від мережі з 282 ділянок, потяг туди не доїде. Рішення прийнято: колія А від «Промислових балок» (запит 4).</li>
+    <li><b>Потяг возить повітря:</b> розклад лише Нафтовий кластер ↔ Захід, станцій «Промислові балки» в розкладі нема, хоч там 19 200 балок.</li>
+  </ol>
+</section>
+
+<section class="tiles" aria-label="Підсумок">
+  <div class="tile bad"><b>2</b><span>колійні мережі не з’єднані: 282 і 55 ділянок</span></div>
+  <div class="tile warn"><b>1</b><span>потяг (2 локомотиви, 4 вагони): розклад Нафта ↔ Захід, вантажу нема</span></div>
+  <div class="tile warn"><b>0</b><span>маршрутів вантажівки: Вантажівка одна, шлях не записаний</span></div>
+  <div class="tile bad"><b>31 921</b><span>пластику лежить у Нафті, на стару базу їде 0</span></div>
+</section>
+
+<section>
+  <h2>Карта з’єднань</h2>
+  <div class="card">
+    <div class="legend">
+      <span><i style="border-color:var(--rail)"></i>колія є</span>
+      <span><i style="border-color:var(--hand)" class="d"></i>вручну / вантажівка</span>
+      <span><i style="border-color:var(--none)" class="d"></i>не з’єднано</span>
+      <span><em style="background:var(--ok)"></em>працює</span>
+      <span><em style="background:var(--warn)"></em>частково</span>
+      <span><em style="background:var(--bad)"></em>стоїть</span>
+      <span><em style="background:var(--idle)"></em>буфер повний або порожній</span>
+    </div>
+    <div class="mapbox">
+    <svg class="map" viewBox="0 0 1100 640" role="img" aria-label="Карта майданчиків і з’єднань у географії гри: північ угорі, схід праворуч">
+      <rect x="0" y="0" width="1100" height="640" fill="none"/>
+      <text x="1090" y="18" text-anchor="end" class="lbl2">пн ↑ · 1 клітинка = 8 м · 2 пікселі</text>
+
+      <!-- з’єднання -->
+      <path class="edge" stroke="var(--rail)" d="M182 100 C 320 300 480 420 568 498"/>
+      <text class="elabel" x="330" y="330" style="fill:var(--rail)" transform="rotate(32 330 330)">потяг Нафта ↔ Захід · порожній, ≈ 2,2 км</text>
+
+      <path class="edge miss" stroke="var(--hand)" d="M80 90 C 260 420 440 480 586 516"/>
+      <text class="elabel" x="150" y="372" style="fill:var(--hand)" transform="rotate(37 150 372)">пластик вручну / вантажівка</text>
+
+      <path class="edge" stroke="var(--rail)" d="M568 498 L854 498"/>
+      <text class="elabel" x="700" y="490" style="fill:var(--rail)">колія є, розкладу нема · 1,2 км</text>
+
+      <path class="edge miss" stroke="var(--none)" d="M854 498 L850 228"/>
+      <text class="elabel" x="862" y="372" style="fill:var(--none)">колії нема: ≈ 1,1 км, −99 м</text>
+
+      <path class="edge miss" stroke="var(--none)" d="M760 70 C 770 130 830 170 850 228"/>
+      <text class="elabel" x="772" y="160" style="fill:var(--none)">колії нема: перепад ≈ 320 м</text>
+
+      <!-- вузли -->
+      <g class="nd" tabindex="0" data-k="naft" transform="translate(70 80)"><circle r="12" fill="var(--warn)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="18" y="-6">Нафтохімія</text><text class="lbl2" x="18" y="8">пластик 148 · гума 149 /хв</text></g>
+      <g class="nd" tabindex="0" data-k="palyvo" transform="translate(160 170)"><circle r="12" fill="var(--warn)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="18" y="4">Паливо й 52 ЕС</text><text class="lbl2" x="18" y="18">паливо 345/хв · 26 ЕС без палива</text></g>
+      <g class="nd" tabindex="0" data-k="stNaft" transform="translate(182 100)"><rect x="-7" y="-7" width="14" height="14" fill="var(--rail)" stroke="var(--fg)" stroke-width="2"/><text class="lbl2" x="14" y="4">станція «Нафтовий кластер»</text></g>
+
+      <g class="nd" tabindex="0" data-k="ves" transform="translate(570 250)"><circle r="12" fill="var(--warn)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="18" y="-2">Вугільна ЕС · Статори</text><text class="lbl2" x="18" y="12">12 ЕС на вугіллі · статорів 9 600 (повні)</text></g>
+
+      <g class="nd" tabindex="0" data-k="stZah" transform="translate(568 498)"><rect x="-7" y="-7" width="14" height="14" fill="var(--rail)" stroke="var(--fg)" stroke-width="2"/><text class="lbl2" x="-14" y="4" text-anchor="end">станції «Захід» і «Модульні рами»</text></g>
+      <g class="nd" tabindex="0" data-k="comp" transform="translate(586 524)"><circle r="12" fill="var(--bad)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="-18" y="4" text-anchor="end">Компʼютери (стара база)</text></g>
+      <g class="nd" tabindex="0" data-k="avan" transform="translate(604 562)"><circle r="14" fill="var(--bad)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="20" y="-2">Аванпост друга</text><text class="lbl2" x="20" y="12">137 машин · 0 % · рами 1 200/1 200</text></g>
+
+      <g class="nd" tabindex="0" data-k="bio" transform="translate(706 444)"><circle r="10" fill="var(--idle)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="16" y="-2">Біопаливо</text><text class="lbl2" x="16" y="12">10 807 у контейнерах, лінія стоїть</text></g>
+      <g class="nd" tabindex="0" data-k="stBal" transform="translate(854 498)"><rect x="-7" y="-7" width="14" height="14" fill="var(--rail)" stroke="var(--fg)" stroke-width="2"/><text class="lbl2" x="14" y="4">станції «Промислові балки»</text></g>
+      <g class="nd" tabindex="0" data-k="stal" transform="translate(850 556)"><circle r="14" fill="var(--warn)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="20" y="-2">Сталь · Промислові балки</text><text class="lbl2" x="20" y="12">24–32 % · 19 200 у платформах (повні)</text></g>
+
+      <g class="nd" tabindex="0" data-k="sklad" transform="translate(850 228)"><circle r="16" fill="var(--idle)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="22" y="-2">Склад-станція</text><text class="lbl2" x="22" y="12">96 контейнерів, порожньо · колія окремо</text></g>
+      <g class="nd" tabindex="0" data-k="alum" transform="translate(760 70)"><circle r="14" fill="var(--warn)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="-20" y="-2" text-anchor="end">Алюміній</text><text class="lbl2" x="-20" y="12" text-anchor="end">17–26 % · буфер 9 600 повний</text></g>
+      <g class="nd" tabindex="0" data-k="sirka" transform="translate(1040 354)"><circle r="10" fill="var(--idle)" stroke="var(--fg)" stroke-width="2"/><text class="lbl" x="-16" y="-2" text-anchor="end">Сірка</text><text class="lbl2" x="-16" y="12" text-anchor="end">16 800 (повні)</text></g>
+    </svg>
+    </div>
+    <p class="detail" id="detail" aria-live="polite"><span class="muted">Торкнись вузла на карті, щоб побачити входи, виходи й що обмежує.</span></p>
+  </div>
+</section>
+
+<section>
+  <h2>Пари: звідки → куди</h2>
+  <div class="tw" tabindex="0"><table>
+    <thead><tr><th>Звідки → куди</th><th>Що</th><th>Чим зараз</th><th>Потік зараз / потреба</th><th>Стан</th></tr></thead>
+    <tbody>
+      <tr><td>Нафтохімія → Компʼютери (стара база)</td><td>Пластик</td><td><span class="by hand">вручну</span></td><td>31 921 лежить; потреба на повному ході 100 (Компʼютер) + 130 (Суперкомпʼютер) /хв; 2,2 км</td><td><span class="pill bad">не їде</span></td></tr>
+      <tr><td>Потяг: Нафтовий кластер ↔ Захід</td><td>нічого</td><td><span class="by rail">потяг</span></td><td>стоянка 15 с; у вагонах 1 544 балок (залишок); вантаж на платформи не подають</td><td><span class="pill warn">порожньо</span></td></tr>
+      <tr><td>Станції «Промислові балки» → кудись</td><td>Промислова балка</td><td><span class="by rail">колія є</span></td><td>у розкладі нема; 19 200 у платформах, 20 175 на карті, споживач: Важкі модульні рами</td><td><span class="pill warn">потяг не заходить</span></td></tr>
+      <tr><td>Колія Сталь → Склад-станція</td><td>усе, що возимо</td><td><span class="by none">нема</span></td><td>≈ 1,1 км, перепад −99 м, ухил ≈ 9 %; рішення А, запит 4; сталевих балок на карті 61</td><td><span class="pill bad">будувати</span></td></tr>
+      <tr><td>Аванпост друга → Склад-станція (Хаб)</td><td>Модульна рама</td><td><span class="by none">нема</span></td><td>2 395 на карті, номінал 36/хв; їхати вже по колії А</td><td><span class="pill idle">після колії</span></td></tr>
+      <tr><td>Алюміній → Склад-станція (Хаб)</td><td>Алюмінієвий корпус, Дюралюмінієвий лист</td><td><span class="by none">нема</span></td><td>по 4 800 у контейнерах; перепад ≈ 320 м, колія ≥ 2,8 км</td><td><span class="pill idle">відкласти</span></td></tr>
+      <tr><td>Вугільна ЕС (Статори) → Хаб</td><td>Статор</td><td><span class="by none">нема</span></td><td>9 600 у 4 контейнерах, потреба 500 на Електромагнітні стрижні</td><td><span class="pill idle">після колії</span></td></tr>
+      <tr><td>Біопаливо → Спалювач біомаси (Сірка)</td><td>Тверде біопаливо</td><td><span class="by none">нема</span></td><td>10 807 лежить, ≈ 1,4 км; альтернатива ЛЕП із запиту 3</td><td><span class="pill idle">варіант до запиту 3</span></td></tr>
+    </tbody>
+  </table></div>
+  
+</section>
+
+<section>
+  <h2>Що зробити по черзі</h2>
+  <ol class="steps">
+    <li><b>Пластик на стару базу, поки нема постійного маршруту:</b> Вантажівкою (є 1) з контейнерів «Пластик» у Нафтовому кластері до контейнера Компʼютерів, 6 800 за рейс.<small>Цифри: 2,2 км, рейс ≈ 11,6 хв, повний кузов набирається за 69 хв. Орієнтовно, пробний рейс уточнить.</small></li>
+    <li><b>Постійно — потяг, що вже їздить Нафта ↔ Захід</b> (питання 2). Йому потрібні лише стрічки до платформ на обох кінцях: це налагодження виробництв, список внизу.</li>
+    <li><b>Колія А</b> від станції «Промислові балки» до Склад-станції (запит 4). Після цього додати у розклад потяга Склад-станцію.</li>
+    <li><b>Сталеві балки для колії:</b> їх 61, випуску нема (запит 5).</li>
+    <li><b>Розклад:</b> додати «Північ/Південь — Промислові балки» і Склад-станцію, коли колія буде. Тоді балки, рами й пластик поїдуть на склад.</li>
+  </ol>
+</section>
+
+<section class="q">
+  <h2>Питання до Олександра</h2>
+
+  <div class="card q">
+    <h3>1. Колії зі Склад-станцією «Логістичний ХАБ» · рішення Олександра: варіант А</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag">Рекомендовано</span><h4>А · від станції «Промислові балки» на південь</h4>
+        <p>Місце: мітка «Промислова балка» + 30 м на пн (a 107, c 34) → «Міст» + 340 м на пн-сх (a 103, c −100).</p>
+        <ul><li>+ найкоротше: ≈ 1,1 км, ухил ≈ 9 % (в межах 1:8)</li><li>+ усі існуючі станції (Нафта, Захід, Сталь) разом виходять на склад</li><li>− сталевих балок на колію: 61 є, кошторис за довжиною не перевірено</li><li>− трасу над провалом треба промітити</li></ul></div>
+      <div class="opt"><h4>Б · від станції «Захід» (Аванпост друга)</h4>
+        <p>Місце: (a −39, c 35) → Склад-станція.</p>
+        <ul><li>+ ухил менший: перепад −73 м, ≈ 5 %</li><li>− довше: ≈ 1,5 км</li><li>− ті самі сталеві балки: ✖</li></ul></div>
+      <div class="opt"><h4>В · вантажівка по дорозі, без колії</h4>
+        <ul><li>+ нічого не будувати з колії; Вантажівка є</li><li>+ Станція вантажівок: 15 модульних рам ✓, 20 роторів ✓, 50 кабелю ✓</li><li>− 6 800–9 600 за рейс, потяг у 2–3 рази місткіший</li><li>− двигуни дефіцитні (бракує 101)</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card q">
+    <h3>2. Чим возити пластик на стару базу?</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag">Рекомендовано</span><h4>А · наявний потяг Нафта → Захід</h4>
+        <p>Нафтовий кластер (4 платформи завантаження) → «Захід» (2 платформи розвантаження), дві стрічки до платформ ≈ 290 м і ≈ 90 м роблять виробництва.</p>
+        <ul><li>+ потяг уже їздить, рейс ≈ 7 хв, 4 вагони вміщують понад 20 000 пластику</li><li>+ далі той самий потяг іде на Склад-станцію (колія А)</li><li>− поки стрічок до платформ нема, не працює</li></ul></div>
+      <div class="opt"><h4>Б · Вантажівка вручну</h4>
+        <ul><li>+ працює сьогодні, 0 будматеріалів</li><li>− 6 800 за рейс, ≈ 11,6 хв, потрібен гравець або записаний шлях</li></ul></div>
+      <div class="opt"><h4>В · Порти дронів</h4>
+        <ul><li>− 10 Блоків радіокерування на порт: 0 є ✖</li><li>− 9 слотів за рейс, мало для 230/хв</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card q">
+    <h3>3. Алюміній → Склад-станція: робити зараз?</h3>
+    <div class="opts">
+      <div class="opt rec"><span class="tag">Рекомендовано</span><h4>А · відкласти до колії через Кварц</h4>
+        <ul><li>+ у контейнерах по 4 800 корпусів і листів, на віхи до Хабу досить</li><li>+ перепад Алюмінію й Склад-станції ≈ 320 м, колія ≥ 2,8 км (ухил ≤ 1:8), у плані 14-залізниця</li></ul></div>
+      <div class="opt"><h4>Б · дві Станції вантажівок + дорога вниз</h4>
+        <ul><li>+ ≈ 7,3 хв туди-назад, 3 800 корпусів і 5 600 листів за рейс</li><li>− двигуни з резерву 11-алюміній (45), Вантажівка ще 15</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Передано виробництвам: налагодження, не логістика</h2>
+  <div class="card"><ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+    <li><b>Нафтохімія / Енергосистема:</b> живлення на 6 Свердловинних помп (a −273…−267, c −145…−138), нафти бракує 900/хв.</li>
+    <li><b>Нафтохімія:</b> стрічки від контейнерів «Пластик» (−236; −129) до 4 платформ станції «Нафтовий кластер» ≈ 290 м.</li>
+    <li><b>Аванпост друга:</b> вихід 9 східних Збирачів «Модульна рама» і стрічка з контейнера (Запит 1 від модульних рам); платформи станцій «Захід» і «Модульні рами» стрічками не підключені.</li>
+    <li><b>Стара база:</b> стрічка від платформ розвантаження «Захід» до Компʼютерів ≈ 90 м.</li>
+    <li><b>Склад-станція:</b> живлення на ДИВО-передавач (111,8; −101,6).</li>
+    <li><b>Паливо:</b> 26 Паливних ЕС на кінці труби без палива (розподіл по трубі).</li>
+    <li><b>Стара база:</b> 3 плавильні «Залізний зливок» (21–23; 9) без виходу, бури 0 %: підключити або знести.</li>
+  </ul></div>
+</section>
+
+<section>
+  <h2>Запити, надіслані Планувальнику</h2>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div class="req"><b>Запит 4 · колія Склад-станція ↔ мережа</b>
+      <dl><dt>Що</dt><dd>Колія ≈ 1,1 км (ухил ≈ 9 %), одноколійна, без нових станцій</dd>
+      <dt>Навіщо</dt><dd>Склад-станція порожня; чекають 31 921 пластику, 2 395 модульних рам, 20 175 балок</dd>
+      <dt>Звідки → куди</dt><dd>«Промислові балки» (мітка + 30 м на пн) → «Міст» + 340 м на пн-сх</dd>
+      <dt>Варіанти</dt><dd>А від Сталі · Б від Заходу · В вантажівка (див. питання 1)</dd>
+      <dt>Стан</dt><dd>варіант А обрано 22.10, чекає Планувальника</dd></dl></div>
+    <div class="req"><b>Запит 5 · Сталева балка на Сталі</b>
+      <dl><dt>Що</dt><dd>2 Будівники «Сталева балка» біля Ливарень, ≈ 30/хв (орієнтовно; уточнити пробною ділянкою колії)</dd>
+      <dt>Навіщо</dt><dd>Колія й вагони потребують сталевих балок, на карті 61, випуску нема. Сталевих зливків на Сталі вистачає: факт 180/хв</dd>
+      <dt>Звідки → куди</dt><dd>Сталь → контейнер біля станції «Промислові балки»</dd>
+      <dt>Стан</dt><dd>новий</dd></dl></div>
+  </div>
+</section>
+</div>
+
+<script>
+var D={
+naft:'<b>Нафтохімія (Іван).</b> Входи: нафта по трубі, вода. Виходи: пластик 148/хв, гума 149/хв, смола 488/хв, ДИВО-передавачі ×2 і контейнери на місці. Обмежує: нафта (свердловинні помпи без живлення). Станція завантаження поруч, але без стрічок.',
+palyvo:'<b>Паливо й ЕС.</b> 4 переробні заводи «Паливо» дають 300/хв, ще 40 і 5. Труба на 48 Паливних ЕС і 4 ЕС окремо. На кінці труби 26 ЕС без палива: це розподіл по трубі, не загальний обсяг (не перевірено).',
+stNaft:'<b>Станція «Нафтовий кластер».</b> 4 платформи завантаження: порожні, жодної стрічки. Розклад потяга: стоянка 15 с.',
+ves:'<b>Вугільна ЕС і Статори.</b> 12 Вугільних ЕС, кожні 4 живляться одним Бурильником 1 (100 %). Лінія Статорів стоїть: 4 контейнери повні (9 600), один Збирач без живлення. Споживач — Хаб.',
+stZah:'<b>Станції «Захід — Модульна плата» і «Модульні рами».</b> 4 платформи на ланцюжку: розвантаження, завантаження, завантаження, розвантаження. Стрічок до них нема, порожні.',
+comp:'<b>Компʼютери, стара база.</b> Входи вручну в контейнери: плата 4 684, кабель, мідний лист. Пластику нема (7 у машині). Виробник «Компʼютер» ×2,5 і Суперкомпʼютер стоять. Вихід: контейнер, далі вручну.',
+avan:'<b>Аванпост друга (Богдан).</b> Руда на місці (11 Бурильників 2) → 32 плавильні → модульні рами. Вихід: контейнер 1 200 (повний). 9 з 18 Збирачів «Модульна рама» без виходу. Платформи поруч не підключені.',
+bio:'<b>Біопаливо.</b> 10 807 твердого біопалива в 8 контейнерах, 4 машини стоять (контейнери ще не повні, ймовірно нема листя й деревини на вході). Спалювач біомаси біля Сірки його не отримує: це альтернатива ЛЕП із запиту 3 від Енергосистеми, відстань ≈ 1,4 км.',
+stBal:'<b>Станції «Промислові балки».</b> Північ і Південь, 4 платформи завантаження, у кожній 4 800 балок. Потяг не заходить: станцій нема в розкладі.',
+stal:'<b>Сталь · Промислові балки (Богдан).</b> Бетон, сталева труба, сталевий зливок → промислові балки 20/хв з 64. Обмежує: платформи повні. Сталевих балок не робить, а колії вони потрібні.',
+sklad:'<b>Склад-станція «Логістичний ХАБ».</b> 96 Промислових контейнерів, 4 платформи (2 розвантаження, 2 завантаження), колія 55 ділянок окремо від мережі. Порожньо, ДИВО-передавач без живлення.',
+alum:'<b>Алюміній (Олександр).</b> Корпус 20/хв, лист 31/хв, кремній 25/хв надлишку. Виходи: контейнери по 4 800 (корпус, лист, кристали) і 2 400 зливків, усе повне. Колії нема, перепад до Склад-станції ≈ 320 м.',
+sirka:'<b>Сірка.</b> 7 контейнерів, 16 800 сірки, 3 бури без струму (мережа 23), 7 контейнерів повні. Нічого не їде, споживача сірки поки нема.'
+};
+var el=document.getElementById('detail');
+function show(k){if(D[k])el.innerHTML=D[k];}
+Array.prototype.forEach.call(document.querySelectorAll('.nd'),function(n){
+  var k=n.getAttribute('data-k');
+  n.addEventListener('click',function(){show(k)});
+  n.addEventListener('focus',function(){show(k)});
+  n.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();show(k)}});
+});
+</script>

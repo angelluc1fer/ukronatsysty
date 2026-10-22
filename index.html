@@ -1,0 +1,64 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>УкроНацисти · стан гри Satisfactory</title>
+<style>:root{--bg:#F4F2EE;--card:#FFFFFF;--ink:#1F2328;--mut:#6B7078;--line:#D9D6CF;--box:#F3F1EC;--ok:#2E8B57;--warn:#C77700;--bad:#C8382C;--acc:#2F6FB5;--okbg:#E6F3EB;--warnbg:#FBF0DC;--badbg:#FAE6E3;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+h1{margin:0;font-size:22px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+h2{font-size:16px;margin:26px 0 8px;display:flex;align-items:center;gap:8px}h2 .n{font:600 12px var(--f-mono);color:var(--mut);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+button.theme{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alert{border-radius:12px;padding:10px 14px;margin:0 0 8px;border:1px solid var(--bad);background:var(--badbg)}.alert b{color:var(--bad)}.alert .why{color:var(--mut);font-size:13px;margin-top:2px}
+.alert.warn{border-color:var(--warn);background:var(--warnbg)}.alert.warn b{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;border-top:4px solid var(--mut)}
+.tile.ok{border-top-color:var(--ok)}.tile.warn{border-top-color:var(--warn)}.tile.bad{border-top-color:var(--bad)}
+.tile .l{color:var(--mut);font-size:12.5px}.tile .v{font:700 24px/1.2 var(--f-mono)}.tile .v small{font:500 13px var(--f-body);color:var(--mut)}.tile .p{font-size:12.5px;color:var(--mut)}
+.st{font-weight:600;white-space:nowrap}.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.mut{color:var(--mut)}
+.ic{display:inline-block;width:28px;height:28px;background-size:contain;background-repeat:no-repeat;background-position:center;flex:none;vertical-align:middle}.ic.s{width:20px;height:20px}
+.ic.none{border:1px dashed var(--line);border-radius:6px}
+.chain{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:34px 1fr minmax(160px,300px);gap:6px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.arrow{text-align:center;color:var(--mut);font-size:13px;line-height:1.1;padding:2px 0}
+.step .nm{font-weight:600}.step .meta{color:var(--mut);font-size:12.5px}
+.rate{font:600 13px var(--f-mono);display:flex;justify-content:space-between;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--box);border:1px solid var(--line);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}.bar.mut i{background:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.buf .t{display:flex;gap:8px;align-items:center}.buf .t b{flex:1}.buf .num{font:600 13px var(--f-mono);margin-top:6px}.buf .note{color:var(--mut);font-size:12.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600;font-size:12.5px}
+td.num,th.num{text-align:right;font-family:var(--f-mono);white-space:nowrap}.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.tw table{min-width:560px}
+tr.bad td:first-child{box-shadow:inset 4px 0 var(--bad)}tr.warn td:first-child{box-shadow:inset 4px 0 var(--warn)}tr.ok td:first-child{box-shadow:inset 4px 0 var(--ok)}
+.iw{display:flex;gap:8px;align-items:center}
+ul.lim{margin:0;padding-left:20px}ul.lim li{margin:3px 0}
+ol.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.todo li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative}
+ol.todo li:before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 13px/26px var(--f-mono);text-align:center}
+ol.todo .why{color:var(--mut);font-size:13.5px;margin-top:2px}ol.todo .num{font:600 12.5px var(--f-mono);margin-top:3px;color:var(--acc)}
+.series{display:grid;grid-template-columns:minmax(150px,1.2fr) auto minmax(180px,2fr);gap:6px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.series .mm{font:600 12.5px var(--f-mono);color:var(--mut);white-space:nowrap}.series .mm b{color:var(--ink)}
+svg.sp{width:100%;height:auto;display:block}svg.sp .ax{stroke:var(--line)}svg.sp .ln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round}svg.sp .dot{fill:var(--acc)}svg.sp text{fill:var(--mut);font:10px var(--f-mono)}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.pg .v{font-size:16px}
+footer{margin-top:28px;color:var(--mut);font-size:12.5px}
+@media (max-width:640px){.step{grid-template-columns:34px 1fr}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}}
+
+</style></head><body><div class="wrap">
+<header><div><h1>УкроНацисти · стан гри Satisfactory</h1><div class="sub">Викладено 22.10 23:00 · сторінок 6 · дата на плитці — коли сторінку оновлено</div></div><button class="theme" id="th" type="button">◐ тема</button></header>
+
+<div class="tiles"><div class="tile mut"><div class="l">Стан</div><div class="v">2 <small>стор.</small></div></div><div class="tile mut"><div class="l">Схеми будівництв</div><div class="v">3 <small>стор.</small></div></div><div class="tile mut"><div class="l">Виробництва</div><div class="v">1 <small>стор.</small></div></div></div>
+
+
+
+
+
+
+
+<section><h2>Стан</h2><div class="grid"><div class="tile mut pg"><div class="v"><a href="stan/enerhosystema.html">Енергосистема · стан 22.10</a></div><div class="p">stan/enerhosystema.html</div><div class="p">оновлено 22.10 04:12</div></div><div class="tile mut pg"><div class="v"><a href="stan/lohistyka.html">Логістика УкроНацистів</a></div><div class="p">stan/lohistyka.html</div><div class="p">оновлено 22.10 21:49</div></div></div></section>
+<section><h2>Схеми будівництв</h2><div class="grid"><div class="tile mut pg"><div class="v"><a href="skhemy/02-enerhetyka/naftova-enerhetyka.html">Нафтова енергосистема</a></div><div class="p">skhemy/02-enerhetyka/naftova-enerhetyka.html</div><div class="p">оновлено 22.10 03:37</div></div><div class="tile mut pg"><div class="v"><a href="skhemy/11-aliuminii/cherha1.html">Олександр · Боксит + Вугілля · Алюмінієвий корпус + Дюралюмінієвий лист · черга 1 · 240 зливків/хв</a></div><div class="p">skhemy/11-aliuminii/cherha1.html</div><div class="p">оновлено 11.10 00:08</div></div><div class="tile mut pg"><div class="v"><a href="skhemy/16-elektronika/cherha1.html">Олександр · Мідь + Кварц · Суперкомпʼютер + Блок радіокерування · черга 1 · масштаб А</a></div><div class="p">skhemy/16-elektronika/cherha1.html</div><div class="p">оновлено 11.10 01:29</div></div></div></section>
+<section><h2>Виробництва</h2><div class="grid"><div class="tile mut pg"><div class="v"><a href="vyrobnytstva/modulni-ramy.html">Виробництво · модульні рами</a></div><div class="p">vyrobnytstva/modulni-ramy.html</div><div class="p">оновлено 22.10 22:38</div></div></div></section>
+<footer>Сторінки робить асистент Олександра; оновлює /поділитись · згенеровано tools\інфо\інфо.js</footer>
+</div><script>
+(function(){var b=document.getElementById('th'),r=document.documentElement,k='info-theme';
+try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){}
+b.onclick=function(){var dark=r.getAttribute('data-theme')?r.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();
+</script></body></html>
