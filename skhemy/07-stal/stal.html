@@ -35,7 +35,7 @@ button:hover{border-color:var(--mut)}button.on{background:var(--ink);color:var(-
 .k-machine .bx,.k-gen .bx,.k-source .bx{stroke:var(--c);stroke-width:2px}
 .st-ok .bx{fill:color-mix(in srgb,var(--ok) 9%,var(--box))}.st-part .bx{fill:color-mix(in srgb,var(--warn) 18%,var(--box));stroke-dasharray:5 3}.st-off .bx{fill:color-mix(in srgb,var(--bad) 16%,var(--box));stroke:var(--bad);stroke-dasharray:3 3}
 .k-sink .bx{fill:color-mix(in srgb,var(--acc) 12%,var(--box))}.k-split .sm,.k-merge .sm{fill:var(--ink)}.k-split .nose,.k-merge .nose{stroke:var(--card)}
-.pt{fill:var(--card);stroke:var(--mut);stroke-width:1px}.pt.u{fill:var(--ink);stroke:var(--ink)}.z0 .pt{display:none}
+.pt{fill:var(--card);stroke:var(--mut);stroke-width:1px}.pt.u{fill:var(--ink);stroke:var(--ink)}.z0 .pt,.z1 .pt,.z0 .nd .nose{display:none}   /* порти — лише близько (z2+), стрілка будівлі — не на «далеко» */
 .dim .eg,.dim .nd{opacity:.22}.dim .up,.dim .dn,.dim .sel{opacity:1}
 .eg.up .cs{stroke:var(--acc);opacity:1}.eg.dn .cs{stroke:var(--warn);opacity:1}.eg.sel .cs{stroke:var(--ink);opacity:1;stroke-width:calc(var(--bw) + 6px)}
 .nd.up .bx,.nd.up .sm{stroke:var(--acc);stroke-width:2.6px}.nd.dn .bx,.nd.dn .sm{stroke:var(--warn);stroke-width:2.6px}.nd.sel .bx,.nd.sel .sm,.nd.sel .jt{stroke:var(--acc);stroke-width:3.6px}
@@ -604,7 +604,6 @@ function wrap(s, max = 15) {   // довга назва з гри — у 2–3 �
   if (bm > max * 1.35) for (let i = 1; i < w.length; i++) for (let j = i + 1; j < w.length; j++) { const L = [w.slice(0, i).join(' '), w.slice(i, j).join(' '), w.slice(j).join(' ')], m = Math.max(...L.map(x => x.length)); if (m < bm - 2) { bm = m; best = L; } }
   return best;
 }
-const LH = 15;   // висота рядка підпису, px
 const FACT = SP['факт'] || {};
 const HIST = SP['історія'] || null;   // мін / середнє / макс по сейвах (node tools\схема\історія.js)
 // коментарі на схемі — у цьому браузері (localStorage) під сталим ключем: «ключ» → «файл» → «назва» (назва міняється — коментарі лишаються); «Скопіювати все» → у чат
@@ -690,20 +689,21 @@ function draw() {
     if (!onFloor(fr.z)) continue;
     const tr = fr.frame && fr.rot ? ` transform="rotate(${fr.rot} ${fr.x + fr.w / 2} ${fr.y + fr.d / 2})"` : '', [lx, ly] = frPt(fr, 1.5, 1.5);
     W.push(`<g class="fr" data-i="${esc(fr.inst || fr.bp)}"${tr}><rect class="frb" x="${fr.x}" y="${fr.y}" width="${fr.w}" height="${fr.d}"/><g class="grid">${fl(fr.x, fr.y, fr.w, fr.d)}</g></g>`);
-    LB.push({ x: lx, y: ly, t: fr.inst || `Проєктувальник ${R.bpGeom(SP['креслення'][fr.bp]).S / 8 - 3} · ${fr.w}×${fr.d} м`, c: fr.inst ? 'lfr' : 'lfr s', p: 10, mk: 0, al: 'l' });
-    if (fr.inst) LB.push({ x: lx, y: ly, dy: 22, t: '«' + fr.bp + '»', c: 'lfr s', p: 2, mk: 3, al: 'l' });
-    if (!fr.inst) for (let i = 0; i < fr.w / 8; i++) LB.push({ x: fr.x + 4 + 8 * i, y: fr.y - 1.6, t: String.fromCharCode(1040 + i), c: 'lax', p: 9, mk: 0 }), i < fr.d / 8 && LB.push({ x: fr.x - 1.8, y: fr.y + 4 + 8 * i, t: String(i + 1), c: 'lax', p: 9, mk: 0 });
+    LB.push({ x: lx, y: ly, t: fr.inst || `Проєктувальник ${R.bpGeom(SP['креслення'][fr.bp]).S / 8 - 3} · ${fr.w}×${fr.d} м`, c: fr.inst ? 'lfr' : 'lfr s', s: 'frm', al: 'l' }); const frL = LB[LB.length - 1];
+    if (fr.inst) LB.push({ x: lx, y: ly, t: '«' + fr.bp + '»', c: 'lfr s', s: 'frs', pn: frL, side: 1, al: 'l' });
+    if (!fr.inst) for (let i = 0; i < fr.w / 8; i++) LB.push({ x: fr.x + 4 + 8 * i, y: fr.y - 1.6, t: String.fromCharCode(1040 + i), c: 'lax', s: 'ax' }), i < fr.d / 8 && LB.push({ x: fr.x - 1.8, y: fr.y + 4 + 8 * i, t: String(i + 1), c: 'lax', s: 'ax' });
   }
+  const tots = G.edges.map(e => e.tot).sort((a, b) => b - a), majorT = Math.max(1e-6, tots[Math.floor(tots.length * .2)] || 0);   // головні потоки — найбільші 20 % стрічок
   for (const e of G.edges) {
     if (!e.pts.some(p => onFloor(p[2]))) continue;
     const d = 'M' + e.pts.map(p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join('L'), it = mainItem(e);
     W.push(`<g class="eg ${e.m === 'p' ? 'pi' : 'be'}${e.tot < 1e-6 ? ' zero' : ''}${e.tot >= e.cap - .01 && e.offT > e.tot + .01 ? ' neck' : ''}" data-e="${e.id}" style="--c:${col(it)}"><path class="cs" d="${d}"/><path class="co" d="${d}"/><path class="hit" d="${d}"/></g>`);
     let best = 0, bi = 1; for (let i = 1; i < e.pts.length; i++) { const L = Math.hypot(e.pts[i][0] - e.pts[i - 1][0], e.pts[i][1] - e.pts[i - 1][1]); if (L > best) { best = L; bi = i; } }
     const a = e.pts[bi - 1], b = e.pts[bi];
-    if (best > 1.5) LB.push({ x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, t: f1(e.tot) + (e.game != null ? ' / ' + f1(e.game) : '') + (e.tot >= e.cap - .01 ? '!' : ''), ic: it, c: 'led' + (e.tot < 1e-6 ? ' z' : ''), p: 4, mk: 6, e });
+    if (best > 1.5) LB.push({ x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, t: f1(e.tot) + (e.game != null ? ' / ' + f1(e.game) : '') + (e.tot >= e.cap - .01 ? '!' : ''), ic: it, c: 'led' + (e.tot < 1e-6 ? ' z' : ''), s: e.tot < 1e-6 ? 'fl0' : e.tot >= majorT ? 'fl' : 'fl2', ext: best, ov: .9, e });
     for (let i = 1; i < e.pts.length; i++) if (Math.abs(e.pts[i][2] - e.pts[i - 1][2]) > .3 && Math.hypot(e.pts[i][0] - e.pts[i - 1][0], e.pts[i][1] - e.pts[i - 1][1]) < .2) {
       W.push(`<circle class="lift" cx="${e.pts[i][0]}" cy="${e.pts[i][1]}" r="1.1" style="--c:${col(it)}"/>`);
-      LB.push({ x: e.pts[i][0], y: e.pts[i][1] - 2.2, t: `↕ ${f1(Math.abs(e.pts[i][2] - e.pts[i - 1][2]))} м`, c: 'llf', p: 5, mk: 4 });
+      LB.push({ x: e.pts[i][0], y: e.pts[i][1] - 2.2, t: `↕ ${f1(Math.abs(e.pts[i][2] - e.pts[i - 1][2]))} м`, c: 'llf', s: 'lf' });
     }
   }
   for (const n of G.nodes) {
@@ -721,24 +721,23 @@ function draw() {
     }
     W.push(`<g class="nd k-${n.kind}${st ? ' st-' + st : ''}" data-n="${esc(n.id)}" style="--c:${col(it)}" transform="translate(${n.x.toFixed(2)},${n.y.toFixed(2)}) rotate(${n.ang})">${body}${ports}</g>`);
     const ext = Math.abs(Math.cos(n.ang * Math.PI / 180)) * n.l + Math.abs(Math.sin(n.ang * Math.PI / 180)) * n.w;   // ширина будівлі на екрані, м
-    const fitK = (lines, fs, ic) => (Math.max(...lines.map(s => s.length)) * fs * .6 + (ic ? fs + 3 : 0) + 6) / (Math.max(ext, 1) * 1.6);   // зум, з якого підпис влазить
-    let half = 0;
-    if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y, t: n.short, c: 'lnd s rzn', p: 6, mk: 3.5 });
+    let nameL = null;
+    if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y, t: n.short, c: 'lnd s rzn', s: 'rz' });
     else if (!/joint|inlet|outlet/.test(n.kind)) {
-      const L1 = wrap(n.short), small = !big, k1 = small ? (n.kind === 'hub' ? 16 : 10) : Math.max(1.4, fitK(L1, 13, it)); half = L1.length * LH / 2;
-      LB.push({ x: n.x, y: n.y, t: L1, ic: big ? it : null, c: 'lnd' + (small ? ' s' : ''), p: small ? 1 : 7, mk: k1 });
-      if (big && it) LB.push({ x: n.x, y: n.y, t: [], ic: it, io: 1, c: 'lnd io', p: 6.5, mk: 1.4, xk: k1 });   // поки назва не влазить — лише іконка
-      if (big && n.short !== n.name) { const L2 = wrap(n.name, 18); LB.push({ x: n.x, y: n.y, dy: half + 4 + L2.length * 13 / 2, t: L2, c: 'lrc', p: 3, mk: Math.max(k1, fitK(L2, 11.5)) }); }
+      const L1 = wrap(n.short), small = !big;
+      LB.push(nameL = { x: n.x, y: n.y, t: L1, ic: big ? it : null, c: 'lnd' + (small ? ' s' : ''), s: small ? 'nms' : 'nm', ext: small ? 0 : ext, ov: 1.25 });
+      if (big && it) LB.push({ x: n.x, y: n.y, t: [], ic: it, io: 1, c: 'lnd io', s: 'io', ext, xp: nameL }), nameL.alt = LB[LB.length - 1];   // поки назва не влазить — лише іконка
+      if (big && n.short !== n.name) LB.push({ x: n.x, y: n.y, t: wrap(n.name, 18), c: 'lrc', s: 'rc', pn: nameL, side: 1, ext, ov: 1.25 });
     }
-    if (big && (n.kind === 'machine' || n.kind === 'gen' || n.kind === 'source')) LB.push({ x: n.x, y: n.y, dy: -(Math.max(half, LH / 2) + 10), t: (n.clock !== 100 ? f1(n.clock) + ' % → ' : '') + pct(n.r), c: 'lpc st-' + (st || 'ok'), p: 6, mk: 3.2 });
-    if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y + 2.4, t: n.outE.map(e => f1(e.tot)).join(' | ') + ' ← ' + f1(n.inE.reduce((s, e) => s + e.tot, 0)), c: 'lrz', p: 5, mk: 7 });
-    if (n.kind === 'joint' || n.kind === 'inlet' || n.kind === 'outlet') LB.push({ x: n.x, y: n.y - 1.8, t: n.short, c: 'ljt', p: 2, mk: 7 });
+    if (big && (n.kind === 'machine' || n.kind === 'gen' || n.kind === 'source')) LB.push({ x: n.x, y: n.y, t: (n.clock !== 100 ? f1(n.clock) + ' % → ' : '') + pct(n.r), c: 'lpc st-' + (st || 'ok'), s: 'pc', pn: nameL, side: -1, ext, ov: 1.25 });
+    if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y + 2.4, t: n.outE.map(e => f1(e.tot)).join(' | ') + ' ← ' + f1(n.inE.reduce((s, e) => s + e.tot, 0)), c: 'lrz', s: 'rzo' });
+    if (n.kind === 'joint' || n.kind === 'inlet' || n.kind === 'outlet') LB.push({ x: n.x, y: n.y - 1.8, t: n.short, c: 'ljt', s: 'jt' });
   }
   (SP['виправити'] || []).forEach((f, i) => { const n = G.byId[f['де']], fr = G.frames.find(x => (x.inst || x.bp) === f['де']); const p = n ? [n.x, n.y, n.z] : fr ? [...frPt(fr, fr.w - 4, 4), fr.z] : null;
-    if (p && onFloor(p[2])) LB.push({ x: p[0], y: p[1], dy: -16, t: String(i + 1), c: 'lfix' + (f['терміново'] ? ' u' : ''), p: 11, mk: 0 }); });
-  const cs = {}; for (const key in COMM) { const p = commPos(key); if (p && onFloor(p[2])) { const q = Math.round(p[0]) + ',' + Math.round(p[1]); cs[q] = (cs[q] || 0) + 1; LB.push({ x: p[0], y: p[1], dy: 14, t: '💬', c: 'lcm', p: 10, mk: 0 }); } }
+    if (p && onFloor(p[2])) LB.push({ x: p[0], y: p[1], dy: -16, t: String(i + 1), c: 'lfix' + (f['терміново'] ? ' u' : ''), s: 'fix' }); });
+  const cs = {}; for (const key in COMM) { const p = commPos(key); if (p && onFloor(p[2])) { const q = Math.round(p[0]) + ',' + Math.round(p[1]); cs[q] = (cs[q] || 0) + 1; LB.push({ x: p[0], y: p[1], dy: 14, t: '💬', c: 'lcm', s: 'cmt' }); } }
   world.innerHTML = W.join('');
-  LB.sort((a, b) => b.p - a.p);
+  LB.sort((a, b) => SZ[b.s][4] - SZ[a.s][4]);
   if (sel) highlight(sel);
   chips(); place();
 }
@@ -755,30 +754,51 @@ function setT(nk, ntx, nty) {
   svg.setAttribute('class', 'z' + (k < 2.5 ? 0 : k < 6 ? 1 : k < 14 ? 2 : 3));
   if (!raf) raf = requestAnimationFrame(() => { raf = 0; place(); });
 }
+// Деталі за зумом (п. 16): розмір підпису на екрані росте з зумом від fMin (на kMin) до fMax (на kMax), логарифмічно; нижче kMin підпис ховається
+// (keep — ніколи не ховається, лишається fMin). Підпис будівлі чи стрічки не ширший за саму будівлю (ext·ov): не влазить — ховається, а не налазить.
+// Пріоритет при зіткненні: ⚠ → № → % → потоки → Р/З → рецепт → вузли.
+const SZ = {   // [kMin, kMax, fMin, fMax, пріоритет, keep]
+  fix: [1, 8, 12, 15, 11, 1], frm: [1, 8, 11, 18, 10, 1], cmt: [1, 8, 12, 15, 10, 1], ax: [2.5, 8, 9, 12, 9], frs: [3, 10, 9, 12, 2],
+  pc: [3.4, 9, 9, 12.5, 8], io: [2.5, 9, 9, 14, 6.9], nm: [4.5, 12, 9, 13, 7], fl: [2.6, 10, 9, 12, 6], fl2: [6, 12, 9, 12, 5.2], rz: [6, 18, 9, 12, 5],
+  lf: [6, 14, 9, 12, 4.5], rzo: [10, 20, 9, 11, 4], fl0: [12, 20, 9, 12, 4], rc: [8, 16, 8.5, 11.5, 3], jt: [9, 18, 9, 11, 2], nms: [8, 16, 9, 12, 1] };
 function place() {
   const vw = stage.clientWidth, vh = stage.clientHeight, cell = 64, occ = new Map(), out = [];
   const hit = r => { for (let gx = Math.floor(r[0] / cell); gx <= Math.floor(r[2] / cell); gx++) for (let gy = Math.floor(r[1] / cell); gy <= Math.floor(r[3] / cell); gy++) for (const q of occ.get(gx + ',' + gy) || []) if (q[0] < r[2] && q[2] > r[0] && q[1] < r[3] && q[3] > r[1]) return true; return false; };
   const add = r => { for (let gx = Math.floor(r[0] / cell); gx <= Math.floor(r[2] / cell); gx++) for (let gy = Math.floor(r[1] / cell); gy <= Math.floor(r[3] / cell); gy++) { const key = gx + ',' + gy; if (!occ.has(key)) occ.set(key, []); occ.get(key).push(r); } };
+  const calc = L => {   // розмір, іконка й видимість за зумом (без зіткнень)
+    const [k0, k1, f0, f1z, , keep] = SZ[L.s]; L._on = false;
+    if (!keep && k < k0) return;
+    const sx = L.x * k + tx, sy = L.y * k + ty; if (sx < -80 || sy < -30 || sx > vw + 80 || sy > vh + 30) return;
+    const fs = f0 + (f1z - f0) * Math.min(1, Math.max(0, Math.log(k / k0) / Math.log(k1 / k0)));
+    const lines = Array.isArray(L.t) ? L.t : [String(L.t)], ch = Math.max(0, ...lines.map(x => x.length));
+    const icOk = L.ic && DT.icons && DT.icons[L.ic] && (L.io || k >= (L.e ? (L.s === 'fl' ? 6 : 9) : 4));
+    for (const icn of icOk ? [1, 0] : [0]) {   // не влізло з іконкою — спробувати без
+      let f = fs;
+      if (L.ext) f = Math.min(f, (L.ext * k * (L.ov || 1) - 6 - (icn ? 3 : 0)) / (ch * .6 + (icn ? 1 : 0)));
+      if (f < f0 - .01 && !keep) continue;
+      if (!ch && !icn) continue;
+      L._on = true; L._fs = Math.max(f, keep ? f0 : 0); L._icn = icn; L._lines = lines; L._ch = ch; L._h = Math.max(1, lines.length) * (L._fs + 2) + 3; return;
+    }
+  };
+  for (const L of LB) if (!L.io) calc(L);
+  for (const L of LB) if (L.io) calc(L);
+  const hgt = X => X._on ? X._h : X.alt && X.alt._on ? X.alt._h : 0;
   for (const L of LB) {
-    if (k < L.mk || (L.xk && k >= L.xk)) continue;
-    const sx = L.x * k + tx, sy = L.y * k + ty + (L.dy || 0);
-    if (sx < -80 || sy < -30 || sx > vw + 80 || sy > vh + 30) continue;
-    const big = L.c.startsWith('lfr') && !L.c.includes(' s'), fs = big ? 18 : L.c.startsWith('lnd') && !L.c.includes(' s') ? 13 : 11.5;
-    const lines = Array.isArray(L.t) ? L.t : [String(L.t)], lh = fs + 2, tw = Math.max(0, ...lines.map(s => s.length)) * fs * .6;
-    const icw = L.ic && DT.icons && DT.icons[L.ic] && (L.io || k >= (L.e ? 9 : 4)) ? fs + 3 : 0, w = tw + icw + 6, h = Math.max(1, lines.length) * lh + 3;
-    if (!tw && !icw) continue;
-    const x0 = L.al === 'l' ? sx : sx - w / 2, r = [x0, sy - h / 2, x0 + w, sy + h / 2];
-    if (L.e && k < 9 && L.e.tot < 1e-6) continue;
-    if (hit(r)) continue; add(r);
+    if (!L._on || (L.xp && L.xp._placed)) continue;   // іконка замість назви — лише поки назва не влізла (чи не втратила місце)
+    const fs = L._fs, lines = L._lines, lh = fs + 2, tw = L._ch * fs * .6, icw = L._icn ? fs + 3 : 0, w = tw + icw + 6, h = L._h;
+    const sx = L.x * k + tx, sy = L.y * k + ty + (L.dy || 0) + (L.pn ? L.side * (hgt(L.pn) + h) / 2 + 2 * L.side : 0);   // % — над назвою, рецепт — під нею
+    const x0 = L.al === 'l' ? sx : sx - w / 2, r = [x0 - 1, sy - h / 2 - 1, x0 + w + 1, sy + h / 2 + 1];
+    if (hit(r)) continue; add(r); L._placed = true;
     const cx = 3 + icw + tw / 2, y0 = -(lines.length - 1) * lh / 2 + fs * .36;
-    out.push(`<g class="lb ${L.c}" transform="translate(${x0.toFixed(1)},${sy.toFixed(1)})"><rect x="0" y="${-h / 2}" width="${w}" height="${h}" rx="4"/>${icw ? `<image href="${DT.icons[L.ic]}" x="3" y="${-fs / 2 - 1}" width="${fs + 2}" height="${fs + 2}"/>` : ''}${tw ? `<text font-size="${fs}">${lines.map((s, i) => `<tspan x="${cx.toFixed(1)}" y="${(y0 + i * lh).toFixed(1)}">${esc(s)}</tspan>`).join('')}</text>` : ''}</g>`);
+    out.push(`<g class="lb ${L.c}" transform="translate(${x0.toFixed(1)},${sy.toFixed(1)})"><rect x="0" y="${-h / 2}" width="${w}" height="${h}" rx="${Math.min(4, fs / 3).toFixed(1)}"/>${icw ? `<image href="${DT.icons[L.ic]}" x="3" y="${-fs / 2 - 1}" width="${fs + 2}" height="${fs + 2}"/>` : ''}${tw ? `<text font-size="${fs.toFixed(1)}">${lines.map((s, i) => `<tspan x="${cx.toFixed(1)}" y="${(y0 + i * lh).toFixed(1)}">${esc(s)}</tspan>`).join('')}</text>` : ''}</g>`);
   }
-  if (k >= 2.2) for (const e of V.G.edges) {   // стрілки напрямку
+  if (k >= 3) for (const e of V.G.edges) {   // стрілки напрямку — розмір за зумом
     if (!e.pts.some(p => onFloor(p[2]))) continue;
+    const sc = Math.min(1.35, Math.max(.75, k / 7));
     for (let i = 1; i < e.pts.length; i++) {
       const [a, b] = e.dir < 0 ? [e.pts[i], e.pts[i - 1]] : [e.pts[i - 1], e.pts[i]], ax = a[0] * k + tx, ay = a[1] * k + ty, bx = b[0] * k + tx, by = b[1] * k + ty, L = Math.hypot(bx - ax, by - ay);
       if (L < 70) continue; const mx = (ax + bx) / 2, my = (ay + by) / 2; if (mx < 0 || my < 0 || mx > vw || my > vh) continue;
-      out.unshift(`<path class="chev${e.tot < 1e-6 ? ' z' : ''}" d="M-4,-4L2,0L-4,4" transform="translate(${(mx + (bx - ax) / L * 18).toFixed(1)},${(my + (by - ay) / L * 18).toFixed(1)}) rotate(${(Math.atan2(by - ay, bx - ax) * 180 / Math.PI).toFixed(0)})"/>`);
+      out.unshift(`<path class="chev${e.tot < 1e-6 ? ' z' : ''}" d="M-4,-4L2,0L-4,4" transform="translate(${(mx + (bx - ax) / L * 18 * sc).toFixed(1)},${(my + (by - ay) / L * 18 * sc).toFixed(1)}) rotate(${(Math.atan2(by - ay, bx - ax) * 180 / Math.PI).toFixed(0)}) scale(${sc.toFixed(2)})"/>`);
     }
   }
   over.innerHTML = out.join('');
