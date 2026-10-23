@@ -42,22 +42,9 @@ a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.
 footer{margin-top:28px;color:var(--mut);font-size:12.5px}
 @media (max-width:640px){.step{grid-template-columns:34px 1fr}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}}
 
-/* шапка-меню (23.10): однакова на всіх сторінках; tools\інфо\інфо.js → menu() */
 :root{--k-rail:#7a4fb5;--k-truck:#d9822b;--k-drone:#2a79b8;--k-hand:#8b5a2b;--k-none:var(--bad)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}}
 :root[data-theme="dark"]{--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}
-nav.menu{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 0 14px;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px}
-.mn{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
-.mn-i,.mn-sub>summary{display:inline-block;padding:5px 10px;border-radius:8px;color:var(--ink);font-size:14px;line-height:1.3;list-style:none;cursor:pointer;text-decoration:none}
-.mn-sub>summary::-webkit-details-marker{display:none}.mn-sub>summary::after{content:" ▾";color:var(--mut)}
-a.mn-i:hover,.mn-sub>summary:hover{background:var(--box);text-decoration:none}
-.mn-i.cur,.mn-sub.cur>summary{background:var(--ink);color:var(--bg);font-weight:600}.mn-sub.cur>summary::after{color:var(--bg)}
-.mn-i.off{color:var(--mut);opacity:.5;cursor:default}
-.mn-sub{position:relative}
-.mn-list{position:absolute;z-index:20;left:0;top:calc(100% + 4px);min-width:230px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
-.mn-meta{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;color:var(--mut);font-size:12.5px}.mn-meta b{color:var(--ink);font-weight:600}
-a.mn-site{border:1px solid var(--line);border-radius:999px;padding:1px 9px}
-@media (max-width:640px){.mn-sub[open]{flex-basis:100%}.mn-list{position:static;box-shadow:none;margin-top:2px}}
 
 /* карта перевезень, питання з варіантами, вид транспорту (23.10) */
 .by{display:inline-block;padding:0 7px;border-radius:4px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
@@ -81,7 +68,21 @@ svg.map{display:block;min-width:760px;width:100%;height:auto}svg.map text{fill:v
 .pm{font-weight:700}.pm.ok{color:var(--ok)}.pm.bad{color:var(--bad)}
 
 svg.map text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
-@media (max-width:640px){.tile .v{font-size:19px}.mn-i,.mn-sub>summary{padding:4px 8px;font-size:13.5px}}
+@media (max-width:640px){.tile .v{font-size:19px}}
+
+/* шапка-меню (23.10): однакова на всіх сторінках; tools\інфо\меню.js */
+nav.menu{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 0 14px;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.mn{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
+.mn-i,.mn-sub>summary{display:inline-block;padding:5px 10px;border-radius:8px;color:var(--ink);font-size:14px;line-height:1.3;list-style:none;cursor:pointer;text-decoration:none}
+.mn-sub>summary::-webkit-details-marker{display:none}.mn-sub>summary::after{content:" ▾";color:var(--mut)}
+a.mn-i:hover,.mn-sub>summary:hover{background:var(--box);text-decoration:none}
+.mn-i.cur,.mn-sub.cur>summary{background:var(--ink);color:var(--bg);font-weight:600}.mn-sub.cur>summary::after{color:var(--bg)}
+.mn-i.off{color:var(--mut);opacity:.5;cursor:default}
+.mn-sub{position:relative}
+.mn-list{position:absolute;z-index:20;left:0;top:calc(100% + 4px);min-width:230px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.mn-meta{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;color:var(--mut);font-size:12.5px}.mn-meta b{color:var(--ink);font-weight:600}
+a.mn-site{border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+@media (max-width:640px){.mn-sub[open]{flex-basis:100%}.mn-list{position:static;box-shadow:none;margin-top:2px}.mn-i,.mn-sub>summary{padding:4px 8px;font-size:13.5px}}
 
 </style></head><body><div class="wrap">
 <nav class="menu" aria-label="Меню сторінок"><div class="mn"><a class="mn-i" href="../index.html">Головна</a><a class="mn-i" href="stan-hry.html">Стан гри</a><a class="mn-i" href="enerhosystema.html">Енергосистема</a><a class="mn-i" href="lohistyka.html">Логістика</a><details class="mn-sub"><summary>Виробництва</summary><div class="mn-list"><a class="mn-i" href="../vyrobnytstva/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../vyrobnytstva/aliuminii.html">Алюміній</a></div></details><details class="mn-sub"><summary>Схеми</summary><div class="mn-list"><a class="mn-i" href="../skhemy/02-enerhetyka/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../skhemy/04-avanpost-druha/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../skhemy/07-stal/stal.html">Сталь</a><a class="mn-i" href="../skhemy/11-aliuminii/aliuminii.html">Алюміній</a><a class="mn-i" href="../skhemy/16-elektronika/cherha1.html">Електроніка</a></div></details><a class="mn-i cur" href="plan-vykonannia.html" aria-current="page">План виконання</a></div><div class="mn-meta"><span>Сейв <b>23.10 00:20</b></span><span>сесія: Планувальник</span></div></nav>
