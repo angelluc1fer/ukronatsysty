@@ -1,0 +1,169 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Кварцові осцилятори · етап 0</title>
+<style>:root{--bg:#F4F2EE;--card:#FFFFFF;--ink:#1F2328;--mut:#6B7078;--line:#D9D6CF;--box:#F3F1EC;--ok:#2E8B57;--warn:#C77700;--bad:#C8382C;--acc:#2F6FB5;--okbg:#E6F3EB;--warnbg:#FBF0DC;--badbg:#FAE6E3;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+h1{margin:0;font-size:22px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+h2{font-size:16px;margin:26px 0 8px;display:flex;align-items:center;gap:8px}h2 .n{font:600 12px var(--f-mono);color:var(--mut);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+button.theme{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alert{border-radius:12px;padding:10px 14px;margin:0 0 8px;border:1px solid var(--bad);background:var(--badbg)}.alert b{color:var(--bad)}.alert .why{color:var(--mut);font-size:13px;margin-top:2px}
+.alert.warn{border-color:var(--warn);background:var(--warnbg)}.alert.warn b{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;border-top:4px solid var(--mut)}
+.tile.ok{border-top-color:var(--ok)}.tile.warn{border-top-color:var(--warn)}.tile.bad{border-top-color:var(--bad)}
+.tile .l{color:var(--mut);font-size:12.5px}.tile .v{font:700 24px/1.2 var(--f-mono)}.tile .v small{font:500 13px var(--f-body);color:var(--mut)}.tile .p{font-size:12.5px;color:var(--mut)}
+.st{font-weight:600;white-space:nowrap}.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.mut{color:var(--mut)}
+.ic{display:inline-block;width:28px;height:28px;background-size:contain;background-repeat:no-repeat;background-position:center;flex:none;vertical-align:middle}.ic.s{width:20px;height:20px}
+.ic.none{border:1px dashed var(--line);border-radius:6px}
+.chain{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:34px 1fr minmax(160px,300px);gap:6px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.arrow{text-align:center;color:var(--mut);font-size:13px;line-height:1.1;padding:2px 0}
+.step .nm{font-weight:600}.step .meta{color:var(--mut);font-size:12.5px}
+.rate{font:600 13px var(--f-mono);display:flex;justify-content:space-between;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--box);border:1px solid var(--line);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}.bar.mut i{background:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.buf .t{display:flex;gap:8px;align-items:center}.buf .t b{flex:1}.buf .num{font:600 13px var(--f-mono);margin-top:6px}.buf .note{color:var(--mut);font-size:12.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600;font-size:12.5px}
+td.num,th.num{text-align:right;font-family:var(--f-mono);white-space:nowrap}.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.tw table{min-width:560px}
+tr.bad td:first-child{box-shadow:inset 4px 0 var(--bad)}tr.warn td:first-child{box-shadow:inset 4px 0 var(--warn)}tr.ok td:first-child{box-shadow:inset 4px 0 var(--ok)}
+.iw{display:flex;gap:8px;align-items:center}
+ul.lim{margin:0;padding-left:20px}ul.lim li{margin:3px 0}
+ol.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.todo li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative}
+ol.todo li:before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 13px/26px var(--f-mono);text-align:center}
+ol.todo .why{color:var(--mut);font-size:13.5px;margin-top:2px}ol.todo .num{font:600 12.5px var(--f-mono);margin-top:3px;color:var(--acc)}
+.series{display:grid;grid-template-columns:minmax(150px,1.2fr) auto minmax(180px,2fr);gap:6px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.series .mm{font:600 12.5px var(--f-mono);color:var(--mut);white-space:nowrap}.series .mm b{color:var(--ink)}
+svg.sp{width:100%;height:auto;display:block}svg.sp .ax{stroke:var(--line)}svg.sp .ln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round}svg.sp .dot{fill:var(--acc)}svg.sp text{fill:var(--mut);font:10px var(--f-mono)}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.pg .v{font-size:16px}
+footer{margin-top:28px;color:var(--mut);font-size:12.5px}
+@media (max-width:640px){.st{white-space:normal}table{display:block;max-width:100%;overflow-x:auto}.step{grid-template-columns:34px minmax(0,1fr)}.step>div{min-width:0;overflow-wrap:anywhere}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}}
+
+:root{--k-rail:#7a4fb5;--k-truck:#d9822b;--k-drone:#2a79b8;--k-hand:#8b5a2b;--k-none:var(--bad)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}}
+:root[data-theme="dark"]{--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}
+
+/* карта перевезень, питання з варіантами, вид транспорту (23.10) */
+.by{display:inline-block;padding:0 7px;border-radius:4px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.by.rail{background:var(--k-rail)}.by.truck{background:var(--k-truck)}.by.drone{background:var(--k-drone)}.by.hand{background:var(--k-hand)}.by.none{background:var(--k-none)}
+.tile .v{overflow-wrap:anywhere}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--mut);margin-bottom:10px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}.legend i.d{border-top-style:dashed}
+.legend em{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.mapbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+svg.map{display:block;min-width:760px;width:100%;height:auto}svg.map text{fill:var(--ink);font-family:var(--f-body)}
+.nd{cursor:pointer}.nd:focus{outline:none}.nd:focus circle,.nd:hover circle,.nd:focus rect,.nd:hover rect{stroke-width:4}
+.lbl{font-size:12px;font-weight:500}svg.map .lbl2{font-size:10.5px;fill:var(--mut)}
+.edge{fill:none;stroke-width:3}.elabel{font-size:10.5px;font-weight:500}
+.detail{margin:10px 0 0;font-size:13.5px;min-height:3.2em}
+.card.q{margin-bottom:8px}.card.q h3{font-size:14.5px;margin:0 0 8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--box);min-width:0}
+.opt.rec{border-color:var(--ok);background:var(--okbg)}.opt h4{margin:0 0 4px;font-size:14px}.opt p{margin:0 0 4px;font-size:13px}
+.opt .tag{font-size:11.5px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+.opt ul{list-style:none;margin:4px 0 0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.pm{font-weight:700}.pm.ok{color:var(--ok)}.pm.bad{color:var(--bad)}
+
+svg.map text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+@media (max-width:640px){.tile .v{font-size:19px}}
+
+/* шапка-меню (23.10): однакова на всіх сторінках; tools\інфо\меню.js */
+nav.menu{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 0 14px;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.mn{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
+.mn-i,.mn-sub>summary{display:inline-block;padding:5px 10px;border-radius:8px;color:var(--ink);font-size:14px;line-height:1.3;list-style:none;cursor:pointer;text-decoration:none}
+.mn-sub>summary::-webkit-details-marker{display:none}.mn-sub>summary::after{content:" ▾";color:var(--mut)}
+a.mn-i:hover,.mn-sub>summary:hover{background:var(--box);text-decoration:none}
+.mn-i.cur,.mn-sub.cur>summary{background:var(--ink);color:var(--bg);font-weight:600}.mn-sub.cur>summary::after{color:var(--bg)}
+.mn-i.off{color:var(--mut);opacity:.5;cursor:default}
+.mn-sub{position:relative}
+.mn-list{position:absolute;z-index:20;left:0;top:calc(100% + 4px);min-width:230px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.mn-meta{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;color:var(--mut);font-size:12.5px}.mn-meta b{color:var(--ink);font-weight:600}
+a.mn-map{border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:12.5px}
+a.mn-site{border:1px solid var(--line);border-radius:999px;padding:1px 9px}a.mn-cmt{color:var(--ink)}a.mn-cmt:hover{background:var(--box);text-decoration:none}
+.mn-btn{display:none}
+@media (max-width:640px){nav.menu{gap:6px}.mn-btn{display:inline-flex;gap:8px;align-items:center;font:inherit;font-size:15px;font-weight:600;color:var(--ink);background:var(--box);border:1px solid var(--line);border-radius:10px;padding:7px 12px;cursor:pointer;max-width:100%}.mn-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.menu:not(.mn-open)>.mn,nav.menu:not(.mn-open)>.mn-meta{display:none}nav.menu.mn-open>.mn{display:flex;flex-direction:column;align-items:stretch;flex-basis:100%}nav.menu.mn-open>.mn-meta{flex-basis:100%}
+.mn-sub[open]{flex-basis:100%}.mn-list{position:static;box-shadow:none;margin-top:2px}.mn-i,.mn-sub>summary{padding:4px 8px;font-size:13.5px}}
+
+</style></head><body><div class="wrap">
+<nav class="menu" aria-label="Меню сторінок"><button type="button" class="mn-btn" aria-expanded="false" onclick="var n=this.parentNode;this.setAttribute('aria-expanded',n.classList.toggle('mn-open'))">☰ <span>Меню</span></button><div class="mn"><a class="mn-i" href="../../index.html">Головна</a><a class="mn-i" href="../../stan/stan-hry.html">Стан гри</a><a class="mn-i" href="../../stan/enerhosystema.html">Енергосистема</a><a class="mn-i" href="../../stan/lohistyka.html">Логістика</a><details class="mn-sub"><summary>Виробництва</summary><div class="mn-list"><a class="mn-i" href="../../vyrobnytstva/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../../vyrobnytstva/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../../vyrobnytstva/aliuminii.html">Алюміній</a></div></details><details class="mn-sub"><summary>Схеми</summary><div class="mn-list"><a class="mn-i" href="../02-enerhetyka/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../04-avanpost-druha/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../07-stal/stal.html">Сталь</a><a class="mn-i" href="../11-aliuminii/aliuminii.html">Алюміній</a><a class="mn-i" href="../16-elektronika/cherha1.html">Електроніка</a><a class="mn-i" href="../17-vazhki-modulni-ramy/vazhki-modulni-ramy.html">Важкі модульні рами</a><a class="mn-i" href="../18-dvyhuny/dvyhuny.html">Двигуни</a><a class="mn-i" href="../19-presovane-vuhillia/presovane-vuhillia.html">Пресоване вугілля</a><a class="mn-i" href="kvartsovi-ostsyliatory.html">Кварцові осцилятори</a></div></details><a class="mn-i" href="../../stan/mapa.html">Мапа</a><a class="mn-i" href="../../stan/plan-vykonannia.html">План виконання</a><a class="mn-i" href="../../stan/mam.html">МАМ</a></div><div class="mn-meta"><span>Сейв <b>24.10 21:43</b></span><span>сесія: Будівництво під ключ</span><a class="mn-site mn-cmt" id="mn-cmt" data-path="проєкти/20-кварцові-осцилятори/схеми/варіанти.html" href="https://github.com/angelluc1fer/ukronatsysty/issues/new?title=%5B%D1%81%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B0%20%C2%B7%20%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D0%B8%2F20-%D0%BA%D0%B2%D0%B0%D1%80%D1%86%D0%BE%D0%B2%D1%96-%D0%BE%D1%81%D1%86%D0%B8%D0%BB%D1%8F%D1%82%D0%BE%D1%80%D0%B8%2F%D1%81%D1%85%D0%B5%D0%BC%D0%B8%2F%D0%B2%D0%B0%D1%80%D1%96%D0%B0%D0%BD%D1%82%D0%B8.html%5D%20&amp;body=%D0%A1%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B0%3A%20https%3A%2F%2Fangelluc1fer.github.io%2Fukronatsysty%2F%25D0%25BF%25D1%2580%25D0%25BE%25D1%2594%25D0%25BA%25D1%2582%25D0%25B8%2F20-%25D0%25BA%25D0%25B2%25D0%25B0%25D1%2580%25D1%2586%25D0%25BE%25D0%25B2%25D1%2596-%25D0%25BE%25D1%2581%25D1%2586%25D0%25B8%25D0%25BB%25D1%258F%25D1%2582%25D0%25BE%25D1%2580%25D0%25B8%2F%25D1%2581%25D1%2585%25D0%25B5%25D0%25BC%25D0%25B8%2F%25D0%25B2%25D0%25B0%25D1%2580%25D1%2596%25D0%25B0%25D0%25BD%25D1%2582%25D0%25B8.html%0A%D0%A0%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D1%96%D0%B9%20%D0%BF%D1%83%D0%B1%D0%BB%D1%96%D1%87%D0%BD%D0%B8%D0%B9%20%E2%80%94%20%D0%BD%D0%B5%20%D0%B2%D0%BF%D0%B8%D1%81%D1%83%D0%B9%20%D1%81%D1%8E%D0%B4%D0%B8%20%D1%81%D0%B5%D0%BA%D1%80%D0%B5%D1%82%D1%96%D0%B2%20%D1%96%20%D0%B0%D0%B4%D1%80%D0%B5%D1%81.%0A---%0A%0A" target="_blank" rel="noopener" title="Відкриє на GitHub форму нового коментаря до цієї сторінки (issue); входить сам GitHub">💬 Коментар до сторінки</a></div></nav>
+<header><div><h1>Кварцові осцилятори · етап 0</h1><div class="sub">Олександр · Залізна руда + Мідна руда + Необроблений кварц · Кварцовий осцилятор · масштаб і місце — вибір Олександра · сейв 24.10 21:43</div></div><button class="theme" id="th" type="button">◐ тема</button></header>
+<div class="alert warn"><b>⚠</b> Двигуни: зарезервовано 1 161, на карті 254 (бракує 907; ще 235 у Вантажівці — не враховано). Кожен Виробник «Кварцовий осцилятор» бере 10 Двигунів → 50 / 80 / 100 за масштабом; з розгоном на 250 % — 20 / 30 / 40 (+ Енергетичні уламки)<div class="why">Інших будівель з Двигунами в цьому будівництві нема (Бурильник 2, Будівники, Плавильні, Збирачі — без Двигунів). Рішення про рядок «20-кварцові-осцилятори» в «Резервах» ШТАБ.md — за Штабом; Двигуни (18) дадуть 20/хв, коли запрацюють.</div></div><div class="alert warn"><b>⚠</b> Рельєф біля жил не відомий (сейв його не зберігає): висоти жил відрізняються на 60–110 м — майданчик і траси стрічок треба облетіти (етап 1)<div class="why">Залізні жили біля «Кварцу» лежать на z +32…+34, кварц — на z −24…−45, мідь — z −31. Стрічки йдуть через Конвеєрні підіймачі; точний майданчик — після розвідки.</div></div>
+<div class="tiles"><div class="tile ok"><div class="l">Мета</div><div class="v">5 – 10 <small>Кварцових осциляторів/хв</small></div><div class="p">Олександр 24.10: «багато», якнайшвидше</div></div><div class="tile ok"><div class="l">Енергія</div><div class="v">+4 861 <small>МВт запасу над номіналом</small></div><div class="p">Мережа 9: генерація 13 900, номінал 9 039, реально 4 920. Потрібно 0,4 – 1,0 ГВт — вистачає (Турбопаливо ще не враховано)</div></div><div class="tile mut"><div class="l">Енергетичні уламки</div><div class="v">105 <small>на карті</small></div><div class="p">Розгін Виробників на 250 % — 3 уламки на машину (6 / 9 / 12); частину бере вежа Нафтової енергетики</div></div><div class="tile bad"><div class="l">Двигуни</div><div class="v">254 <small>на карті проти 1 161 в резервах</small></div><div class="p">+235 у Вантажівці (не враховано)</div></div></div>
+
+
+
+
+
+
+
+
+<section><h2>Питання до Олександра <span class="n">3</span></h2><div class="card q"><h3>1. Який масштаб будуємо? (рецепт і числа — «Прошита залізна плита» з усього, що відкрито в сейві; у дужках — стандартний рецепт без неї)</h3><div class="opts"><div class="opt rec"><span class="tag">Рекомендовано</span><h4>Б — 7,5 на хв (рекомендовано)</h4><p>Однаково для будь-якого місця; три Бурильники 2 на жилах (залізо 78 %, мідь 70 %, кварц 94 %)</p><ul><li><span class="pm ok">+</span> 48 машин (57) + 3 бури; ≈ 577 МВт реально, 644 номінал (626 / 680)</li><li><span class="pm ok">+</span> сировина: Залізна руда 94 (225), Мідна руда 168 (105), Необроблений кварц 225 /хв — по одній жилі кожного виду, без розгону бурів</li><li><span class="pm ok">+</span> Двигунів 80 на Виробниках на 100 %, або 30 із розгоном Виробників на 250 % (+9 уламків)</li><li><span class="pm ok">+</span> жили Кварцу тримають і 10/хв — можна дозбудувати модуль без нового майданчика</li><li><span class="pm bad">−</span> час ≈ 7,5 год за готовою схемою «Схеми» (оцінка, не перевірено; до схеми прикидали 3,5–4,5 — занижено) + ЛЕП</li><li><span class="pm bad">−</span> Двигуни 30 – 80 — поза «Резервами» (бракує 907 і так)</li></ul></div><div class="opt"><h4>А — 5 на хв</h4><p>Те саме; три Бурильники 2 (залізо 52 %, мідь 47 %, кварц 63 %)</p><ul><li><span class="pm ok">+</span> найменше: 33 машини (39) + 3 бури; ≈ 388 МВт реально, 420 номінал (421 / 444)</li><li><span class="pm ok">+</span> сировина: залізо 62,5 (150), мідь 112 (70), кварц 150 /хв</li><li><span class="pm ok">+</span> Двигунів 50, або 20 із розгоном (+6 уламків); час ≈ 5 год (оцінка пропорційно схемі Б)</li><li><span class="pm bad">−</span> це нижня межа «5–10/хв» — при вищому попиті доведеться будувати друге виробництво (оболонка й станція не під 10)</li><li><span class="pm bad">−</span> жили Кварцу використано лише наполовину</li></ul></div><div class="opt"><h4>В — 10 на хв</h4><p>Те саме; 5 Бурильників 2 (залізо 2 × 52 %, мідь 93 %, кварц 100 % і бідна 100 %)</p><ul><li><span class="pm ok">+</span> максимум «багато»: 61 машина (74) + 5 бур; ≈ 784 МВт реально, 809 номінал (849 / 861)</li><li><span class="pm ok">+</span> сировина: залізо 125 (300), мідь 223 (140), кварц 300 /хв; оболонка одразу під кінцевий — будуємо один раз</li><li><span class="pm ok">+</span> Двигунів 100, або 40 із розгоном (+12 уламків)</li><li><span class="pm bad">−</span> час ≈ 9 год (оцінка пропорційно схемі Б) + ЛЕП; мідь — майже вся багата жила (93 %)</li><li><span class="pm bad">−</span> Необроблений кварц 300 &gt; Конвеєрна стрічка 3 (270): два бури — дві стрічки; усі три жили кварцу задіяно</li></ul></div></div></div><div class="card q"><h3>2. Де будуємо? Вільні жили заліза, міді й кварцу — тільки три ділянки, де є всі три на ≤ 600 м (руду не возимо)</h3><div class="opts"><div class="opt rec"><span class="tag">Рекомендовано</span><h4>«Кварц» — схід від старої бази (рекомендовано)</h4><p>«Кварц» + 160 м на сх (a 170, c −62), ≈ 1,45 км на схід від ГАБу, 1,2 км від Складу-2; Хаб і Залізнична станція · Хаб — 620 – 680 м</p><ul><li><span class="pm ok">+</span> найближче до бази: ЛЕП ≈ 507 м до Електростовпа в Хабі (мережа 9, головна) — ≈ 3–4 Опори ЛЕП (оцінка; точно — маршрут.js на етапі 1), матеріали є на складі</li><li><span class="pm ok">+</span> жили на місці: кварц — багата 124 м, нормальна 206 м, бідна 157 м; залізо — 4 нормальні 390 – 464 м; мідь — багата 455 м</li><li><span class="pm ok">+</span> мітка «Кварц» вже стоїть біля жили; станція потяга в Хабі поруч</li><li><span class="pm bad">−</span> залізо й мідь не багаті — бури працюють на 52 – 78 % (для В — два залізних)</li><li><span class="pm bad">−</span> перепад висот між жилами 60 – 110 м, рельєф не відомий; ⚠ Електростовп мережі 23 (Сірка, 299 м) — не живлення: Спалювач біомаси без палива</li></ul></div><div class="opt"><h4>«Плато схід» — усе багате, але далеко</h4><p>1,6 км на пн-сх від «Плато» (a 240, c −320), ≈ 3 км від ГАБу</p><ul><li><span class="pm ok">+</span> усі жили багаті: мідь — 3 × 109 – 136 м, залізо — 2 × 349 – 386 м, кварц — багата 319 м і 2 нормальні</li><li><span class="pm ok">+</span> найбільший запас: бури на 44 – 94 %, масштаб В без розгону</li><li><span class="pm bad">−</span> ЛЕП ≈ 1,33 км до Опори ЛЕП біля «Алюмінію» (мережа 9): 5 – 6 Опор ЛЕП</li><li><span class="pm bad">−</span> далеко від Складу-2 і станцій (≈ 3 км): будматеріали — довгі рейси; колії поруч нема</li><li><span class="pm bad">−</span> висоти жил z 107 – 169, рельєф не відомий</li></ul></div><div class="opt"><h4>Північний захід — біля «Енергостанції над водою»</h4><p>2,1 км на пн-сх від «Енергостанції над водою» (a −205, c −415), ≈ 3,7 км від ГАБу</p><ul><li><span class="pm ok">+</span> кварц — 2 багаті 113 – 143 м; залізо — 3 нормальні 196 – 231 м; ближче до кварцових жил, ніж у «Кварцу»</li><li><span class="pm bad">−</span> мідь — лише одна нормальна жила (83 м): ≤ 120/хв — не тягне Б з рецептом «Прошита залізна плита» (168) і В (223); лише А</li><li><span class="pm bad">−</span> найдальше: ЛЕП ≈ 1,31 км; далеко від бази й колії</li></ul></div></div></div><div class="card q"><h3>3. Двигуни: Виробники «Кварцовий осцилятор» на 100 % чи з розгоном?</h3><div class="opts"><div class="opt rec"><span class="tag">Рекомендовано</span><h4>Розгін на 250 % (рекомендовано при дефіциті Двигунів)</h4><p>Виробників: А — 2, Б — 3, В — 4</p><ul><li><span class="pm ok">+</span> Двигунів 20 / 30 / 40 замість 50 / 80 / 100 — на 30 / 50 / 60 менше</li><li><span class="pm ok">+</span> електрика ще невелика: ≈ +90 / +110 / +190 МВт до розрахунку</li><li><span class="pm bad">−</span> 6 / 9 / 12 Енергетичних уламків з 105</li><li><span class="pm bad">−</span> менше машин у кінці ланцюга: збій однієї Виробник — більша частка потоку</li></ul></div><div class="opt"><h4>На 100 %</h4><p>Виробників: А — 5, Б — 8, В — 10</p><ul><li><span class="pm ok">+</span> без уламків; простіше ставити й балансувати (кожен бере свою частку)</li><li><span class="pm bad">−</span> Двигунів 50 / 80 / 100 при дефіциті 907</li></ul></div></div></div></section>
+<section><h2>Ланцюг Б — 7,5/хв (рецепт «Прошита залізна плита»; стандартний — у дужках)</h2><div class="tw"><table><tr><th>Будівля</th><th>Кількість</th><th>Результат /хв</th><th>МВт</th></tr><tr><td>Плавильня «Мідний зливок»</td><td>6 (4)</td><td>167,5 (105)</td><td>21,8 (13,4)</td></tr><tr><td>Плавильня «Залізний зливок»</td><td>4 (8)</td><td>93,8 (225)</td><td>11,5 (29,4)</td></tr><tr><td>Будівник «Кварцові кристали»</td><td>6</td><td>135</td><td>24</td></tr><tr><td>Будівник «Залізна плита»</td><td>4 (6)</td><td>62,5 (112,5)</td><td>11,5 (22)</td></tr><tr><td>Будівник «Дріт»</td><td>12 (7)</td><td>335 (210)</td><td>43,6 (28)</td></tr><tr><td>Будівник «Кабель»</td><td>4</td><td>105</td><td>13,4</td></tr><tr><td>Збирач «Прошита залізна плита»</td><td>4 (4, «Армована залізна плита»)</td><td>18,8</td><td>—</td></tr><tr><td>Виробник «Кварцовий осцилятор»</td><td>8 на 100 % (або 3 на 250 %)</td><td>7,5</td><td>≈ 55 кожен (≈ 184 на 250 %)</td></tr><tr><td>Бурильник 2 на жилах</td><td>3 (залізо, мідь, кварц)</td><td>Залізна руда 94 · Мідна руда 168 · Необроблений кварц 225</td><td>≈ 15 кожен на 100 %</td></tr></table></div></section>
+<section><h2>Що далі (після вашого вибору)</h2><div class="card"><div>Схема інструментом «Схема»: кресленики лише повторювані модулі (Дріт → Кабель, Кварцові кристали, Виробники), решта — вручну; 0 ✖.</div><div>Кошторис ✓/✖ зі складу (Бурильник 2, Модульні рами, Кабель, ЛЕП), логістика будматеріалів, час будівництва.</div><div>Етап 1 — розвідка: Бурильники на жили, мітки «Кварцові осцилятори низ / верх / кут 1–4 / ЛЕП».</div></div></section>
+<footer>Оцінки часу — за коефіцієнтами «Схеми» (не перевірено, калібрує Олександр). Рельєф, Двигуни у Вантажівці й вільні уламки — не перевірено. · згенеровано tools\інфо\інфо.js</footer>
+</div><script>
+document.addEventListener('click',function(e){var s=document.querySelector('.mn-sub[open]');if(s&&!s.contains(e.target))s.removeAttribute('open');});
+// Клієнт спільних коментарів (з 23.10, п. 18): коментар = issue репозиторію сайту на GitHub (відкрито / закрито).
+// Вбудовується в сторінки стану (tools\інфо\інфо.js) і схеми (tools\схема\схема.js) через tools\інфо\меню.js (MENU.gh) — один код, window.GHC.
+//   GHC.newUrl(назва, текст)  — адреса форми нового issue з уже вписаними назвою й текстом (мітки через URL чужим не ставляться — мітка в назві: «[<ключ схеми або сторінка> · <елемент>] …»)
+//   GHC.load(cb)              — читає issues (відкриті й закриті) через API без входу, кеш у sessionStorage на 5 хв; без інтернету — тихо нічого (cb не викликається)
+//   GHC.list                  — розібрані issues після load: {n, scope, el, text, key, body, who, at, state, url, comments}
+//   key — машинний ключ елемента схеми («n:id», «e:a→b», «i:id», «f:N»), береться з посилання «#к=…» у тексті issue (його кладе движок схем)
+// Секретів тут нема й бути не повинно: усе публічне, вхід робить сам GitHub, ключів доступу тут нема.
+(function () {
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'ghc:issues', TTL = 5 * 60 * 1000;
+  var G = window.GHC = { repo: REPO, site: SITE, list: null, _w: [], _f: [], _busy: false };
+  var enc = encodeURIComponent;
+  G.NOTE = 'Репозиторій публічний — не вписуй сюди секретів і адрес.';
+  G.parse = function (i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), b = i.body || '', k = /#к=([^\s)>\]]+)/.exec(b), body = b.indexOf('\n---') >= 0 ? b.slice(b.indexOf('\n---') + 4) : b;
+    var key = ''; if (k) { try { key = decodeURIComponent(k[1]); } catch (e) { key = k[1]; } }
+    return m ? { n: i.number, scope: m[1], el: m[2], text: m[3], key: key, body: body.replace(/^\s+|\s+$/g, ''), who: i.user && i.user.login, at: i.created_at, state: i.state, url: i.html_url, comments: i.comments } : null;
+  };
+  G.newUrl = function (title, body) { return 'https://github.com/' + REPO + '/issues/new?title=' + enc(title) + '&body=' + enc(String(body).slice(0, 3000)); };
+  G.date = function (iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); };
+  G.onSite = function () { return /github\.io$/.test(location.hostname) && location.pathname.indexOf('/ukronatsysty/') === 0; };
+  G.pagePath = function (fallback) { if (!G.onSite()) return fallback; var q = location.pathname.slice('/ukronatsysty/'.length); return q || 'index.html'; };   // шлях сторінки на сайті
+  G.pageUrl = function (fallback) { return G.onSite() ? location.origin + location.pathname : (fallback || SITE); };
+  function done(raw) { G.list = raw.map(G.parse).filter(Boolean); G._busy = false; var w = G._w; G._w = []; w.forEach(function (f) { try { f(G.list); } catch (e) {} }); }
+  function fail() { G._busy = false; var f = G._f; G._f = []; G._w = []; f.forEach(function (x) { try { x(); } catch (e) {} }); }
+  G.load = function (cb, bad) {
+    if (G.list) { cb(G.list); return; }
+    G._w.push(cb); if (bad) G._f.push(bad); if (G._busy) return; G._busy = true;
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { done(c.d); return; } } catch (e) {}
+    if (!window.fetch) { fail(); return; }
+    var all = [];
+    (function next(p) {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&per_page=100&page=' + p, { cache: 'no-cache', headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (a) {
+          all = all.concat(a.filter(function (i) { return !i.pull_request; }));
+          if (a.length === 100 && p < 3) return next(p + 1);
+          var slim = all.map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 2000), user: i.user && { login: i.user.login }, created_at: i.created_at, state: i.state, html_url: i.html_url, comments: i.comments }; });
+          try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+          done(slim);
+        })
+        .catch(fail);   // без інтернету / ліміт API — тихо нічого
+    })(1);
+  };
+  // «Коментар до сторінки» у шапці-меню (id="mn-cmt", data-path — шлях сторінки на сайті; на сайті шлях беремо з адреси)
+  function pageBtn() {
+    var a = document.getElementById('mn-cmt'); if (!a) return;
+    var p = G.pagePath(a.getAttribute('data-path') || ''), u = G.pageUrl(G.site + encodeURI(p));
+    a.href = G.newUrl('[сторінка · ' + p + '] ', 'Сторінка: ' + u + '\n' + G.NOTE + '\n---\n\n');
+    G.load(function (L) {
+      var o = L.filter(function (i) { return i.scope === 'сторінка' && i.el === p && i.state === 'open'; });
+      if (o.length) { a.textContent = '💬 Коментар до сторінки · ' + o.length + ' відкрито'; a.title = 'Відкриті коментарі до цієї сторінки: ' + o.map(function (i) { return '#' + i.n; }).join(', ') + ' — github.com/' + REPO + '/issues'; }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pageBtn); else pageBtn();
+})();
+
+(function(){var b=document.getElementById('th'),r=document.documentElement,k='info-theme';
+try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){}
+b.onclick=function(){var dark=r.getAttribute('data-theme')?r.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();
+</script></body></html>
