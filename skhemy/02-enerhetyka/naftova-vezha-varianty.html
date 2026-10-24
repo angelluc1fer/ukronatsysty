@@ -1,0 +1,168 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Нафтова енергетика · вежа з цистерн</title>
+<style>:root{--bg:#F4F2EE;--card:#FFFFFF;--ink:#1F2328;--mut:#6B7078;--line:#D9D6CF;--box:#F3F1EC;--ok:#2E8B57;--warn:#C77700;--bad:#C8382C;--acc:#2F6FB5;--okbg:#E6F3EB;--warnbg:#FBF0DC;--badbg:#FAE6E3;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+h1{margin:0;font-size:22px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+h2{font-size:16px;margin:26px 0 8px;display:flex;align-items:center;gap:8px}h2 .n{font:600 12px var(--f-mono);color:var(--mut);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+button.theme{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alert{border-radius:12px;padding:10px 14px;margin:0 0 8px;border:1px solid var(--bad);background:var(--badbg)}.alert b{color:var(--bad)}.alert .why{color:var(--mut);font-size:13px;margin-top:2px}
+.alert.warn{border-color:var(--warn);background:var(--warnbg)}.alert.warn b{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;border-top:4px solid var(--mut)}
+.tile.ok{border-top-color:var(--ok)}.tile.warn{border-top-color:var(--warn)}.tile.bad{border-top-color:var(--bad)}
+.tile .l{color:var(--mut);font-size:12.5px}.tile .v{font:700 24px/1.2 var(--f-mono)}.tile .v small{font:500 13px var(--f-body);color:var(--mut)}.tile .p{font-size:12.5px;color:var(--mut)}
+.st{font-weight:600;white-space:nowrap}.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.mut{color:var(--mut)}
+.ic{display:inline-block;width:28px;height:28px;background-size:contain;background-repeat:no-repeat;background-position:center;flex:none;vertical-align:middle}.ic.s{width:20px;height:20px}
+.ic.none{border:1px dashed var(--line);border-radius:6px}
+.chain{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:34px 1fr minmax(160px,300px);gap:6px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.arrow{text-align:center;color:var(--mut);font-size:13px;line-height:1.1;padding:2px 0}
+.step .nm{font-weight:600}.step .meta{color:var(--mut);font-size:12.5px}
+.rate{font:600 13px var(--f-mono);display:flex;justify-content:space-between;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--box);border:1px solid var(--line);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}.bar.mut i{background:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.buf .t{display:flex;gap:8px;align-items:center}.buf .t b{flex:1}.buf .num{font:600 13px var(--f-mono);margin-top:6px}.buf .note{color:var(--mut);font-size:12.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600;font-size:12.5px}
+td.num,th.num{text-align:right;font-family:var(--f-mono);white-space:nowrap}.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.tw table{min-width:560px}
+tr.bad td:first-child{box-shadow:inset 4px 0 var(--bad)}tr.warn td:first-child{box-shadow:inset 4px 0 var(--warn)}tr.ok td:first-child{box-shadow:inset 4px 0 var(--ok)}
+.iw{display:flex;gap:8px;align-items:center}
+ul.lim{margin:0;padding-left:20px}ul.lim li{margin:3px 0}
+ol.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.todo li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative}
+ol.todo li:before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 13px/26px var(--f-mono);text-align:center}
+ol.todo .why{color:var(--mut);font-size:13.5px;margin-top:2px}ol.todo .num{font:600 12.5px var(--f-mono);margin-top:3px;color:var(--acc)}
+.series{display:grid;grid-template-columns:minmax(150px,1.2fr) auto minmax(180px,2fr);gap:6px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.series .mm{font:600 12.5px var(--f-mono);color:var(--mut);white-space:nowrap}.series .mm b{color:var(--ink)}
+svg.sp{width:100%;height:auto;display:block}svg.sp .ax{stroke:var(--line)}svg.sp .ln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round}svg.sp .dot{fill:var(--acc)}svg.sp text{fill:var(--mut);font:10px var(--f-mono)}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.pg .v{font-size:16px}
+footer{margin-top:28px;color:var(--mut);font-size:12.5px}
+@media (max-width:640px){.step{grid-template-columns:34px 1fr}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}}
+
+:root{--k-rail:#7a4fb5;--k-truck:#d9822b;--k-drone:#2a79b8;--k-hand:#8b5a2b;--k-none:var(--bad)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}}
+:root[data-theme="dark"]{--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}
+
+/* карта перевезень, питання з варіантами, вид транспорту (23.10) */
+.by{display:inline-block;padding:0 7px;border-radius:4px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.by.rail{background:var(--k-rail)}.by.truck{background:var(--k-truck)}.by.drone{background:var(--k-drone)}.by.hand{background:var(--k-hand)}.by.none{background:var(--k-none)}
+.tile .v{overflow-wrap:anywhere}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--mut);margin-bottom:10px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}.legend i.d{border-top-style:dashed}
+.legend em{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.mapbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+svg.map{display:block;min-width:760px;width:100%;height:auto}svg.map text{fill:var(--ink);font-family:var(--f-body)}
+.nd{cursor:pointer}.nd:focus{outline:none}.nd:focus circle,.nd:hover circle,.nd:focus rect,.nd:hover rect{stroke-width:4}
+.lbl{font-size:12px;font-weight:500}svg.map .lbl2{font-size:10.5px;fill:var(--mut)}
+.edge{fill:none;stroke-width:3}.elabel{font-size:10.5px;font-weight:500}
+.detail{margin:10px 0 0;font-size:13.5px;min-height:3.2em}
+.card.q{margin-bottom:8px}.card.q h3{font-size:14.5px;margin:0 0 8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--box);min-width:0}
+.opt.rec{border-color:var(--ok);background:var(--okbg)}.opt h4{margin:0 0 4px;font-size:14px}.opt p{margin:0 0 4px;font-size:13px}
+.opt .tag{font-size:11.5px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+.opt ul{list-style:none;margin:4px 0 0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.pm{font-weight:700}.pm.ok{color:var(--ok)}.pm.bad{color:var(--bad)}
+
+svg.map text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+@media (max-width:640px){.tile .v{font-size:19px}}
+
+/* шапка-меню (23.10): однакова на всіх сторінках; tools\інфо\меню.js */
+nav.menu{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center;justify-content:space-between;margin:0 0 14px;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.mn{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
+.mn-i,.mn-sub>summary{display:inline-block;padding:5px 10px;border-radius:8px;color:var(--ink);font-size:14px;line-height:1.3;list-style:none;cursor:pointer;text-decoration:none}
+.mn-sub>summary::-webkit-details-marker{display:none}.mn-sub>summary::after{content:" ▾";color:var(--mut)}
+a.mn-i:hover,.mn-sub>summary:hover{background:var(--box);text-decoration:none}
+.mn-i.cur,.mn-sub.cur>summary{background:var(--ink);color:var(--bg);font-weight:600}.mn-sub.cur>summary::after{color:var(--bg)}
+.mn-i.off{color:var(--mut);opacity:.5;cursor:default}
+.mn-sub{position:relative}
+.mn-list{position:absolute;z-index:20;left:0;top:calc(100% + 4px);min-width:230px;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.mn-meta{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center;color:var(--mut);font-size:12.5px}.mn-meta b{color:var(--ink);font-weight:600}
+a.mn-site{border:1px solid var(--line);border-radius:999px;padding:1px 9px}a.mn-cmt{color:var(--ink)}a.mn-cmt:hover{background:var(--box);text-decoration:none}
+@media (max-width:640px){.mn-sub[open]{flex-basis:100%}.mn-list{position:static;box-shadow:none;margin-top:2px}.mn-i,.mn-sub>summary{padding:4px 8px;font-size:13.5px}}
+
+</style></head><body><div class="wrap">
+<nav class="menu" aria-label="Меню сторінок"><div class="mn"><a class="mn-i" href="../../index.html">Головна</a><a class="mn-i" href="../../stan/stan-hry.html">Стан гри</a><a class="mn-i" href="../../stan/enerhosystema.html">Енергосистема</a><a class="mn-i" href="../../stan/lohistyka.html">Логістика</a><details class="mn-sub"><summary>Виробництва</summary><div class="mn-list"><a class="mn-i" href="../../vyrobnytstva/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../../vyrobnytstva/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../../vyrobnytstva/aliuminii.html">Алюміній</a></div></details><details class="mn-sub"><summary>Схеми</summary><div class="mn-list"><a class="mn-i" href="naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../04-avanpost-druha/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../07-stal/stal.html">Сталь</a><a class="mn-i" href="../11-aliuminii/aliuminii.html">Алюміній</a><a class="mn-i" href="../16-elektronika/cherha1.html">Електроніка</a><a class="mn-i" href="../17-vazhki-modulni-ramy/vazhki-modulni-ramy.html">Важкі модульні рами</a><a class="mn-i" href="../18-dvyhuny/dvyhuny.html">Двигуни</a></div></details><a class="mn-i" href="../../stan/plan-vykonannia.html">План виконання</a></div><div class="mn-meta"><span>Сейв <b>24.10 15:46</b></span><span>сесія: Планувальник</span><a class="mn-site mn-cmt" id="mn-cmt" data-path="проєкти/02-енергетика/схеми/нафтова_вежа_варіанти.html" href="https://github.com/angelluc1fer/ukronatsysty/issues/new?title=%5B%D1%81%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B0%20%C2%B7%20%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D0%B8%2F02-%D0%B5%D0%BD%D0%B5%D1%80%D0%B3%D0%B5%D1%82%D0%B8%D0%BA%D0%B0%2F%D1%81%D1%85%D0%B5%D0%BC%D0%B8%2F%D0%BD%D0%B0%D1%84%D1%82%D0%BE%D0%B2%D0%B0_%D0%B2%D0%B5%D0%B6%D0%B0_%D0%B2%D0%B0%D1%80%D1%96%D0%B0%D0%BD%D1%82%D0%B8.html%5D%20&amp;body=%D0%A1%D1%82%D0%BE%D1%80%D1%96%D0%BD%D0%BA%D0%B0%3A%20https%3A%2F%2Fangelluc1fer.github.io%2Fukronatsysty%2F%25D0%25BF%25D1%2580%25D0%25BE%25D1%2594%25D0%25BA%25D1%2582%25D0%25B8%2F02-%25D0%25B5%25D0%25BD%25D0%25B5%25D1%2580%25D0%25B3%25D0%25B5%25D1%2582%25D0%25B8%25D0%25BA%25D0%25B0%2F%25D1%2581%25D1%2585%25D0%25B5%25D0%25BC%25D0%25B8%2F%25D0%25BD%25D0%25B0%25D1%2584%25D1%2582%25D0%25BE%25D0%25B2%25D0%25B0_%25D0%25B2%25D0%25B5%25D0%25B6%25D0%25B0_%25D0%25B2%25D0%25B0%25D1%2580%25D1%2596%25D0%25B0%25D0%25BD%25D1%2582%25D0%25B8.html%0A%D0%A0%D0%B5%D0%BF%D0%BE%D0%B7%D0%B8%D1%82%D0%BE%D1%80%D1%96%D0%B9%20%D0%BF%D1%83%D0%B1%D0%BB%D1%96%D1%87%D0%BD%D0%B8%D0%B9%20%E2%80%94%20%D0%BD%D0%B5%20%D0%B2%D0%BF%D0%B8%D1%81%D1%83%D0%B9%20%D1%81%D1%8E%D0%B4%D0%B8%20%D1%81%D0%B5%D0%BA%D1%80%D0%B5%D1%82%D1%96%D0%B2%20%D1%96%20%D0%B0%D0%B4%D1%80%D0%B5%D1%81.%0A---%0A%0A" target="_blank" rel="noopener" title="Відкриє на GitHub форму нового коментаря до цієї сторінки (issue); входить сам GitHub">💬 Коментар до сторінки</a></div></nav>
+<header><div><h1>Нафтова енергетика · вежа з цистерн</h1><div class="sub">Іван · Сира нафта · Електроенергія + Пластик (мітка «Енергостанція над водою») · запит 13 · три варіанти для Олександра · сейв 24.10 15:46</div></div><button class="theme" id="th" type="button">◐ тема</button></header>
+<div class="alert warn"><b>⚠</b> Нафти вистачає — бракує Паливних електростанцій: 52 ЕС × 20 = 1 040 м³/хв палива, подача 952 + 67 = 1 019 (98 %); більше нафти без нових ЕС МВт не додасть<div class="why">Фактична стеля — 13 000 МВт (52 ЕС × 250). Реально мережа бере 5 110 з номіналу 8 996 МВт, запас над номіналом +4 904 МВт — енергії не терміново. Цифри «855 з 937» (23.10) застаріли: сейв 24.10 15:46 — подача станції 952 з 960 за повного навантаження.</div></div><div class="alert warn"><b>⚠</b> Варіант В зараз неможливий: рецепти «Мазут (дод. кресленик)», «Розведене паливо», «Турбопаливо» в сейві не відкрито (Змішувач — відкрито)<div class="why">Назви в грі: «Залишкова важка нафта» = Мазут, «Розбавлене паливо» = «Розведене паливо». Відкривають жорсткі диски (Мазут, Розведене паливо) і М.А.М. «Сірка → Турбопаливо». «Каністра з розведеним паливом» (те саме розведення через Пакувальник) — відкрито й уже працює на станції.</div></div><div class="alert warn"><b>⚠</b> Двигуни: зарезервовано 355, на карті 254 (бракує 101) — кожна Трубопровідна помпа 2 (2), Нафтова помпа (15), Переробний завод (10), Паливна ЕС (15) їх бере<div class="why">Вежа — 8–16 Двигунів, жили +30; нові ЕС (+8) — 120, уже в резерві 02. Поки «Двигуни» (20/хв) не запрацюють — будівництво з боргу.</div></div>
+<div class="tiles"><div class="tile ok"><div class="l">Сира нафта: помпи</div><div class="v">1 620 <small>м³/хв</small></div><div class="p">Свердловина 6 помп × 250 % = 900 · Нафтова помпа (багата, 200 %) 480 · Нафтова помпа (багата, 100 %) 240 · максимум, факт залежить від підпору</div></div><div class="tile ok"><div class="l">Паливо станції</div><div class="v">952 / 960 <small>м³/хв</small></div><div class="p">48 ЕС станції при 100 % · кластер: 67 з 80 (4 ЕС) · спалюється ≈ 353 при навантаженні 37 %</div></div><div class="tile warn"><div class="l">Стеля за ЕС</div><div class="v">13 000 <small>МВт</small></div><div class="p">52 Паливні ЕС; за паливом зараз ≈ 12 740 МВт (1 019 × 12,5)</div></div><div class="tile ok"><div class="l">Мережа: реально / номінал</div><div class="v">5 110 / 8 996 <small>МВт</small></div><div class="p">встановлено 13 930 · запас над номіналом +4 904 МВт</div></div><div class="tile ok"><div class="l">Вільні жили біля станції</div><div class="v">2 <small>нормальні</small></div><div class="p">по 120 /хв при 100 %, 300 при 250 % (3 уламки з 104 на помпу) · Нафтовий кластер</div></div><div class="tile mut"><div class="l">Вежа 4 × 3</div><div class="v">28 800 <small>м³</small></div><div class="p">12 Промислових цистерн по 2 400 · не додають нафти, лише запас і рівний потік</div></div></div>
+
+
+
+
+
+
+
+
+<section><h2>Питання до Олександра <span class="n">1</span></h2><div class="card q"><h3>Який обсяг будуємо? Вежа в усіх варіантах 4 колони × 3 цистерни (будуємо один раз; в А вистачило б 3 колони, але оболонка й симетрія — під Б)</h3><div class="opts"><div class="opt rec"><span class="tag">Рекомендовано</span><h4>Б — вежа + 2 вільні жили (рекомендовано)</h4><p>Нафтовий кластер: вежа a −251…−247, c −162…−158 (земля z −3,8, перепад 0 м); жили (−234,6; −161,2) — 115 м від вежі, (−227,1; −143,2) — 223 м</p><ul><li><span class="pm ok">+</span> нафта 1 620 → 2 220 м³/хв (+600, +37 %): 2 Нафтові помпи на 250 % (+6 уламків з 104, +268 МВт)</li><li><span class="pm ok">+</span> 4 колони × 600 = 2 400 м³/хв ≥ 2 220 — вежа не обмежує; запас 28 800 м³ = 13 хв повного потоку</li><li><span class="pm ok">+</span> дає нафту під заплановані +8 Паливних ЕС: +160 м³/хв палива = ≈ 240 нафти → +2 000 МВт (Двигунів 120 — уже в резерві 02) і ще ≈ 360 м³/хв на пластик і гуму</li><li><span class="pm ok">+</span> вільні жили перестають простоювати; вежа одразу під кінцевий масштаб</li><li><span class="pm bad">−</span> МВт самі по собі +0: стеля 13 000 МВт — 52 ЕС; +2 000 МВт лише з 8 новими ЕС і ≈ 4 новими Переробними заводами «Паливо» (окремий крок)</li><li><span class="pm bad">−</span> Двигуни: вежа 8–16 + 2 Нафтові помпи 30 = 38–46 при резерві мінус 101</li><li><span class="pm bad">−</span> час ≈ 1 год 30 (оцінка, не перевірено): вежа ≈ 55 хв + жили ≈ 35 хв (труби ≈ 340 м, ЛЕП)</li></ul></div><div class="opt"><h4>А — лише вежа на поточну нафту</h4><p>Нафтовий кластер, a −251…−247, c −162…−158 (5 × 5 фундаментів, 40 × 40 м; поряд ще 3 такі самі ділянки)</p><ul><li><span class="pm ok">+</span> найдешевше: 12 цистерн, 4 Трубопровідні помпи 2 (+4 запасні), 0 нових ПЗ і ЕС; Двигунів 8–16</li><li><span class="pm ok">+</span> вежа вирівнює потік: Нафтові помпи не підпираються, усі ПЗ бачать повний тиск; час ≈ 55 хв (оцінка)</li><li><span class="pm ok">+</span> Б можна дозбудувати потім: вежа вже на 2 400 м³/хв</li><li><span class="pm bad">−</span> Паливо 1 019 → не більше 1 040 м³/хв: +0…+21, МВт +0…+260 (стеля 52 ЕС)</li><li><span class="pm bad">−</span> нафта та сама 1 620 — вільні жили простоюють далі</li><li><span class="pm bad">−</span> самоплив до 32 ПЗ станції (z 28,3) — запас напору лише ≈ 6 м (верх вежі ≈ 34 м): не перевірено в грі</li></ul></div><div class="opt"><h4>В — вежа + жили + нові рецепти (зараз недоступний)</h4><p>те саме, що Б + 2 Змішувачі біля станції (місце — Проєктувальник)</p><ul><li><span class="pm ok">+</span> «Мазут (дод.)» + «Розведене паливо»: 30 нафти → 80 Палива (4× проти 20 стандартного): +160 Палива = лише 60 нафти/хв (2 ПЗ), жили не потрібні</li><li><span class="pm ok">+</span> Змішувач відкрито («Розробка системи управління»); Турбопаливо ×2,2 МВт на кожен м³ палива</li><li><span class="pm bad">−</span> потрібно відкрити 2–3 рецепти: «Мазут (дод.)», «Розведене паливо» (жорсткі диски), «Турбопаливо» (М.А.М. Сірка) — зараз не відкрито</li><li><span class="pm bad">−</span> Змішувач ×2: Двигунів 40, Важких модульних рам 20 (✖ проти Фази 4: на карті 114), Комп’ютерів 20, Алюмінієвих корпусів 100</li><li><span class="pm bad">−</span> Турбопаливо: МВт на ЕС лишається 250 — сенс лише при &gt; 52 ЕС; Пресоване вугілля 10/хв на кожен ПЗ</li></ul></div></div></div></section>
+<section><h2>Вежа з Промислових цистерн — розмір, напір, місце (однаково для А, Б, В)</h2><div class="tw"><table><tr><th>Параметр</th><th>Значення</th><th>Чому</th></tr><tr><td>Колон × поверхів</td><td>4 × 3 = 12 цистерн</td><td>Трубопровід 2 — 600 м³/хв на колону: А 1 620 ≤ 1 800 (3 колони), Б 2 220 ≤ 2 400 (4 колони); симетрія як у прикладі</td></tr><tr><td>Запас</td><td>28 800 м³</td><td>12 × 2 400 м³ · 17,8 хв при 1 620/хв, 13 хв при 2 220/хв</td></tr><tr><td>Габарит</td><td>28 × 28 × 36 м</td><td>цистерна 14 × 14 × 12 м, 2 × 2 на колони → вкладається в рамку Проєктувальника 2 (40 × 40 × 40); 5 × 5 фундаментів</td></tr><tr><td>Підйом</td><td>1 Трубопровідна помпа 2 на колону + 1 запасна (8)</td><td>напір 50 м проти 36 м вежі + підводка; межа підйому однієї помпи ≈ 45 м; Нафтова помпа й ПЗ — лише 10 м</td></tr><tr><td>Вниз до ПЗ</td><td>самоплив</td><td>32 ПЗ станції на z 28,3, ще 11 на кластері на z ≈ −4…0; верх вежі ≈ 34 м (основа на z −1,7) → запас ≈ 6 м, не перевірено; вище z 28 лишаються помпи станції</td></tr><tr><td>Місце (кандидати)</td><td>Нафтовий кластер: a −251…−247, c −162…−158 · −251…−247, −157…−153 · −246…−242, −158…−154 · −256…−252, −164…−160</td><td>рівна земля z −3,8 (перепад 0–0,3 м), фундаментів немає; ≈ 330 м до станції; не перевірено: дерева, скелі, труби на землі; мітки поруч нема — поставити «Нафтова вежа»</td></tr><tr><td>У Проєктувальнику 2</td><td>кресленик «колона × 3 цистерни» × 4</td><td>усе інше вручну: колектор подачі, колектор виходу до ПЗ, труби від жил і свердловини, плита 5 × 5</td></tr></table></div></section>
+<section><h2>Рецепти: що відкрито й скільки Палива дає нафта (сейв 24.10 15:46)</h2><div class="tw"><table><tr><th>Рецепт (назва з гри)</th><th>Відкрито</th><th>30 нафти → Паливо</th><th>МВт на 1 м³/хв нафти</th></tr><tr><td>Паливо (стандартний)</td><td><span class="st ok">✓ так</span></td><td>20 (+15 смоли)</td><td>8,3</td></tr><tr><td>Гума → Мазут → «Каністра з розведеним паливом» (так працює станція)</td><td><span class="st ok">✓ так</span></td><td>≈ 40 (+20 гуми)</td><td>16,7</td></tr><tr><td>Пластик → Мазут → каністри</td><td><span class="st ok">✓ так</span></td><td>≈ 20 (+20 пластику)</td><td>8,3</td></tr><tr><td>Полімерна смола (дод.) — 60 нафти → 130 смоли + 20 Мазуту</td><td><span class="st ok">✓ так</span></td><td>≈ 20</td><td>8,3</td></tr><tr><td>Залишкове паливо — Мазут 60 → Паливо 40</td><td><span class="st ok">✓ так</span></td><td>—</td><td>6,3 на Мазут</td></tr><tr><td>Мазут (дод. кресленик) — 30 нафти → 40 Мазуту + 20 смоли</td><td><span class="st bad">✖ ні (жорсткі диски)</span></td><td>80 з Розведеним паливом</td><td>33,3</td></tr><tr><td>Розведене паливо (Змішувач) — Мазут 50 + Вода 100 → Паливо 100</td><td><span class="st bad">✖ ні (жорсткі диски)</span></td><td>(= каністри, без Пакувальників)</td><td>—</td></tr><tr><td>Турбопаливо — Паливо 22,5 + Пресоване вугілля → 18,75</td><td><span class="st bad">✖ ні (М.А.М. Сірка)</span></td><td>×2,2 МВт на м³ палива</td><td>ЕС лишається 250 МВт</td></tr></table></div></section>
+<section><h2>Будматеріали ✓/✖ (за Docs гри й сейвом 24.10 15:46; труби — оцінка)</h2><div class="tw"><table><tr><th>Що</th><th>А</th><th>Б (А + жили)</th><th>В (Б + Змішувачі, якщо відкрити)</th><th>На карті</th></tr><tr><td>Промислова цистерна ×12: Промислова балка 60, Мідний лист 120, Пластик 300</td><td><span class="st ok">✓ ✓</span></td><td><span class="st ok">✓ ✓</span></td><td><span class="st ok">✓ ✓</span></td><td>балок 19 370 · листів 2 256 · пластику 40 298</td></tr><tr><td>Трубопровідна помпа 2 ×8: Важка модульна рама 8, Двигун 16, Пластик 80</td><td><span class="st warn">⚠ ⚠ Двигуни</span></td><td><span class="st warn">⚠ ⚠ Двигуни</span></td><td><span class="st warn">⚠ ⚠ Двигуни</span></td><td>ХМР 114 (Фаза 4 ≈ 1 700) · Двигунів 254 при резерві −101</td></tr><tr><td>Труби Мк 2 (≈ 100 шт., Б ≈ 200): Мідний лист 2 + Пластик 1</td><td><span class="st ok">✓ ✓</span></td><td><span class="st ok">✓ ✓</span></td><td><span class="st ok">✓ ✓</span></td><td>оцінка довжини</td></tr><tr><td>Нафтова помпа ×2: Двигун 30, Промислова балка 40, Кабель 120</td><td>—</td><td><span class="st warn">⚠ ⚠ Двигуни</span></td><td><span class="st warn">⚠ ⚠ Двигуни</span></td><td>Кабелю 955 ✓</td></tr><tr><td>Енергетичні уламки: 3 на помпу × 2</td><td>—</td><td><span class="st ok">✓ ✓ 6 з 104</span></td><td><span class="st ok">✓ ✓ 6 з 104</span></td><td>104</td></tr><tr><td>Змішувач ×2: Комп’ютер 20, ХМР 20, Двигун 40, Алюмінієвий корпус 100</td><td>—</td><td>—</td><td><span class="st bad">✖ ✖ ХМР (Фаза 4) · ⚠ Двигуни</span></td><td>Комп’ютерів 80 ✓ · корпусів 5 023 ✓</td></tr><tr><td>Разом Двигунів</td><td>8–16</td><td>38–46</td><td>78–86</td><td>бракує 101 і так</td></tr><tr><td>Додатково МВт (споживання)</td><td>≈ 32–64</td><td>≈ 300–330</td><td>≈ 380</td><td>запас над номіналом +4 904 ✓</td></tr><tr><td>Час будівництва (оцінка, не перевірено)</td><td>≈ 55 хв</td><td>≈ 1 год 30</td><td>≈ 2 год</td><td>коефіцієнти `tools\схема\конфіг.json`</td></tr></table></div></section>
+<section><h2>Вільні жили Сирої нафти (Нафтовий кластер, сейв 24.10 15:46)</h2><div class="tw"><table><tr><th>Жила (a, c)</th><th>Якість</th><th>100 %</th><th>250 %</th><th>Від вежі</th><th>Живлення поруч</th></tr><tr><td>(−234,6; −161,2) z −4</td><td>нормальна</td><td>120</td><td>300</td><td>≈ 115 м</td><td>Електростовп 1 (−222,2; −162,5) — 161 м</td></tr><tr><td>(−227,1; −143,2) z −4</td><td>нормальна</td><td>120</td><td>300</td><td>≈ 223 м</td><td>Опора ЛЕП (−241,9; −136,1) — 131 м</td></tr></table></div></section>
+<section><h2>Не перевірено</h2><div class="card"><div>Реальна подача станції по хвилинах і скільки нафти зараз реально йде у ПЗ (контейнери Пластику й Гуми повні, 37 % навантаження — частина ПЗ стоїть через вихід, а не через нафту).</div><div>Чи самоплив із вежі (верх ≈ 34 м) дістає вхід ПЗ на z 28,3; чи 2 Нафтові помпи на жилах не впруться в підпір (помпа на багатій жилі 200 % працювала на 70 %).</div><div>Вільні ділянки під вежу — лише за рельєфом (`рельєф.py`): дерева, скелі, труби на землі не перевірено; довжина труб і час — оцінка.</div><div>Цифри «МВт на 1 м³/хв» — за Docs гри: ЕС спалює 20 м³/хв Палива на 250 МВт, Турбопалива 7,5.</div></div></section>
+<footer>Планувальник · запит 13 · `штаб\асистент\черга.md` · рецепти й вартість — Docs гри (uk.json), сейв 24.10 15:46 · згенеровано tools\інфо\інфо.js</footer>
+</div><script>
+document.addEventListener('click',function(e){var s=document.querySelector('.mn-sub[open]');if(s&&!s.contains(e.target))s.removeAttribute('open');});
+// Клієнт спільних коментарів (з 23.10, п. 18): коментар = issue репозиторію сайту на GitHub (відкрито / закрито).
+// Вбудовується в сторінки стану (tools\інфо\інфо.js) і схеми (tools\схема\схема.js) через tools\інфо\меню.js (MENU.gh) — один код, window.GHC.
+//   GHC.newUrl(назва, текст)  — адреса форми нового issue з уже вписаними назвою й текстом (мітки через URL чужим не ставляться — мітка в назві: «[<ключ схеми або сторінка> · <елемент>] …»)
+//   GHC.load(cb)              — читає issues (відкриті й закриті) через API без входу, кеш у sessionStorage на 5 хв; без інтернету — тихо нічого (cb не викликається)
+//   GHC.list                  — розібрані issues після load: {n, scope, el, text, key, body, who, at, state, url, comments}
+//   key — машинний ключ елемента схеми («n:id», «e:a→b», «i:id», «f:N»), береться з посилання «#к=…» у тексті issue (його кладе движок схем)
+// Секретів тут нема й бути не повинно: усе публічне, вхід робить сам GitHub, ключів доступу тут нема.
+(function () {
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'ghc:issues', TTL = 5 * 60 * 1000;
+  var G = window.GHC = { repo: REPO, site: SITE, list: null, _w: [], _f: [], _busy: false };
+  var enc = encodeURIComponent;
+  G.NOTE = 'Репозиторій публічний — не вписуй сюди секретів і адрес.';
+  G.parse = function (i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), b = i.body || '', k = /#к=([^\s)>\]]+)/.exec(b), body = b.indexOf('\n---') >= 0 ? b.slice(b.indexOf('\n---') + 4) : b;
+    var key = ''; if (k) { try { key = decodeURIComponent(k[1]); } catch (e) { key = k[1]; } }
+    return m ? { n: i.number, scope: m[1], el: m[2], text: m[3], key: key, body: body.replace(/^\s+|\s+$/g, ''), who: i.user && i.user.login, at: i.created_at, state: i.state, url: i.html_url, comments: i.comments } : null;
+  };
+  G.newUrl = function (title, body) { return 'https://github.com/' + REPO + '/issues/new?title=' + enc(title) + '&body=' + enc(String(body).slice(0, 3000)); };
+  G.date = function (iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); };
+  G.onSite = function () { return /github\.io$/.test(location.hostname) && location.pathname.indexOf('/ukronatsysty/') === 0; };
+  G.pagePath = function (fallback) { if (!G.onSite()) return fallback; var q = location.pathname.slice('/ukronatsysty/'.length); return q || 'index.html'; };   // шлях сторінки на сайті
+  G.pageUrl = function (fallback) { return G.onSite() ? location.origin + location.pathname : (fallback || SITE); };
+  function done(raw) { G.list = raw.map(G.parse).filter(Boolean); G._busy = false; var w = G._w; G._w = []; w.forEach(function (f) { try { f(G.list); } catch (e) {} }); }
+  function fail() { G._busy = false; var f = G._f; G._f = []; G._w = []; f.forEach(function (x) { try { x(); } catch (e) {} }); }
+  G.load = function (cb, bad) {
+    if (G.list) { cb(G.list); return; }
+    G._w.push(cb); if (bad) G._f.push(bad); if (G._busy) return; G._busy = true;
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { done(c.d); return; } } catch (e) {}
+    if (!window.fetch) { fail(); return; }
+    var all = [];
+    (function next(p) {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&per_page=100&page=' + p, { cache: 'no-cache', headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (a) {
+          all = all.concat(a.filter(function (i) { return !i.pull_request; }));
+          if (a.length === 100 && p < 3) return next(p + 1);
+          var slim = all.map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 2000), user: i.user && { login: i.user.login }, created_at: i.created_at, state: i.state, html_url: i.html_url, comments: i.comments }; });
+          try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+          done(slim);
+        })
+        .catch(fail);   // без інтернету / ліміт API — тихо нічого
+    })(1);
+  };
+  // «Коментар до сторінки» у шапці-меню (id="mn-cmt", data-path — шлях сторінки на сайті; на сайті шлях беремо з адреси)
+  function pageBtn() {
+    var a = document.getElementById('mn-cmt'); if (!a) return;
+    var p = G.pagePath(a.getAttribute('data-path') || ''), u = G.pageUrl(G.site + encodeURI(p));
+    a.href = G.newUrl('[сторінка · ' + p + '] ', 'Сторінка: ' + u + '\n' + G.NOTE + '\n---\n\n');
+    G.load(function (L) {
+      var o = L.filter(function (i) { return i.scope === 'сторінка' && i.el === p && i.state === 'open'; });
+      if (o.length) { a.textContent = '💬 Коментар до сторінки · ' + o.length + ' відкрито'; a.title = 'Відкриті коментарі до цієї сторінки: ' + o.map(function (i) { return '#' + i.n; }).join(', ') + ' — github.com/' + REPO + '/issues'; }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pageBtn); else pageBtn();
+})();
+
+(function(){var b=document.getElementById('th'),r=document.documentElement,k='info-theme';
+try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){}
+b.onclick=function(){var dark=r.getAttribute('data-theme')?r.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();
+</script></body></html>
