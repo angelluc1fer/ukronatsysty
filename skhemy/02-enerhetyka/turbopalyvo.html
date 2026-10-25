@@ -147,9 +147,13 @@ ol.stp.man li .why{margin-top:2px}
 .eg.v-trk .co{stroke-dasharray:10 5;opacity:1}.eg.v-trk .cs{stroke:#9a6b3a;opacity:1}
 .eg.v-pwr .co{stroke-dasharray:3 4;opacity:1}.eg.v-pwr .cs{stroke:#d4b106;opacity:1}
 .eg.v-out .co{stroke-dasharray:14 6;opacity:1}.eg.v-out .cs{stroke:var(--acc);opacity:1}
-#lgd{position:absolute;left:8px;top:8px;max-width:min(46%,420px);padding:6px 10px;border-radius:10px;background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);font:600 11.5px var(--f-body);display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;pointer-events:none;z-index:3}
+#lgd{position:absolute;right:8px;bottom:8px;max-width:min(46%,420px);padding:6px 10px;border-radius:10px;background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);font:600 11.5px var(--f-body);display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;pointer-events:none;z-index:3}
 #lgd b{width:100%;font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}#lgd span{white-space:nowrap}#lgd i{display:inline-block;width:14px;height:5px;border-radius:3px;margin-right:5px;vertical-align:middle}
 #lgd i.trk{background:repeating-linear-gradient(90deg,#9a6b3a 0 6px,transparent 6px 9px)}#lgd i.pwr{background:repeating-linear-gradient(90deg,#d4b106 0 3px,transparent 3px 6px)}#lgd i.out{background:repeating-linear-gradient(90deg,var(--acc) 0 8px,transparent 8px 12px)}
+
+.ldr{stroke:var(--acc);stroke-width:1px;vector-effect:non-scaling-stroke;opacity:.65;stroke-dasharray:3 3}
+#lgd{pointer-events:auto;cursor:pointer}#lgd b::after{content:' ▴'}#lgd.c b::after{content:' ▾'}#lgd.c span{display:none}
+@media (max-width:760px){#lgd{max-width:min(78%,300px);font-size:10.5px}}
 /* шапка-меню (23.10; по кнопці на ПК і телефоні — 25.10): однакова на всіх сторінках; toolsінфоменю.js */
 nav.menu{position:relative;margin:0 0 14px;background:var(--card);border:1px solid var(--line);border-radius:12px}
 .mn-bar{display:flex;align-items:center;gap:12px;padding:6px 8px;min-height:44px}
@@ -974,7 +978,7 @@ function draw() {
     if (big && (n.kind === 'machine' || n.kind === 'gen' || n.kind === 'source')) LB.push({ x: n.x, y: n.y, t: (n.clock !== 100 ? f1(n.clock) + ' % → ' : '') + pct(n.r), c: 'lpc st-' + (st || 'ok'), s: 'pc', pn: nameL, side: -1, ext, ov: 1.25 });
     if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y + 2.4, t: n.outE.map(e => f1(e.tot)).join(' | ') + ' ← ' + f1(n.inE.reduce((s, e) => s + e.tot, 0)), c: 'lrz', s: 'rzo' });
     if (n.kind === 'joint' || n.kind === 'inlet' || n.kind === 'outlet') LB.push({ x: n.x, y: n.y - 1.8, t: n.short, c: 'ljt', s: 'jt' });
-    if (n.ann) LB.push({ x: n.x, y: n.y, t: [].concat(n.ann), c: 'lann', s: 'ann' });
+    if (n.ann) { const off = n.src && n.src['підпис_зсув'], lx = n.x + (off ? +off[0] : 0), ly = n.y + (off ? +off[1] : 0); if (off) W.push(`<line class="ldr" x1="${n.x.toFixed(1)}" y1="${n.y.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"/>`); LB.push({ x: lx, y: ly, t: [].concat(n.ann), c: 'lann', s: n.src && n.src['підпис_головний'] ? 'ann1' : 'ann' }); }   // «підпис_зсув»: [dx, dy] м — підпис винесено з виноскою
     for (let q = lb0; q < LB.length; q++) LB[q].ow = 'n:' + n.id;
   }
   (SP['виправити'] || []).forEach((f, i) => { const id0 = [].concat(f['де'] || [])[0], n = G.byId[id0], fr = G.frames.find(x => (x.inst || x.bp) === id0); const p = n ? [n.x, n.y, n.z] : fr ? [...frPt(fr, fr.w - 4, 4), fr.z] : null;
@@ -989,7 +993,7 @@ function draw() {
 function legendStrip() {
   let o = document.getElementById('lgd');
   if (!SP['легенда'] || V.only || floor === 'cut') { if (o) o.remove(); return; }
-  if (!o) { o = document.createElement('div'); o.id = 'lgd'; stage.appendChild(o); }
+  if (!o) { o = document.createElement('div'); o.id = 'lgd'; if (window.matchMedia('(max-width:760px)').matches) o.classList.add('c'); o.onclick = () => o.classList.toggle('c'); stage.appendChild(o); }   // на телефоні легенда згорнута; тап — розгорнути
   const items = new Set(); for (const e of V.G.edges) { if (e.vid) continue; const i = mainItem(e); if (i) items.add(i); }
   o.innerHTML = '<b>Легенда</b>' + [...items].map(i => `<span><i style="background:${col(i)}"></i>${esc(nm(i))}</span>`).join('') + SP['легенда'].map(l => `<span><i class="${esc(l.c || '')}"></i>${esc(l.t)}</span>`).join('');
 }
@@ -1101,14 +1105,6 @@ function drawCut() {
   if (sel || FOC) highlight(sel);
   chips(); legendStrip(); place();
 }
-// 25.10 (Комплекс): стрічка легенди на карті — завжди на виду; spec «легенда»: [{t, c}] додає свої позначки (колір предметів — автоматично)
-function legendStrip() {
-  let o = document.getElementById('lgd');
-  if (!SP['легенда'] || V.only || floor === 'cut') { if (o) o.remove(); return; }
-  if (!o) { o = document.createElement('div'); o.id = 'lgd'; stage.appendChild(o); }
-  const items = new Set(); for (const e of V.G.edges) { if (e.vid) continue; const i = mainItem(e); if (i) items.add(i); }
-  o.innerHTML = '<b>Легенда</b>' + [...items].map(i => `<span><i style="background:${col(i)}"></i>${esc(nm(i))}</span>`).join('') + SP['легенда'].map(l => `<span><i class="${esc(l.c || '')}"></i>${esc(l.t)}</span>`).join('');
-}
 function openCell(key) {   // клітинка → цей кресленик на плані його поверху
   const c = CUT.cells.find(q => q.key === key); if (!c) return;
   const F = floors(); setFloor(F[c.fi].z);
@@ -1138,7 +1134,7 @@ function setT(nk, ntx, nty) {
 // (keep — ніколи не ховається, лишається fMin). Підпис будівлі чи стрічки не ширший за саму будівлю (ext·ov): не влазить — ховається, а не налазить.
 // Пріоритет при зіткненні: ⚠ → № → % → потоки → Р/З → рецепт → вузли.
 const SZ = {   // [kMin, kMax, fMin, fMax, пріоритет, keep]
-  ann: [.1, 4, 11.5, 15, 11.5, 1], annl: [.1, 4, 10, 12.5, 6.4, 1],   // 25.10: блок-підпис будівлі (spec «підпис») і підпис лінії (spec «підпис» у звʼязку) — видно на будь-якому зумі
+  ann1: [.1, 4, 11.5, 15, 12, 1], ann: [.1, 4, 11.5, 15, 11.5, 1], annl: [.1, 4, 10, 12.5, 6.4, 1],   // 25.10: блок-підпис будівлі (spec «підпис») і підпис лінії (spec «підпис» у звʼязку) — видно на будь-якому зумі
   fix: [1, 8, 12, 15, 11, 1], frm: [1, 8, 11, 18, 10, 1], cmt: [1, 8, 12, 15, 10, 1], ax: [2.5, 8, 9, 12, 9], frs: [3, 10, 9, 12, 2],
   pc: [3.4, 9, 9, 12.5, 8], io: [2.5, 9, 9, 14, 6.9], nm: [4.5, 12, 9, 13, 7], fl: [2.6, 10, 9, 12, 6], fl2: [6, 12, 9, 12, 5.2], rz: [6, 18, 9, 12, 5],
   lf: [6, 14, 9, 12, 4.5], rzo: [10, 20, 9, 11, 4], fl0: [12, 20, 9, 12, 4], rc: [8, 16, 8.5, 11.5, 3], jt: [9, 18, 9, 11, 2], nms: [8, 16, 9, 12, 1],
@@ -1151,7 +1147,7 @@ function place() {
     const [k0, k1, f0, f1z, , keep] = SZ[L.s]; L._on = false;
     if (!keep && k < k0) return;
     const sx = L.x * k + tx, sy = L.y * k + ty; if (sx < -80 || sy < -30 || sx > vw + 80 || sy > vh + 30) return;
-    const fs = f0 + (f1z - f0) * Math.min(1, Math.max(0, Math.log(k / k0) / Math.log(k1 / k0)));
+    const fs = (f0 + (f1z - f0) * Math.min(1, Math.max(0, Math.log(k / k0) / Math.log(k1 / k0)))) * (vw < 560 && /^ann/.test(L.s) ? .72 : 1);   // телефон: блок-підписи дрібніші
     const lines = Array.isArray(L.t) ? L.t : [String(L.t)], ch = Math.max(0, ...lines.map(x => x.length));
     const icOk = L.ic && DT.icons && DT.icons[L.ic] && (L.io || k >= (L.ik != null ? L.ik : L.e ? (L.s === 'fl' ? 6 : 9) : 4));
     for (const icn of icOk ? [1, 0] : [0]) {   // не влізло з іконкою — спробувати без
@@ -1169,7 +1165,8 @@ function place() {
     if (!L._on || (L.xp && L.xp._placed)) continue;   // іконка замість назви — лише поки назва не влізла (чи не втратила місце)
     const fs = L._fs, lines = L._lines, lh = fs + 2, tw = L._ch * fs * .6, icw = L._icn ? fs + 3 : 0, w = tw + icw + 6, h = L._h;
     const sx = L.x * k + tx, sy = L.y * k + ty + (L.dy || 0) + (L.pn ? L.side * (hgt(L.pn) + h) / 2 + 2 * L.side : 0);   // % — над назвою, рецепт — під нею
-    const x0 = L.al === 'l' ? sx : sx - w / 2, r = [x0 - 1, sy - h / 2 - 1, x0 + w + 1, sy + h / 2 + 1];
+    let x0 = L.al === 'l' ? sx : sx - w / 2; if (/^ann/.test(L.s)) x0 = Math.max(4, Math.min(vw - w - 4, x0));   // блок-підпис не виходить за екран
+    const r = [x0 - 1, sy - h / 2 - 1, x0 + w + 1, sy + h / 2 + 1];
     if (hit(r)) continue; add(r); L._placed = true;
     const cx = 3 + icw + tw / 2, y0 = -(lines.length - 1) * lh / 2 + fs * .36;
     out.push(`<g class="lb ${L.c}${FOC && inFoc(L.ow) ? ' foc' : ''}" transform="translate(${x0.toFixed(1)},${sy.toFixed(1)})"><rect x="0" y="${-h / 2}" width="${w}" height="${h}" rx="${Math.min(4, fs / 3).toFixed(1)}"/>${icw ? `<image href="${DT.icons[L.ic]}" x="3" y="${-fs / 2 - 1}" width="${fs + 2}" height="${fs + 2}"/>` : ''}${tw ? `<text font-size="${fs.toFixed(1)}">${lines.map((s, i) => `<tspan x="${cx.toFixed(1)}" y="${(y0 + i * lh).toFixed(1)}">${esc(s)}</tspan>`).join('')}</text>` : ''}</g>`);
