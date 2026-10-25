@@ -140,6 +140,16 @@ ol.stp.man li .why{margin-top:2px}
 .bar{align-items:flex-start;gap:6px 12px}.floors,.acts{min-width:0}.acts{justify-content:flex-end}.acts button,.floors button,.tabs button{white-space:nowrap}
 .card{width:360px}
 @media (max-width:760px){.ttl .sub{white-space:normal}}
+
+/* 25.10 (Комплекс): блок-підписи, підписи ліній, легенда на карті, колія / ЛЕП / контур */
+.lb.lann rect{fill:color-mix(in srgb,var(--card) 94%,transparent);stroke:var(--acc);stroke-width:1.2px}.lb.lann text{font-weight:700;fill:var(--ink)}
+.lb.lann.l rect{stroke:var(--line);stroke-width:1px}.lb.lann.l text{font-weight:600;font-family:var(--f-mono)}
+.eg.v-trk .co{stroke-dasharray:10 5;opacity:1}.eg.v-trk .cs{stroke:#9a6b3a;opacity:1}
+.eg.v-pwr .co{stroke-dasharray:3 4;opacity:1}.eg.v-pwr .cs{stroke:#d4b106;opacity:1}
+.eg.v-out .co{stroke-dasharray:14 6;opacity:1}.eg.v-out .cs{stroke:var(--acc);opacity:1}
+#lgd{position:absolute;left:8px;top:8px;max-width:min(46%,420px);padding:6px 10px;border-radius:10px;background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);font:600 11.5px var(--f-body);display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;pointer-events:none;z-index:3}
+#lgd b{width:100%;font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}#lgd span{white-space:nowrap}#lgd i{display:inline-block;width:14px;height:5px;border-radius:3px;margin-right:5px;vertical-align:middle}
+#lgd i.trk{background:repeating-linear-gradient(90deg,#9a6b3a 0 6px,transparent 6px 9px)}#lgd i.pwr{background:repeating-linear-gradient(90deg,#d4b106 0 3px,transparent 3px 6px)}#lgd i.out{background:repeating-linear-gradient(90deg,var(--acc) 0 8px,transparent 8px 12px)}
 /* шапка-меню (23.10; по кнопці на ПК і телефоні — 25.10): однакова на всіх сторінках; toolsінфоменю.js */
 nav.menu{position:relative;margin:0 0 14px;background:var(--card);border:1px solid var(--line);border-radius:12px}
 .mn-bar{display:flex;align-items:center;gap:12px;padding:6px 8px;min-height:44px}
@@ -251,7 +261,7 @@ function expand(SP, DT, only) {
     if (byId[id]) { errs.push(`повторний id ${id}`); return; }
     const c = T.clocks && T.clocks[b.id] != null ? clockOf({ 'такт': T.clocks[b.id] }) : clockOf(b);
     const n = { id, bid: b.id, inst: T.inst, bp: bpId, type: b['тип'], kind: ty.kind, name: ty.n, x, y, z, ang, a0, w: ty.w, l: ty.l, h: ty.h,
-      recipe: b['рецепт'], clock0: c, clock: c, text: b['текст'], fact: b['факт'], rules: b['правила'], purity: PUR[b['чистота'] || 'нормальна'] || 1,
+      recipe: b['рецепт'], clock0: c, clock: c, text: b['текст'], ann: b['підпис'], link: b['посилання'], fact: b['факт'], rules: b['правила'], purity: PUR[b['чистота'] || 'нормальна'] || 1,
       item: b['предмет'], pumps: b['помпи'], gives: b['дає'], takes: b['бере'], fuel: b['паливо'], amount: b['кількість'], capacity: b['місткість'], ports: {}, inE: [], outE: [], src: b, lx: +b.x || 0, ly: +b.y || 0, lz: +b.z || 0 };
     if (n.kind === 'machine' && !DT.recipes[n.recipe]) errs.push(`${id}: невідомий рецепт «${n.recipe}» (node tools\\схема\\схема.js рецепт <слово>)`);
     for (const p of ty.ports) {
@@ -307,7 +317,7 @@ function expand(SP, DT, only) {
     const cap = m === 'p' ? PIPE[Math.min(t, 2)] : BELT[Math.min(t, 6)];
     const pts = o['точно'] && o['шлях'] ? o['шлях'].map(w => { const [x, y] = T.pt(+w[0], +w[1]); return [x, y, T.z + (+w[2] || 0)]; }) : route(a, b, o['шлях'], T);   // «точно» — геометрія як у грі
     let len = 0, dz = 0; for (let i = 1; i < pts.length; i++) { len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); dz += Math.abs(pts[i][2] - pts[i - 1][2]); }
-    const e = { id: 'e' + edges.length, a: a.n, ap: a.p.id, b: b.n, bp: b.p.id, m, t, cap, t0: t, cap0: cap, pts, len, dz, lift: o['підіймач'], inst: T.inst, text: o['текст'], off: {}, acc: {}, f: {} };
+    const e = { id: 'e' + edges.length, a: a.n, ap: a.p.id, b: b.n, bp: b.p.id, m, t, cap, t0: t, cap0: cap, pts, len, dz, lift: o['підіймач'], inst: T.inst, text: o['текст'], ann: o['підпис'], vid: o['вид'], off: {}, acc: {}, f: {} };
     edges.push(e); a.n.outE.push(e); b.n.inE.push(e);
   }
   function addBP(bpId, T, pre) {
@@ -754,7 +764,7 @@ function buildTime(G, K0) {
   const zero = () => ({ m: 0, rz: 0, vy: 0, ib: 0, bn: 0, bm: 0, tn: 0, tm: 0, lf: 0, fd: 0, min: 0 });
   const add = (ns, es) => { const R = zero(); R.fd = cellsOf(ns);
     for (const n of ns) { const k = nodeK(n); R[KEY[k]]++; R.min += K[k]; }
-    for (const e of es) { if (e.m === 'p') { R.tn++; R.tm += e.len; R.min += K['звʼязок_хв'] + e.len * K['труба_м_хв']; } else { R.bn++; R.bm += e.len; R.min += K['звʼязок_хв'] + e.len * K['стрічка_м_хв']; } const l = liftsOf(e); R.lf += l; R.min += l * K['підіймач_хв']; }
+    for (const e of es) { if (e.vid) continue; if (e.m === 'p') { R.tn++; R.tm += e.len; R.min += K['звʼязок_хв'] + e.len * K['труба_м_хв']; } else { R.bn++; R.bm += e.len; R.min += K['звʼязок_хв'] + e.len * K['стрічка_м_хв']; } const l = liftsOf(e); R.lf += l; R.min += l * K['підіймач_хв']; }
     R.min += R.fd * K['фундамент_хв']; return R; };
   const plus = (a, b) => { const o = zero(); for (const k in o) o[k] = a[k] + b[k]; return o; };
   const insts = G.frames.filter(f => f.inst), byBp = {};
@@ -886,13 +896,14 @@ function onFloor(z0, z1 = z0) {
 const hasBuf = () => V && V.G.nodes.some(n => n.buf && n.capacity && +n.amount < .97 * n.capacity);
 function chips() {
   const T = V.G.T, P = V.G.problems, err = V.G.errs.length;
-  $('chips').innerHTML = [
+  const CH = [
     T.mwNom ? `<span class="chip" title="реально / якщо все працює на повну">⚡ ${f1(T.mwUse)} / ${f1(T.mwNom)} МВт</span>` : '',
     T.mwGenNom ? `<span class="chip gen" title="генерує / при повному паливі">🔋 ${f1(T.mwGen)} / ${f1(T.mwGenNom)} МВт</span>` : '',
     `<span class="chip" title="Енергетичні уламки під такти">◆ ${T.shards} уламк.</span>`,
     Object.keys(V.over).length ? `<span class="chip whatif" title="такти чи стрічки змінено тут, не в грі">що як: ${Object.keys(V.over).length}</span>` : '',
     V.steady ? `<span class="chip whatif" title="контейнери на виході вже повні — лише пропускають те, що забирає вихід">прогноз</span>` : '',
-    err ? `<span class="chip bad">✖ ${err} помилок</span>` : ''].join('');
+    err ? `<span class="chip bad">✖ ${err} помилок</span>` : ''];
+  $('chips').innerHTML = SP['підсумок'] ? SP['підсумок'].map(t => `<span class="chip">${esc(typeof t === 'string' ? t : t.t)}</span>`).join('') + (err ? `<span class="chip bad">✖ ${err} помилок</span>` : '') : CH.join('');
   $('bprob').textContent = `Проблеми · ${P.length + err}`; $('bprob').classList.toggle('warn', P.length + err > 0);
   $('bsteady').hidden = !hasBuf(); $('bsteady').classList.toggle('on', !!V.steady); $('bsteady').textContent = V.steady ? 'Прогноз ✓' : 'Прогноз';
 }
@@ -926,9 +937,10 @@ function draw() {
     if (!e.pts.some(p => onFloor(p[2]))) continue;
     const lb0 = LB.length;
     const d = 'M' + e.pts.map(p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`).join('L'), it = mainItem(e);
-    W.push(`<g class="eg ${e.m === 'p' ? 'pi' : 'be'}${e.tot < 1e-6 ? ' zero' : ''}${e.tot >= e.cap - .01 && e.offT > e.tot + .01 ? ' neck' : ''}${e.man ? ' man' : ''}" data-e="${e.id}" style="--c:${col(it)}"><path class="cs" d="${d}"/><path class="co" d="${d}"/><path class="hit" d="${d}"/></g>`);
+    W.push(`<g class="eg ${e.m === 'p' ? 'pi' : 'be'}${e.tot < 1e-6 ? ' zero' : ''}${e.tot >= e.cap - .01 && e.offT > e.tot + .01 ? ' neck' : ''}${e.man ? ' man' : ''}${e.vid ? ' v-' + ({ 'колія': 'trk', 'ЛЕП': 'pwr', 'контур': 'out' }[e.vid] || 'oth') : ''}" data-e="${e.id}" style="--c:${col(it)}"><path class="cs" d="${d}"/><path class="co" d="${d}"/><path class="hit" d="${d}"/></g>`);
     let best = 0, bi = 1; for (let i = 1; i < e.pts.length; i++) { const L = Math.hypot(e.pts[i][0] - e.pts[i - 1][0], e.pts[i][1] - e.pts[i - 1][1]); if (L > best) { best = L; bi = i; } }
     const a = e.pts[bi - 1], b = e.pts[bi];
+    if (e.ann) LB.push({ x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, t: [].concat(e.ann).concat(e.vid ? Math.round(e.len) + ' м' : f1(e.tot) + ' /хв · ' + Math.round(e.len) + ' м'), c: 'lann l', s: 'annl' });
     if (best > 1.5) LB.push({ x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, t: f1(e.tot) + (e.game != null ? ' / ' + f1(e.game) : '') + (e.tot >= e.cap - .01 ? '!' : ''), ic: it, c: 'led' + (e.tot < 1e-6 ? ' z' : ''), s: e.tot < 1e-6 ? 'fl0' : e.tot >= majorT ? 'fl' : 'fl2', ext: best, ov: .9, e });
     for (let i = 1; i < e.pts.length; i++) if (Math.abs(e.pts[i][2] - e.pts[i - 1][2]) > .3 && Math.hypot(e.pts[i][0] - e.pts[i - 1][0], e.pts[i][1] - e.pts[i - 1][1]) < .2) {
       W.push(`<circle class="lift" cx="${e.pts[i][0]}" cy="${e.pts[i][1]}" r="1.1" style="--c:${col(it)}"/>`);
@@ -962,6 +974,7 @@ function draw() {
     if (big && (n.kind === 'machine' || n.kind === 'gen' || n.kind === 'source')) LB.push({ x: n.x, y: n.y, t: (n.clock !== 100 ? f1(n.clock) + ' % → ' : '') + pct(n.r), c: 'lpc st-' + (st || 'ok'), s: 'pc', pn: nameL, side: -1, ext, ov: 1.25 });
     if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y + 2.4, t: n.outE.map(e => f1(e.tot)).join(' | ') + ' ← ' + f1(n.inE.reduce((s, e) => s + e.tot, 0)), c: 'lrz', s: 'rzo' });
     if (n.kind === 'joint' || n.kind === 'inlet' || n.kind === 'outlet') LB.push({ x: n.x, y: n.y - 1.8, t: n.short, c: 'ljt', s: 'jt' });
+    if (n.ann) LB.push({ x: n.x, y: n.y, t: [].concat(n.ann), c: 'lann', s: 'ann' });
     for (let q = lb0; q < LB.length; q++) LB[q].ow = 'n:' + n.id;
   }
   (SP['виправити'] || []).forEach((f, i) => { const id0 = [].concat(f['де'] || [])[0], n = G.byId[id0], fr = G.frames.find(x => (x.inst || x.bp) === id0); const p = n ? [n.x, n.y, n.z] : fr ? [...frPt(fr, fr.w - 4, 4), fr.z] : null;
@@ -970,7 +983,15 @@ function draw() {
   world.innerHTML = W.join('');
   LB.sort((a, b) => SZ[b.s][4] - SZ[a.s][4]);
   if (sel || FOC) highlight(sel);
-  chips(); place();
+  chips(); legendStrip(); place();
+}
+// 25.10 (Комплекс): стрічка легенди на карті — завжди на виду; spec «легенда»: [{t, c}] додає свої позначки (колір предметів — автоматично)
+function legendStrip() {
+  let o = document.getElementById('lgd');
+  if (!SP['легенда'] || V.only || floor === 'cut') { if (o) o.remove(); return; }
+  if (!o) { o = document.createElement('div'); o.id = 'lgd'; stage.appendChild(o); }
+  const items = new Set(); for (const e of V.G.edges) { if (e.vid) continue; const i = mainItem(e); if (i) items.add(i); }
+  o.innerHTML = '<b>Легенда</b>' + [...items].map(i => `<span><i style="background:${col(i)}"></i>${esc(nm(i))}</span>`).join('') + SP['легенда'].map(l => `<span><i class="${esc(l.c || '')}"></i>${esc(l.t)}</span>`).join('');
 }
 function rot(x, y, d) { const c = Math.cos(d * Math.PI / 180), s = Math.sin(d * Math.PI / 180); return [x * c - y * s, x * s + y * c]; }
 // точка (lx; ly) креслення в координатах ділянки: рамка з «поворот» повернута навколо центру
@@ -1078,7 +1099,15 @@ function drawCut() {
   world.innerHTML = W.join('');
   LB.sort((a, b) => SZ[b.s][4] - SZ[a.s][4]);
   if (sel || FOC) highlight(sel);
-  chips(); place();
+  chips(); legendStrip(); place();
+}
+// 25.10 (Комплекс): стрічка легенди на карті — завжди на виду; spec «легенда»: [{t, c}] додає свої позначки (колір предметів — автоматично)
+function legendStrip() {
+  let o = document.getElementById('lgd');
+  if (!SP['легенда'] || V.only || floor === 'cut') { if (o) o.remove(); return; }
+  if (!o) { o = document.createElement('div'); o.id = 'lgd'; stage.appendChild(o); }
+  const items = new Set(); for (const e of V.G.edges) { if (e.vid) continue; const i = mainItem(e); if (i) items.add(i); }
+  o.innerHTML = '<b>Легенда</b>' + [...items].map(i => `<span><i style="background:${col(i)}"></i>${esc(nm(i))}</span>`).join('') + SP['легенда'].map(l => `<span><i class="${esc(l.c || '')}"></i>${esc(l.t)}</span>`).join('');
 }
 function openCell(key) {   // клітинка → цей кресленик на плані його поверху
   const c = CUT.cells.find(q => q.key === key); if (!c) return;
@@ -1109,6 +1138,7 @@ function setT(nk, ntx, nty) {
 // (keep — ніколи не ховається, лишається fMin). Підпис будівлі чи стрічки не ширший за саму будівлю (ext·ov): не влазить — ховається, а не налазить.
 // Пріоритет при зіткненні: ⚠ → № → % → потоки → Р/З → рецепт → вузли.
 const SZ = {   // [kMin, kMax, fMin, fMax, пріоритет, keep]
+  ann: [.1, 4, 11.5, 15, 11.5, 1], annl: [.1, 4, 10, 12.5, 6.4, 1],   // 25.10: блок-підпис будівлі (spec «підпис») і підпис лінії (spec «підпис» у звʼязку) — видно на будь-якому зумі
   fix: [1, 8, 12, 15, 11, 1], frm: [1, 8, 11, 18, 10, 1], cmt: [1, 8, 12, 15, 10, 1], ax: [2.5, 8, 9, 12, 9], frs: [3, 10, 9, 12, 2],
   pc: [3.4, 9, 9, 12.5, 8], io: [2.5, 9, 9, 14, 6.9], nm: [4.5, 12, 9, 13, 7], fl: [2.6, 10, 9, 12, 6], fl2: [6, 12, 9, 12, 5.2], rz: [6, 18, 9, 12, 5],
   lf: [6, 14, 9, 12, 4.5], rzo: [10, 20, 9, 11, 4], fl0: [12, 20, 9, 12, 4], rc: [8, 16, 8.5, 11.5, 3], jt: [9, 18, 9, 11, 2], nms: [8, 16, 9, 12, 1],
@@ -1169,8 +1199,8 @@ function bounds() {
   for (const n of G.nodes) if (onFloor(n.z)) { const r = Math.max(n.l, n.w) / 2 + 1; ext(n.x - r, n.y - r, n.x + r, n.y + r); }
   return x0 > x1 ? [0, 0, 40, 40] : [x0 - 3, y0 - 3, x1 + 3, y1 + 3];
 }
-function fitRect(x0, y0, x1, y1) { const vw = stage.clientWidth, vh = stage.clientHeight - 8, nk = Math.min(vw / (x1 - x0), vh / (y1 - y0)); setT(nk, (vw - (x1 - x0) * nk) / 2 - x0 * nk, (vh - (y1 - y0) * nk) / 2 - y0 * nk + 4); }
-function fit() { fitRect(...bounds()); }
+function fitRect(x0, y0, x1, y1, pad = 0) { const vw = stage.clientWidth - 2 * pad, vh = stage.clientHeight - 8 - 2 * pad, nk = Math.min(vw / (x1 - x0), vh / (y1 - y0)); setT(nk, (stage.clientWidth - (x1 - x0) * nk) / 2 - x0 * nk, (stage.clientHeight - 8 - (y1 - y0) * nk) / 2 - y0 * nk + 4); }
+function fit() { fitRect(...bounds(), !V.only && SP['легенда'] ? 46 : 0); }   // 25.10: карта з блок-підписами — відступ 46 px, щоб підписи не обрізались
 function zoomAt(px, py, f) { const nk = Math.min(90, Math.max(.15, k * f)); setT(nk, px - (px - tx) * nk / k, py - (py - ty) * nk / k); }
 function centerOn(x, y, nk) { nk = nk || Math.max(k, 6); setT(nk, stage.clientWidth / 2 - x * nk - (card.hidden || innerWidth < 760 ? 0 : 180), stage.clientHeight / 2 - y * nk); }
 
@@ -1298,6 +1328,7 @@ function cardNode(n) {
   const x = n.ex || R.explain(n, DT), it = nodeItem(n), loc = n.inst ? `${esc(n.inst)} · креслення «${esc(n.bp)}» · ` : n.man ? `вручну${n.blk ? ' · ' + esc(n.blk) : ''} · ` : n.bp ? '' : 'ділянка · ';
   let h = `<div class="ch">${ic(it, 'ic big')}<div><b>${esc(n.full)}</b>${n.full.includes(n.name) ? '' : ' · ' + esc(n.name)}<div class="mut">${loc}${n.inst || V.only ? `клітинка ${'АБВГД'[Math.min(4, Math.max(0, Math.floor(n.lx / 8)))] || '?'}${Math.floor(n.ly / 8) + 1} · ` : ''}(${f1(n.lx)}; ${f1(n.ly)}; висота ${f1(n.lz)}) м · ${n.w > 2.1 ? 'виходи на ' + DIRN(n.a0) : ''}</div></div></div>`;
   if (n.text) h += `<p class="txt">${esc(n.text)}</p>`;
+  if (n.link) h += `<p><a class="go" href="${esc(n.link)}" target="_blank" rel="noopener">Відкрити детальну схему →</a></p>`;
   if (['machine', 'gen', 'source'].includes(n.kind)) {
     h += `<div class="row">${chip(x.state, n.r)}</div>`;
     if (n.kind === 'machine') h += `<div class="kv"><span>Рецепт</span><b>«${esc(rn(n.recipe))}»</b></div>`;
