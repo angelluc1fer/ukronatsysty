@@ -162,6 +162,7 @@ nav.menu{position:relative;margin:0 0 14px;background:var(--card);border:1px sol
 .mn-t{flex:1 1 0;min-width:4em;font-weight:600;font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mn-sv{flex:none;color:var(--mut);font-size:12.5px;white-space:nowrap}.mn-sv b{color:var(--ink);font-weight:600}
 nav.menu:not(.mn-open)>.mn-pan{display:none}
+body nav.menu.mn-open{z-index:2000}   /* відкрите меню — над мапою Leaflet (шари до 1000) і схемами (26.10) */
 .mn-pan{position:absolute;z-index:30;left:-1px;right:-1px;top:100%;background:var(--card);border:1px solid var(--line);border-top:1px dashed var(--line);border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
 nav.menu.mn-open{border-bottom-left-radius:0;border-bottom-right-radius:0}
 .mn{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 18px;padding:10px 12px 6px;max-height:75vh;overflow:auto}
