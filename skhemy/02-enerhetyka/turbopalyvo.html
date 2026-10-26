@@ -154,6 +154,7 @@ ol.stp.man li .why{margin-top:2px}
 .ldr{stroke:var(--acc);stroke-width:1px;vector-effect:non-scaling-stroke;opacity:.65;stroke-dasharray:3 3}
 #lgd{pointer-events:auto;cursor:pointer}#lgd b::after{content:' ▴'}#lgd.c b::after{content:' ▾'}#lgd.c span{display:none}
 @media (max-width:760px){#lgd{max-width:min(78%,300px);font-size:10.5px}}
+#lgd i.plt{background:repeating-linear-gradient(45deg,#556 0 2px,transparent 2px 5px);height:7px}
 /* шапка-меню (23.10; по кнопці на ПК і телефоні — 25.10): однакова на всіх сторінках; toolsінфоменю.js */
 nav.menu{position:relative;margin:0 0 14px;background:var(--card);border:1px solid var(--line);border-radius:12px}
 .mn-bar{display:flex;align-items:center;gap:12px;padding:6px 8px;min-height:44px}
@@ -930,7 +931,7 @@ function draw() {
   for (const fr of G.frames) {
     if (!onFloor(fr.z)) continue;
     const lb0 = LB.length;
-    const tr = fr.frame && fr.rot ? ` transform="rotate(${fr.rot} ${fr.x + fr.w / 2} ${fr.y + fr.d / 2})"` : '', [lx, ly] = frPt(fr, 1.5, 1.5);
+    const tr = fr.frame && fr.rot ? ` transform="rotate(${fr.rot} ${fr.x + fr.w / 2} ${fr.y + fr.d / 2})"` : '', [lx, ly] = frPt(fr, 1.5, (SP['ділянка'] || {})['номери_зверху'] && fr.inst ? -3.2 : 1.5);   // «номери_зверху»: номер вставки над рамкою, не на машинах
     W.push(`<g class="fr" data-i="${esc(fr.inst || fr.bp)}"${tr}><rect class="frb" x="${fr.x}" y="${fr.y}" width="${fr.w}" height="${fr.d}"/><g class="grid">${fl(fr.x, fr.y, fr.w, fr.d)}</g></g>`);
     LB.push({ x: lx, y: ly, t: fr.inst || `Проєктувальник ${R.bpGeom(SP['креслення'][fr.bp]).S / 8 - 3} · ${fr.w}×${fr.d} м`, c: fr.inst ? 'lfr' : 'lfr s', s: 'frm', al: 'l' }); const frL = LB[LB.length - 1];
     if (fr.inst) LB.push({ x: lx, y: ly, t: '«' + fr.bp + '»' + (BPN[fr.bp] > 1 ? ' × ' + BPN[fr.bp] : ''), c: 'lfr s', s: 'frs', pn: frL, side: 1, al: 'l' });
@@ -979,7 +980,7 @@ function draw() {
     if (big && (n.kind === 'machine' || n.kind === 'gen' || n.kind === 'source')) LB.push({ x: n.x, y: n.y, t: (n.clock !== 100 ? f1(n.clock) + ' % → ' : '') + pct(n.r), c: 'lpc st-' + (st || 'ok'), s: 'pc', pn: nameL, side: -1, ext, ov: 1.25 });
     if (/split|merge/.test(n.kind)) LB.push({ x: n.x, y: n.y + 2.4, t: n.outE.map(e => f1(e.tot)).join(' | ') + ' ← ' + f1(n.inE.reduce((s, e) => s + e.tot, 0)), c: 'lrz', s: 'rzo' });
     if (n.kind === 'joint' || n.kind === 'inlet' || n.kind === 'outlet') LB.push({ x: n.x, y: n.y - 1.8, t: n.short, c: 'ljt', s: 'jt' });
-    if (n.ann) { const off = n.src && n.src['підпис_зсув'], lx = n.x + (off ? +off[0] : 0), ly = n.y + (off ? +off[1] : 0); if (off) W.push(`<line class="ldr" x1="${n.x.toFixed(1)}" y1="${n.y.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"/>`); LB.push({ x: lx, y: ly, t: [].concat(n.ann), c: 'lann', s: n.src && n.src['підпис_головний'] ? 'ann1' : 'ann' }); }   // «підпис_зсув»: [dx, dy] м — підпис винесено з виноскою
+    if (n.ann) { const off = n.src && n.src['підпис_зсув'], lx = n.x + (off ? +off[0] : 0), ly = n.y + (off ? +off[1] : 0); if (off) W.push(`<line class="ldr" x1="${n.x.toFixed(1)}" y1="${n.y.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"/>`); LB.push({ x: lx, y: ly, t: [].concat(stage.clientWidth < 560 && n.src && n.src['підпис_вузький'] || n.ann), c: 'lann', s: n.src && n.src['підпис_головний'] ? 'ann1' : 'ann' }); }   // «підпис_зсув»: [dx, dy] м — підпис винесено з виноскою
     for (let q = lb0; q < LB.length; q++) LB[q].ow = 'n:' + n.id;
   }
   (SP['виправити'] || []).forEach((f, i) => { const id0 = [].concat(f['де'] || [])[0], n = G.byId[id0], fr = G.frames.find(x => (x.inst || x.bp) === id0); const p = n ? [n.x, n.y, n.z] : fr ? [...frPt(fr, fr.w - 4, 4), fr.z] : null;
@@ -994,7 +995,7 @@ function draw() {
 function legendStrip() {
   let o = document.getElementById('lgd');
   if (!SP['легенда'] || V.only || floor === 'cut') { if (o) o.remove(); return; }
-  if (!o) { o = document.createElement('div'); o.id = 'lgd'; if (window.matchMedia('(max-width:760px)').matches) o.classList.add('c'); o.onclick = () => o.classList.toggle('c'); stage.appendChild(o); }   // на телефоні легенда згорнута; тап — розгорнути
+  if (!o) { o = document.createElement('div'); o.id = 'lgd'; if (window.matchMedia('(max-width:900px)').matches) o.classList.add('c'); o.onclick = () => o.classList.toggle('c'); stage.appendChild(o); }   // на телефоні легенда згорнута; тап — розгорнути
   const items = new Set(); for (const e of V.G.edges) { if (e.vid) continue; const i = mainItem(e); if (i) items.add(i); }
   o.innerHTML = '<b>Легенда</b>' + [...items].map(i => `<span><i style="background:${col(i)}"></i>${esc(nm(i))}</span>`).join('') + SP['легенда'].map(l => `<span><i class="${esc(l.c || '')}"></i>${esc(l.t)}</span>`).join('');
 }
@@ -1190,6 +1191,7 @@ function place() {
 function bounds() {
   const G = V.G;
   if (floor === 'cut') return CUT.bounds;
+  if (!V.only && (SP['ділянка'] || {})['вид'] && floor !== 'cut') return stage.clientWidth < 560 && SP['ділянка']['вид_вузький'] || SP['ділянка']['вид'];   // 26.10 (телефон — `вид_вузький`): стартовий вид [x0, y0, x1, y1] (м) — відкриття й «⤢» на будівлі, не на всій ділянці
   if (V.only && G.frames[0]) { const f = G.frames[0]; return [f.x - 3, f.y - 3, f.x + f.w + 3, f.y + f.d + 3]; }   // вкладка кресленика — повна рамка 40 × 40 в однаковому масштабі (п. 15)
   let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
   const ext = (a, b, c, d) => { x0 = Math.min(x0, a); y0 = Math.min(y0, b); x1 = Math.max(x1, c); y1 = Math.max(y1, d); };
