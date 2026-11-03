@@ -1,0 +1,314 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ТЕС-1</title>
+<style>:root{--bg:#F4F2EE;--card:#FFFFFF;--ink:#1F2328;--mut:#6B7078;--line:#D9D6CF;--box:#F3F1EC;--ok:#2E8B57;--warn:#C77700;--bad:#C8382C;--acc:#2F6FB5;--okbg:#E6F3EB;--warnbg:#FBF0DC;--badbg:#FAE6E3;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+header>div:first-child{min-width:0;flex:1}h1{margin:0;font-size:22px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+.clamp1:not(.x){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clamp1,.clamp{cursor:pointer}.clamp:not(.x){display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+h2{font-size:16px;margin:0;display:flex;align-items:center;gap:8px;min-width:0}h2 .ht{min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}h2 .n{flex:none}details.sec>summary{min-width:0}h2 .n{font:600 12px var(--f-mono);color:var(--mut);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+button.theme{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alert{border-radius:12px;padding:10px 14px;margin:0 0 8px;border:1px solid var(--bad);background:var(--badbg)}.alert b{color:var(--bad)}.alert .why{color:var(--mut);font-size:13px;margin-top:2px}
+.alert.warn{border-color:var(--warn);background:var(--warnbg)}
+.more{margin:0 0 8px}.more>summary{cursor:pointer;padding:6px 14px;border:1px dashed var(--bad);border-radius:12px;color:var(--bad);font-weight:600;font-size:13.5px;list-style:none;margin-bottom:8px}.more>summary::-webkit-details-marker{display:none}.more[open]>summary{margin-bottom:8px}.tmore{margin-top:8px}.tmore>summary{border-color:var(--line);color:var(--mut);margin-bottom:0}.tmore[open]>summary{margin-bottom:8px}
+/* розділи-<details> (25.10): відкрито лише головне */
+details.sec{margin:14px 0 0}details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;padding:8px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px}details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::before{content:'▸';color:var(--mut);margin-right:8px;transition:transform .15s}details.sec[open]>summary::before{transform:rotate(90deg)}details.sec[open]>summary{margin-bottom:8px}details.sec>summary:hover{border-color:var(--mut)}.alert.warn b{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(max(150px,calc((100% - 40px)/6)),1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;border-top:4px solid var(--mut)}
+.tile.ok{border-top-color:var(--ok)}.tile.warn{border-top-color:var(--warn)}.tile.bad{border-top-color:var(--bad)}
+.tile{min-width:0}.tile .l{color:var(--mut);font-size:12.5px;line-height:1.3}.tile .v{font:700 24px/1.2 var(--f-mono)}.tile .v .vv{white-space:nowrap}.tile .v small{font:500 12.5px var(--f-body);color:var(--mut)}.tile .p{font-size:12.5px;color:var(--mut);line-height:1.3;margin-top:2px}
+.tile .clamp:not(.x),.alert .at.clamp:not(.x){-webkit-line-clamp:3}ul.lim li.clamp:not(.x){-webkit-line-clamp:4}.tile .v2{font-size:20px}.tile .v3{font-size:17px}.tile .v4{font-size:14.5px}.tile .v5{font-size:12px}.tile .v6{font-size:13px}.tile .v6 .vv{white-space:normal;overflow-wrap:anywhere}
+.st{font-weight:600;white-space:nowrap}.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.mut{color:var(--mut)}
+.ic{display:inline-block;width:28px;height:28px;background-size:contain;background-repeat:no-repeat;background-position:center;flex:none;vertical-align:middle}.ic.s{width:20px;height:20px}
+.ic.none{border:1px dashed var(--line);border-radius:6px}
+.chain{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:34px 1fr minmax(160px,300px);gap:6px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.arrow{text-align:center;color:var(--mut);font-size:13px;line-height:1.1;padding:2px 0}
+.step .nm{font-weight:600}.step .meta{color:var(--mut);font-size:12.5px}
+.rate{font:600 13px var(--f-mono);display:flex;justify-content:space-between;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--box);border:1px solid var(--line);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}.bar.mut i{background:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.buf .t{display:flex;gap:8px;align-items:center}.buf .t b{flex:1}.buf .num{font:600 13px var(--f-mono);margin-top:6px}.buf .note{color:var(--mut);font-size:12.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}.tile .iw,.iw{min-width:0}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600;font-size:12.5px}
+td.num,th.num{text-align:right;font-family:var(--f-mono);white-space:nowrap}.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.tw table{min-width:560px}
+tr.bad td:first-child{box-shadow:inset 4px 0 var(--bad)}tr.warn td:first-child{box-shadow:inset 4px 0 var(--warn)}tr.ok td:first-child{box-shadow:inset 4px 0 var(--ok)}
+.iw{display:flex;gap:8px;align-items:center}
+ul.lim{margin:0;padding-left:4px;list-style:none}ul.lim li{margin:5px 0}ul.lim li::before{content:"• ";color:var(--mut)}
+ol.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.todo li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative}
+ol.todo li:before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 13px/26px var(--f-mono);text-align:center}
+ol.todo .why{color:var(--mut);font-size:13.5px;margin-top:2px}ol.todo .num{font:600 12.5px var(--f-mono);margin-top:3px;color:var(--acc)}
+.series{display:grid;grid-template-columns:minmax(150px,1.2fr) auto minmax(180px,2fr);gap:6px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.series .mm{font:600 12.5px var(--f-mono);color:var(--mut);white-space:nowrap}.series .mm b{color:var(--ink)}
+svg.sp{width:100%;height:auto;display:block}svg.sp .ax{stroke:var(--line)}svg.sp .ln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round}svg.sp .dot{fill:var(--acc)}svg.sp text{fill:var(--mut);font:10px var(--f-mono)}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.pg .v{font:600 15px/1.3 var(--f-body)}.tile.pg .p{margin-top:1px}
+footer{margin-top:28px;color:var(--mut);font-size:12.5px}
+@media (max-width:640px){.wrap{padding:10px 10px calc(24px + env(safe-area-inset-bottom,0px))}.st{white-space:normal}.step{grid-template-columns:34px minmax(0,1fr)}.step>div{min-width:0;overflow-wrap:anywhere}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}
+.tw{background:none;border:none;border-radius:0;overflow:visible}.tw table,.tw tbody,.tw tr,.tw td{display:block;min-width:0}.tw thead{display:none}.tw table{min-width:0}.tw tr{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 12px;margin-bottom:8px}.tw tr.bad{border-left:4px solid var(--bad)}.tw tr.warn{border-left:4px solid var(--warn)}.tw tr.ok{border-left:4px solid var(--ok)}.tw tr.bad td:first-child,.tw tr.warn td:first-child,.tw tr.ok td:first-child{box-shadow:none}
+.tw td{display:flex;gap:10px;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:5px 0;overflow-wrap:anywhere}.tw td:last-child{border-bottom:none}.tw td[data-l]::before{content:attr(data-l);flex:none;max-width:38%;color:var(--mut);font-size:12px}.tw td>*{min-width:0}.tw td.num{text-align:right}}
+
+:root{--k-rail:#7a4fb5;--k-truck:#d9822b;--k-drone:#2a79b8;--k-hand:#8b5a2b;--k-none:var(--bad)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}}
+:root[data-theme="dark"]{--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}
+
+/* карта перевезень, питання з варіантами, вид транспорту (23.10) */
+.by{display:inline-block;padding:0 7px;border-radius:4px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.by.rail{background:var(--k-rail)}.by.truck{background:var(--k-truck)}.by.drone{background:var(--k-drone)}.by.hand{background:var(--k-hand)}.by.none{background:var(--k-none)}
+.tile .v{overflow-wrap:anywhere}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--mut);margin-bottom:10px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}.legend i.d{border-top-style:dashed}
+.legend em{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.mapbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+svg.map{display:block;min-width:760px;width:100%;height:auto}svg.map text{fill:var(--ink);font-family:var(--f-body)}
+.nd{cursor:pointer}.nd:focus{outline:none}.nd:focus circle,.nd:hover circle,.nd:focus rect,.nd:hover rect{stroke-width:4}
+.lbl{font-size:12px;font-weight:500}svg.map .lbl2{font-size:10.5px;fill:var(--mut)}
+.edge{fill:none;stroke-width:3}.elabel{font-size:10.5px;font-weight:500}
+.detail{margin:10px 0 0;font-size:13.5px;min-height:3.2em}
+.card.q{margin-bottom:8px}.card.q h3{font-size:14.5px;margin:0 0 8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--box);min-width:0}
+.opt.rec{border-color:var(--ok);background:var(--okbg)}.opt h4{margin:0 0 4px;font-size:14px}.opt p{margin:0 0 4px;font-size:13px}
+.opt .tag{font-size:11.5px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+.opt ul{list-style:none;margin:4px 0 0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.pm{font-weight:700}.pm.ok{color:var(--ok)}.pm.bad{color:var(--bad)}
+
+svg.map text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+@media (max-width:640px){.tile .v{font-size:20px}.tile .v2{font-size:18px}.tile .v3{font-size:16px}.tile .v4{font-size:14px}.tile .v5,.tile .v6{font-size:12px}}
+
+/* план складу (п. 38, 30.10): вкладка на поверх, сховища в масштабі, колір рамки — група */
+.ptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px}
+.ptab{flex:none;font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.ptab small{color:var(--mut);margin-left:6px;font-size:12px}.ptab.on{background:var(--ink);color:var(--bg)}.ptab.on small{color:inherit;opacity:.75}
+.pfl[hidden]{display:none}.pw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.pl-note{font-size:13px;margin:0 0 8px}
+svg.plan{display:block;width:100%;height:auto}svg.plan text{fill:var(--ink);font-family:var(--f-body)}
+.pl-s{cursor:pointer}.pl-s .pl-t{fill:var(--c);opacity:.12}.pl-s .pl-f{fill:none;stroke:var(--c);stroke-width:2}.pl-s.emp .pl-f{stroke-dasharray:5 4;opacity:.6}
+.pl-s:hover .pl-f,.pl-s:focus .pl-f,.pl-s.sel .pl-f{stroke-width:4}.pl-s:focus{outline:none}.pl-s.dim{opacity:.18}
+svg.plan .pl-n{font-size:11px;font-weight:700}svg.plan .pl-c{font-size:12px;font-weight:600;font-family:var(--f-mono)}svg.plan .pl-m{font-size:10px;fill:var(--mut)}
+.pl-bar{fill:var(--box)}.pl-bf{fill:var(--c)}.pl-noic{fill:none;stroke:var(--mut);stroke-dasharray:3 2}
+.pl-lift rect{fill:var(--box);stroke:var(--ink);stroke-width:2}
+.plg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.pgc{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:12.5px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer}
+.pgc i{width:12px;height:12px;border-radius:3px;border:2px solid var(--c);background:var(--c);background-clip:padding-box;opacity:.9}.pgc small{color:var(--mut)}.pgc.on{background:var(--ink);color:var(--bg)}.pgc.on small{color:inherit}
+.pl-detail{font-size:14px;min-height:3.4em}.pl-items{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 16px}
+.pl-items li{display:flex;align-items:center;gap:8px;min-width:0}.pl-items li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl-items li b{font-family:var(--f-mono);font-size:13px}
+svg.plan .pl-s.emp .pl-m{font-size:9px}
+.pl-ib{fill:var(--ink);opacity:.14}
+
+/* картка контейнера в плані складу (30.10): біля контейнера поверх плану, на телефоні — знизу на всю ширину */
+.plc{position:absolute;z-index:100;width:340px;max-width:calc(100vw - 16px);max-height:80vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:12px 14px;font-size:14px;line-height:1.4}
+.plc[hidden]{display:none}.plc:focus{outline:none}
+.plc.mob{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-width:none;max-height:72vh;border-radius:14px 14px 0 0;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.plc-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}.plc-h>i{flex:none;width:6px;align-self:stretch;border-radius:3px;background:var(--c)}.plc-h>div{flex:1;min-width:0}.plc-h b{display:block;font-size:15px}.plc-h small{color:var(--mut);font-size:13px}
+.plc-x{flex:none;font:inherit;font-size:14px;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--box);color:var(--ink);cursor:pointer}
+.plc-d{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0 0 10px}.plc-d dt{color:var(--mut);font-size:13px}.plc-d dd{margin:0;min-width:0}
+.plc-bar{display:block;height:6px;border-radius:3px;background:var(--box);margin-top:4px;overflow:hidden}.plc-bar i{display:block;height:100%;background:var(--c)}
+.plc-it{list-style:none;margin:0 0 8px;padding:0}.plc-it li{display:grid;grid-template-columns:28px 1fr auto;gap:0 8px;align-items:center;padding:4px 0;border-top:1px solid var(--line)}
+.plc-it .ic{width:28px;height:28px;grid-row:1/3;border-radius:6px;background-color:rgba(127,127,127,.18)}.plc-it .pn{min-width:0;overflow:hidden;text-overflow:ellipsis}.plc-it b{font-family:var(--f-mono);font-size:13px;text-align:right}.plc-it small{grid-column:2/4;color:var(--mut);font-size:12px}
+.plc-b{font-size:13px;color:var(--mut)}.plc-b span{color:var(--ink);font-weight:600;margin-right:6px}.plc-e{padding:6px 0}.pl-hint{font-size:12.5px;margin:0}
+
+/*mn:start*/
+/* шапка-меню (23.10; по кнопці — 25.10; одна на всіх сторінках, 30.10 п. 37): на всю ширину вгорі, поза .wrap; усі розміри в px — не залежать від шрифту й масштабу сторінки; tools/інфо/меню.js.
+   Селектор :root nav.menu.menu — вищий за будь-які старі перевизначення (.shell>nav.menu у схемах) — у старих сторінках сайту меню теж стає таким самим. Між першим і останнім рядком (mn:start / mn:end) tools/поділитись.js підміняє блок на поточний. */
+:root nav.menu.menu{position:sticky;top:0;z-index:40;flex:none;display:block;box-sizing:border-box;width:100%;margin:0;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:var(--card);color:var(--ink);font:14px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+nav.menu *{box-sizing:border-box}
+nav.menu .mn-bar{display:flex;align-items:center;gap:12px;height:48px;padding:0 16px}
+nav.menu .mn-btn{display:inline-flex;align-items:center;gap:6px;flex:none;height:32px;margin:0;font:600 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--box);border:1px solid var(--line);border-radius:8px;padding:0 12px;cursor:pointer}
+nav.menu .mn-btn:hover,nav.menu.mn-open .mn-btn{background:var(--ink);color:var(--bg)}
+nav.menu .mn-t{flex:1 1 0;min-width:60px;font-weight:600;font-size:15px;line-height:1.3;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.menu .mn-sv{flex:none;color:var(--mut);font-size:13px;white-space:nowrap}nav.menu .mn-sv b{color:var(--ink);font-weight:600}
+nav.menu:not(.mn-open)>.mn-pan{display:none}
+:root nav.menu.menu.mn-open{z-index:2000}   /* відкрите меню — над мапою Leaflet (шари до 1000) і схемами */
+nav.menu .mn-pan{position:absolute;z-index:30;left:0;right:0;top:100%;display:flex;flex-direction:column;max-height:calc(100vh - 48px);background:var(--card);border:0;border-bottom:1px solid var(--line);border-top:1px dashed var(--line);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+nav.menu .mn{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 18px;padding:10px 16px 6px;overflow:auto;flex:1 1 auto;min-height:0}
+nav.menu .mn-meta{flex:none;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:8px 16px 10px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}
+nav.menu .mn-g{display:flex;flex-direction:column;gap:1px;min-width:0}nav.menu .mn-g>b{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);padding:4px 8px 2px}
+nav.menu .mn-i{display:block;padding:5px 8px;border-radius:7px;color:var(--ink);font-size:14px;line-height:1.3;font-weight:400;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.menu a.mn-i.mn-sub,nav.menu .mn-i.mn-sub{padding-left:24px;font-size:13px}nav.menu a.mn-i:hover{background:var(--box);text-decoration:none}nav.menu .mn-i.cur{background:var(--ink);color:var(--bg);font-weight:600}nav.menu .mn-i.off{color:var(--mut);opacity:.5;cursor:default}
+nav.menu a.mn-map,nav.menu a.mn-site{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:13px;color:var(--ink);text-decoration:none}nav.menu a.mn-cmt:hover,nav.menu a.mn-map:hover{background:var(--box);text-decoration:none}
+@media (max-width:640px){nav.menu .mn-bar{gap:8px;height:44px;padding:0 8px}nav.menu .mn-sv{font-size:12px}nav.menu .mn-pan{max-height:calc(100vh - 44px)}nav.menu .mn{grid-template-columns:1fr;padding:8px}nav.menu .mn-meta{padding:8px}}
+/*mn:end*/
+
+.i-LiquidTurboFuel{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAXzUlEQVR42t2beXQeV5nmf/dW1bfvkj6tthbLtrzbkWNsZ7ETk4XQSYBEGSCBMOlMAk0IHDLDcOY07fiPPt09hDnNNDOcSTdLgBBiNRBCSHcgsSOy4BDLJl5ky/Im2dqXb9G3V9W984cUoM9pCH1sy3TXX3XOV1Xfrec+7/O+93lvGVz6QwBCCIGQAjSAee37b73jp6bp8U5Mpj2wbBQmFf9BDrl7925j/sVNrbUAiCcanmxrW/l/gtHEu1tbO3qWL1+nmxqW6HisQXu90fvn7zUXerBiYf7Gd+1/vu++f+6683b/vlf38ZOfvsDE1KSKhaJqYnTEnMlm99p27pZOcHvBYZ4nC3EYF/NZ27ZtM0ZGplY99PGH/2JF2/LD/afPbl+yZPk37/ngB79w359+VJ4/PyJ+9KPnmJye0F7DJ/MlRzpauYZhttmusX/YLfUBFqD+PTBAvn3S1dUluru73XkWf/z662786kw6MyoE9X6fl0g4TDQU5u4P3UV9UyPf/u732ffzl/CWJ6g30qpWplGYA5O256Hdx/IvahBigVhwMUNgUW198wM1yfq7NbIpGAhYM5OjajaX1c0tS42b3n0znes6GDz8Gmd6vkfCHibshZSnkTE7qgfLPnF2bEanZ6bXjKdSR+cBVn9EAOyUWj+qhRBy27Zt4s03f7VmzdrOv/J6PP+vf6Cvs76p5aFoOBydSaVJTU3SWF+rs4WyML0BIha0m8OESkMsCjssbWlGVDVxJh9n0LuS8fQsJ86ctqdGJ61cOvVEauLkx+bD0/0jZIAANJYv+OHGhsVPhkMRwtEowpBMjow6pXLBCMdrBRpqzSzrQpOsjUyTjFnkEhvwrXwvS7a8l+/tfoZKTmMLB0PazJx6Xdc6I4h8enp4xl76xFuZ9EKEwjumnW3btpk9PXDvvR1N11yzrXL//R+eDYaqvxBLxO4OhSKOx+8zJsbGlaPKsrZ+sWmYHqrsIdrkBBurpqmp8nMutJVTi25kZedWWlvbqY5E2XhFJ4V9X6HRM04unaKhLeNabsU4OKiKA+OFwkKlqHcEoKenxwE4csR9bnp80vT5olQna5b7fQFS05P4giG84bBRH6lnsZWhQ/SzqiZDOVTDeNVtTNRvoWTFMHGYnkiRn3mdcKqXxul9JGsHKRZyaL+pz2VM8+ykl/G084XuvkJl507krl2XVwME4Fm1atM9yrHrTp0587FINNweCkcolopuwBeUtuuKcDxBi3+WLf4ztEUKmMlm0o07sBuuwPVWUUhnsMt5/MUR2oyTrDAPU0jPEvO5TKQtJo+5enpc80/l8tGMG/gfP+sf+fFOkLsWKBWK3xvoNPv8gdkJEOFIJEo0FlWF3CzZ/Kz0+iK0Rhy2J2eo85eI19XjtN+Cf83NeMMRUpMTlDIzVEb7WG4MsCo6iOm1cXIuhybrOKM7iOpaNn7xb9yK12f0OMZ7H3Fnn9/fibWxF3uh6gDz9+R4F0Y+YnninhUda8unzp7wjI8OS4/PT2NVmM7oFNck07ihBDP1t2Evu4Ga+kY8liY3fo6onWaddRxv3WmqA0MUxwq4BwXnK8s4f+UHkLYi7feQu7KTRO+brKyqfqRrcvaFzt5Lr/x/SCUohUB7PN4ly9vX3Hlu+LSRTWdlsrqKVfEy1ycnWVFn0BfcxEDVDqzGNQSiUSqFGYKFcTp80ywJnSZi/4rZoUmcn0xR9/Qk9ccrNCSrORKJYYVDFEolSNbK6tdeUR7LaquxrJ+trVQGd4PRvUCF0O8CQAOG1urI+MT4u2qr65cvb653VpkDclN9kcOzVbzirCAfbaNUETjFHC16kLX6V6yND+IvHyDfewB2n6X5ByM0DOTxlF2ka2P6TOxAkMHaZkSxRClZR+xsvxsdHZNuIJj4dqn49G4Quy4zAECX1PooNfGaYksy/r4l9hFjfZOQTw8mOZIOoiwvQsGVtUXuqD3M5thxsuU87vEB5O6zLHpmmviwjXQFwhBUhIF2BUY+R1UiRH91HY4/SEm5mDVJWb3vda09VvsO0/zBGtueXLVALPg9APQJQDfGmAqXh/9syAn795z16KlKRASiUTa3ePgvq4a4a9FJaq0CY8MQeW6E5E9SVI0qfBpcacxVs0oghcBBYlQqeAs5CpEgo4uWUkpN4y5uJXnsiBubnrQKoUBgWbH0TBfIywzAXCZI+P3LJtzop8+kNHnHFA9fbXB7R5H/tHSShlCFvik/r//Cw5XPnCN8voSFpmQamEpgavfXayZDazQCQ0jkbJ6wU+LQ4iX4giFmhcYTiYqq/W+iPJ6O6+C7H3LdFCB7LjEI8vf8pgGRrfcNFLTZHw3H1J9tDzldy1LqhlUBpyTC7tde9XLvN7J8qU9Q8kUQUuBqgVQOFTQKYz6ZK0BhSKggqCBJZGdZdn4A7fVj5gqMrFgjKosa3ZpCwZ8I+h8SoB9dgGLQeKcy+Ogvj5Zr6tpzj2ytvP8DHbbUrbeJ84WgHHvuuDz8SopfYlIyFDXROFdnpikKjalBCY2JQKOR6DlfTCuU0IDEKhUJxwKcXbKKiq1wfH68/oCIHOyl5PF2dJbL33gX5C81C+Q7lcE7dyKHTh14IlwceTiV2H7i9dPl/p4Xnnv89ET+szeYRdVoCZxCge9pmA4EMNVv/BwbhUChYR4CkEKihcK2XWrPD1N9uh9fOERxaoahNetFtjruxgv5RDIW+4QAvf0dxrjQq8G3CycH4B8lL7wUjNzwOKbyWl7ji36Le0eGSAuw9BwOAf0bpA0EArCFganB55OcvmYTL2y7nYoNsz4PK/e/pmq+v1ukYpHxMZHteCBFFuBREH1diO5u1MW0zP5gdHd3YQAOQjhfbserdyJHFF/cVs6LpOERjm3zHRkg5/fOPVSDFuD8C4z1vCC6KCFwShVaBk5TdfoYRtCHv1JmfP0mmYuGVTyfq/NV/B8VwMtg7ALV3Y37tjYtOAB3zf25QGvx6ZOU2QUPwx7LcfffrByhNe7RYoE9yUYigG2AqcEWGjDmBXFODSQCpTUVDMTIJBt69lKezeKRBvlAkPSmLaJoKx03vJ+SoK8D5yPLzY0PrTHeox/Aupgg/FvjS789jd1zA1DTii9eV86IsCEpFfI8KQPYPg9CgZ5ngfr1zeJfnFWATEVTOzSBt/dN8HspZlJkrrpepgI+UaqUln6uLvwPn1jnfaUt5LwZD5jPv+/V6p5QqL5653y/4bK5wt1zSIiPwsB7UF0ZadSc8nj1mEJcEfLTMZulKAWmBldozPnZ17jzQawoC01JaJSWeKfHObG2E8M0mZkZo+gMkkqkdP0i94pgVc3ischKDou2ypmCpyVXrtgvFDIvzWuSuiwAAGwH8zGwbxPYy3BvfTEYUxW7IgvBALcVZym7LlKDI+YEUCNRSBwUDpCTUJJQUppSscSgVcGZPYR56jlamxSN69YLK9ns9sWu06Wq1XIiWxDZfEVHPPaKzc3WN0+M5nIXyoILAuCJOZaLT2n6r9Xq3gkrGBnU6HMKscUfpDWfpTx/rS3maG8jKAkoSY2jYEjC2VqTsQ0mDfHT1PjSBFfcQMv7v8BocAM/fSsrg8GkND0GNWJCb48O6PdUTwZN5Xz1lbOlzM4LrBMutBWlu8HogdxH4Ss3FVN/9bIvprLFEt+ujrHBkBSVwgIKGkwUWivKGkYEjDV5yC7107TIIeQPMpW4Ck/7TazesIm6xmbq8hkmT/aynpcolrI01U7KuCzx+gAvmiozrDVCiAsLgQsWET3/jPdD4k8M+h/3hBO9WlAVjYon7RyNmRQFAVJBUcGkCRNNHoxlknBSUjRrEc1bSSe34pgRquNxktU1+J1xxMhekpmX8agxXcwo3hoSYzM5/m/PEfdvu/smcxfDNb7gZqQAvRuMZ2C6Fb5xhVP5rweE15mezZtPxsM8lMswrBRZS5JaZOJps6iuBhFvotR0PWLRFpxAHJGZpZJJk8mco+HcAaKFXyAF4PUw9bKrK2/l6B0t3/Ml190z/+JcDMv8YhUUUoOug+Z3G+LYz4XHe05JYv6A+IxRRsULeNq8VCUE1Y3tOEveS2LdzWCGSKcnGDs/hJ46yWrPAC3BAYLGNLOFel4YbCGf6OSar33TTQ6dNE77fV+/sVC6/2WBcd18NXrJbfE/8FDbwRyHwVH039e67qfOI532cNbUKyQtMR9OtAm7/RbcdTdQX1sHrsNsaoxA+iydvEai/gzVcgbjeJ7Cz8s8t2YzTvMabKPE2e3XyqpvndQhpT7yVS//8xNwQoMUF8E5vmj9+JfBFaBfc/nxlgQPPdis5FVLPEzKWo5EriDYupmWFctxhGTs3FmilQnqGabKewijMkzhF3msV8/hOVYggWCZ/QYnlnag0kWmV60V+cYGJzkyajVa1sMC+5P6Ii2SLkZ7XMzHpK/Rz19sb/P8zU2rpK9oReVLuSWci26ExCLGs0UsO0/T7CGWVPbRGjxIMHsE/97jJJ4YIvnSGGrKRgLSkIQnJjjYuhIrniDjuhg+v6g9cgjXMlescdxvboHZi7FUvmAAdoK8DkR7TDy9tcnz4DXtZuCNfJ344ZkIRbzYmPiE5praaW4OvkxIDhHIjRJ5pZ/A189S9WoeI2XjCklFCqTWKCDuKkaUzVjnRphKU1rcKBqOHlTVs3mf7THyK1y99+W5Boq+nCIoAdWe8De1xqwz0/jF5KwSOYLSG0nQ0hDllvYyNzUPs7yqRGbWi3qjgO+1DOaUSxiN1yepOKAcjULjCI1HgyUkI34/333osyjDgx0IserN1/TaZ/+R85Y11WPbHY9CigvMBhdlh8jK5S3e42nP/YMztj9V8ogPrhfizg2Oe8/aGb21Ki0NHJ7qjbDsqRHCB7IYBYVrgtQSU7tINGq+oLB/3ZWRVNllhi3JubZlGNkslUVNov7QfhUvlUKuZU6ucdXr28F84gLE8CIA0GUMjb2aC0bjyWQ0fNU9m/yV+zbkzGvXN8pAsSKf+YXWn/qhEs+cgE2Wh9XlWfISLBccDDxKYGqNi5g30ECJuYFJIYlmJjm+cgOYJmnpIy4FNSdPkDPk8lpXPf4g2LsugMkXQUm7tdYIt+z70ic73QOf3h7x6mUf4rXspp/t+V7277wvjYp0oaJ9RonvBMKUpYGcswVxhUvltxb3GoEHgdKghaasNXWFMg39hzD8ftxijuF3bZZ5v1fVuG7LBkt+UIDeewETeTFSiULA1NTx0fUTA1eds7beNazaN73/kS/f+KdHxx5uU+X+HYZDueyofaUy+2I1hNScF2BoTQmBjYlA4hUCrwALA2eeEWbFZfOhgyjHxavhnBlkZOMmcLX2af7bA2Btv4CdJBcll86LkLiuh9L2z/yv7jse/OSb+oEHLK0R44q/vbWSF35D6EKhwLf8EZQh0BrQAleCi8LARQR9EPTiR6P13NDKWtM8Nkb0wD4Mjxc3m2Vg3RYj47FUVOkVWwxuE6AfAKurC2MnyK6uP5wRF9Nx1YDQu7sMvXOn5PHHHQT8UPFktV0ZuUoqqRxb7SkV2R+KEwIcqRHapSQkGgmODYaBNEDiYou5qfUpwdbjhxAIvMohXVXNyKq1oLQ2pXwE4B/A7u7G/S3vcMEBANDirm5X7NqlxNxSWT4Ls1n46q3lvPB7/TpXrvBktApDzJWOkjnDxAZwXHBdkAIvAnc+uZWUYuX4CNH+Q3jCQUr5LFObrzZyhtAxrbc8ZbBDQdsNjcZjH1/J3s+t40FDzNUoC5IGf6eTPG9n/7Wm7yrt3H/C8AZGXMWYxyNuNBS1hTIVIQCFxsAvNJgSpMRwFbYWOGgqgHQgNzHCmTVXQjmPW12DZ3ICPTYuXgtbN9ctMj9zZa3aFvRbLWecxJ+kzcTws9ls7zvZZpe66aAB+RRMVRRfv8POCTDcVMXhG8EaTHPuBQ0tcYRAKQUBD8QCIOdmp4zARjIlJC3pWdTBN/DHqslMzXCgOi5+ucygYbWdfPcSf6BQtdQ5GHyXfYg2lVeez8PK0NxGj9+dJi8pA97GoQdYBAPrtPPgEV/QSmvNecMUN2iX6nIZF42Sc8InlcYwDMpll7zSlDHJCBdbKoTSTMzanAhU8J36Ge3GMVYuDdO+arXuszqYrtlszNqmkc6WdL3XrtraMLn36Fj+dFcXRl/fv14tXnIAeuYNk8/CzJ3QXmUaG35u+tVsxZaxQIBtxQw5wNSCvDQQNtgFl5SCPBpXwDSKEeBwrYAlOTr8x6mvsgiuu4XY9Q+x+2BOnM+GhOGNUhexuNJ8S9zZMGKvjef/8nt97kxXF6Kn518HYEG2p79tof93zWNry7N3t1pe85Tj8n0V406vl3i5TF5rbBxKmEgMXFyyUjNiKIaSBnqpl6p6l3AgwExiM5HVt7N0/WaqG5s5NFQh0P8taiPHiLvjJBdPqy+9aqknDviu1rp8SohL7wj9ITlSClCPSZ454fHd/vfa63j8PvPzFtwzM8404AHKCoqYDEmX8SaT6HJJ2R+gIW5Sqt/MaNXV+BKLWFxfTzQeh8w5vIM/ZNHM85RyBb5/xMeTB6V7aloa2insKZbSO/g9+44X7AOFu+Z9g/coHlthl29PGJbMFIt0W0G2WhbSsZlWMOqVZBoliVaTpoSLP1pDvul6Ci1XI8INWDNppmZmkNkxPPZrJLO9YKd5cTLMP51axv5hqFCSiUjenZkpbPSbsYeKTvor/I69x8ZCAdA3nxG+BoM1gh1+dMs5V7mTrpAYPgqUOLbYQq/ys2qpItLYjLH+XsLXPkJk9XZc6WNkeASVGWZt+RWuF8/SQD97z0QYTnyAmapbeOvUJNNTw2i3ol2FElpK23Z+4ajSq/Ms0JctBABWgucYVDpNtkaRPXtdS/pM5PWLBFuaHRbFJZngYsJrbyPZeSuNDYsoV0pMj0+QGjlOZGoPV/qOgpPlpWMWP+iP40l2sqRtMb/c/wap9CxKu2RncximhdCc6Ovbv1xrLcScEOjLFgKA6JtbA7HfMRo7/KJ0Tb0bvL5N6NZkQEzQxIn6rTS+60aSi1qxDJOhs4OQH6U2u4+NHOB4ocSzx8r86Gg1p/NRlKpQaw/qc+dOqZt27JBIy/nxT1/EdlKfNyzrxkg0/gIgxaOP8rs0YKEY8LYIbYhZ/N3SKnHVjUv9hH2SU3YVU5EOQs2r8YeiRKuqaauNUls5TaM7wGLPIJOjKV48kmfPSJLhQgSnUiQ7M6rLpbJqXrzYWLt6AxW7xIEjfUynUv97ZLDv0wvdF3gn0xQBYnFIHNzY6FnbUa2cUCxmfr0/TtHwUdvYRCRRzZL6OGuik1wdOolwbZxynn8+6vBmppW0TlDITJCeGnN9wQBaYYTDEQqlwlShWHrh9EDfk83tK2/x+b1f6T+8f2Dnzp0A7Nq1S112AAToK9sTEQt5qqQ88em8LYsVJUrBBhLxIMsa/VzfOMvNrVPU+Qr8asjiO0djDKSjeBKLwUnr4aEhVS5VZGNLizANA6dUSk1Mjn/uzJnjzwBTl9UPeKcSQINs3rAjP1CM7D884YqzM4ZTFxF8YkOGR67M8JcbT3FHyyCHz85y33dNHvhJlAMzCSrS4vzJgwwODorW5cuNlRs2CDQ/Pn3m9B6fz++9666PdQNT27ZtMwGDri7j3/pOC6UBBuC2ti69Jhbw/3x1ncvd60y9YVlYjI2N8/QbKZ49ajA46ycYChP0Qy4760aiCRGNRkjW1bqlSun54TPnv9zf37s3GAwmo9WLG+urA0d6e3tdLsAUXbA0+PYXII/dvfa+ziXJR8/T1vDjfcfkS28cEkURIRQI4TUVrlNytTBkMBwT4XAI5Sg7lZl+z9DpYy/NPWenfKe4/qME4LfSrlNX03hnsWR3V1XF3FCsysim0hTLOV0qVXTAH5CBUARpmn8+NTVeXZOouk0rrv3wh983uuu55wx6e21+sz/o3933xuKBBzotILRh3abnd2y/UcXjSScQSLi1da16Wcd63bps3VNty9ZePX+9VVtbG7yUkyUuAwimEDhCeD8ZCce/sqJjOabpY2J6Yo8/HFnaUFN30/PPP32ss7PT6p2bbX7tmv8HAUAANEebo7fccdumQ/1H/jxfcMZmptMPDg0dNudSWpeE7t92ci7ZXuH/D0PDyLyTJUabAAAAAElFTkSuQmCC)}</style></head><body>
+<nav class="menu" aria-label="Меню сторінок"><div class="mn-bar"><button type="button" class="mn-btn" aria-expanded="false" onclick="var n=this.closest('nav');this.setAttribute('aria-expanded',n.classList.toggle('mn-open'))">☰ Меню</button><span class="mn-t">Стан тес1</span><span class="mn-sv">Сейв <b>04.11 00:34</b></span></div><div class="mn-pan"><div class="mn"><div class="mn-g"><b>Сторінки</b><a class="mn-i" href="../index.html">Головна</a><a class="mn-i" href="../stan/stan-hry.html">Стан гри</a><a class="mn-i" href="../stan/enerhosystema.html">Енергосистема</a><a class="mn-i" href="../stan/lohistyka.html">Логістика</a><a class="mn-i" href="../stan/mapa.html">Мапа</a><a class="mn-i" href="../stan/plan-vykonannia.html">План виконання</a><a class="mn-i" href="../stan/mam.html">МАМ</a></div><div class="mn-g"><b>Виробництва</b><a class="mn-i" href="naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="turbopalyvo.html">Турбопаливо</a><a class="mn-i" href="modulni-ramy.html">Модульні рами</a><a class="mn-i" href="aliuminii.html">Алюміній</a></div><div class="mn-g"><b>Схеми</b><a class="mn-i" href="../skhemy/02-enerhetyka/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../skhemy/02-enerhetyka/turbopalyvo.html">Турбопаливо — огляд</a><a class="mn-i mn-sub" href="../skhemy/02-enerhetyka/turbopalyvo-a.html">ПЗ · Паливний завод + полімер</a><a class="mn-i mn-sub" href="../skhemy/02-enerhetyka/turbopalyvo-b.html">ТПЗ · Турбопаливний переробний завод</a><a class="mn-i mn-sub" href="../skhemy/02-enerhetyka/turbopalyvo-enerhostantsiia.html">ТЕС · 5 однакових по 20 ЕС</a><a class="mn-i" href="../skhemy/04-avanpost-druha/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../skhemy/07-stal/stal.html">Сталь</a><a class="mn-i" href="../skhemy/09-naftokhimiia/naftokhimiia.html">Нафтохімія</a><a class="mn-i" href="../skhemy/10-tsentr/detali-pidiimacha.html">Деталі підіймача</a><a class="mn-i" href="../skhemy/11-aliuminii/aliuminii.html">Алюміній</a><a class="mn-i" href="../skhemy/13-zakhid/plyty-i-poroshok.html">Плити й порошок</a><a class="mn-i" href="../skhemy/16-elektronika/elektronika.html">Електроніка</a><a class="mn-i" href="../skhemy/17-vazhki-modulni-ramy/vazhki-modulni-ramy.html">Важкі модульні рами</a><a class="mn-i" href="../skhemy/18-dvyhuny/dvyhuny.html">Двигуни</a><a class="mn-i" href="../skhemy/19-presovane-vuhillia/presovane-vuhillia.html">Пресоване вугілля</a><a class="mn-i" href="../skhemy/20-kvartsovi-ostsyliatory/kvartsovi-ostsyliatory.html">Кварцові осцилятори</a><a class="mn-i" href="../skhemy/21-zaliznyi-avanpost/midnyi-poroshok-i-diamanty.html">Мідний порошок і діаманти</a></div></div><div class="mn-meta"><span>сесія: Штаб</span></div></div></nav>
+<div class="wrap">
+<header><div><h1>ТЕС-1</h1><div class="sub clamp1" title="Турбопаливна енергетична станція · стан будівництва за сейвом 04.11 00:34 · 1,5 км на пн від «Алюміній», північно-західний рукав озера">Турбопаливна енергетична станція · стан будівництва за сейвом 04.11 00:34 · 1,5 км на пн від «Алюміній», північно-західний рукав озера</div></div><button class="theme" id="th" type="button">◐ тема</button></header>
+<div class="alert warn"><div class="clamp at"><b>⚠</b> Вихідний контейнер Кварцових кристалів повний — виробництво кварцу стоїть</div><div class="why clamp">Контейнер (a 53,7; c −178,4) має 4 800 з 4 800. Поки його не спорожнити, 45 шт./хв не виробляються. На поверхи 3–5 ТЕС-1 цей кварц якраз потрібен: у потязі лише 4 582 з 8 880.</div></div><div class="alert warn"><div class="clamp at"><b>⚠</b> Підіймача для працівників ще нема</div><div class="why clamp">Будівля вже 70 м заввишки (z 157,4…227,9), а буде вище. У сейві поруч із ТЕС-1 нема ні кабіни, ні зупинок.</div></div>
+<div class="tiles"><div class="tile warn"><div class="l">Поверхи ЕС</div><div class="v"><span class="vv">1 / 4</span> <small>готово</small></div><div class="p clamp">Поверх ЕС 2 готовий, поверхи 3–5 ще не починали</div></div><div class="tile warn"><div class="l">Паливні електростанції</div><div class="v"><span class="vv">5 / 20</span> <small>ЕС</small></div><div class="p clamp">Усі 5 на Турбопаливі; за попередні 5 хв працювали 76–93 %, зараз 100 %</div></div><div class="tile ok"><div class="l">Потужність</div><div class="v v4"><span class="vv">1 250 / 5 000</span> <small>МВт</small></div><div class="p clamp">Підключено до мережі 206</div></div><div class="tile ok"><div class="l">Турбопаливо в цистернах</div><div class="v"><span class="vv">9 672</span> <small>м³</small></div><div class="p clamp">4 Промислові цистерни на техповерсі повні. Для 5 ЕС це ≈ 4,3 год, для 20 ЕС ≈ 64 хв</div></div><div class="tile mut"><div class="l">Витрата</div><div class="v v2"><span class="vv">37,5 / 150</span> <small>м³/хв</small></div><div class="p clamp">Повного вагона (2 400 м³) зараз вистачає на 64 хв, на 20 ЕС — на 16 хв</div></div><div class="tile mut"><div class="l">Висота</div><div class="v"><span class="vv">70,5</span> <small>м</small></div><div class="p clamp">Плита поверху 1 z 157,4 — дах поверху ЕС 2 z 227,9</div></div></div>
+<details class="sec" data-k="посилання"><summary><h2><span class="ht">Сторінки</span> <span class="n">2</span></h2></summary><div class="sb"><div class="grid"><div class="tile ok pg"><div class="v"><a href="../skhemy/02-enerhetyka/turbopalyvo-enerhostantsiia.html">Схема ТЕС</a></div><div class="p">Проєктна схема; висоти ще не під збудоване</div><div class="p"></div></div><div class="tile ok pg"><div class="v"><a href="turbopalyvo.html">Стан ПЗ і ТПЗ</a></div><div class="p">Сторінка від 02.11</div><div class="p"></div></div></div></div></details>
+<details class="sec" data-k="ланцюг"><summary><h2><span class="ht">Ланцюг від сировини до виробу</span> <span class="n">5</span></h2></summary><div class="sb"><div class="chain"><div class="step"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><div><div class="nm">ТПЗ · відправка <span class="st ok">✓ у режимі завантаження</span></div><div class="meta">Вантажна платформа для рідини <b>4</b> з 4 працює · Станція «ТПЗ - турбопаливо відправка»; 3 платформи повні по 3 200 м³, четверта — 554 м³</div></div><div class="rt"></div></div><div class="arrow">▼ ТЕС-1</div><div class="step"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><div><div class="nm">Потяг «Логістика турбопалива №1» <span class="st ok">✓ стоїть на ТЕС-1, зливає вагон 1</span></div><div class="meta">Вантажний вагон <b>4</b> з 4 працює · Вагон 1 — 1 073 м³, вагони 2–4 — по 2 400 м³. Розклад: ТЕС-1 → ТПЗ - турбопаливо відправка</div></div><div class="rt"></div></div><div class="arrow">▼ цистерни</div><div class="step"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><div><div class="nm">Станція ТЕС-1 <span class="st ok">✓ розвантаження</span></div><div class="meta">Вантажна платформа для рідини <b>1</b> з 1 працює · 2 105 м³ на платформі; через 2 Трубопровідні помпи 2 далі на техповерх</div></div><div class="rt"></div></div><div class="arrow">▼ ЕС</div><div class="step"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><div><div class="nm">Цистерни на техповерсі <span class="st ok">✓ повні</span></div><div class="meta">Промислова цистерна <b>4</b> з 4 працює</div></div><div class="rt"></div></div><div class="arrow">▼ </div><div class="step"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><div><div class="nm">Поверх ЕС 2 <span class="st ok">✓ у мережі 206</span></div><div class="meta">Паливна електростанція <b>5</b> з 5 працює · На вході кожної ЕС 49,7–50 м³ Турбопалива</div></div><div class="rt"><div class="rate"><span>факт 1 250</span><span>номінал 1 250 МВт</span></div><div class="bar ok"><i style="width:100.0%"></i></div></div></div></div></div></details>
+<details class="sec" data-k="буфери"><summary><h2><span class="ht">Буфери [є - макс - %]</span> <span class="n">3</span></h2></summary><div class="sb"><div class="grid"><div class="card buf"><div class="t"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><b>Цистерни Турбопалива × 4</b><span class="st ok">✓ повний</span></div><div class="bar ok"><i style="width:100.0%"></i></div><div class="num">[9 672 - 9 600 - 100 %]</div><div class="note">ТЕС-1, техповерх (z 183,4)</div><div class="note">Повні, цистерна тримає трохи більше 2 400 м³</div></div><div class="card buf"><div class="t"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><b>Платформа «ТЕС-1»</b><span class="st ok">✓ працює</span></div><div class="bar ok"><i style="width:65.8%"></i></div><div class="num">[2 105 - 3 200 - 66 %]</div><div class="note">ТЕС-1, поверх 1</div></div><div class="card buf"><div class="t"><span class="ic  i-LiquidTurboFuel" title="Турбопаливо"></span><b>Потяг, вагони 1–4</b><span class="st ok">✓ працює</span></div><div class="bar ok"><i style="width:86.2%"></i></div><div class="num">[8 273 - 9 600 - 86 %]</div><div class="note">станція ТЕС-1</div></div></div></div></details>
+<details class="sec" data-k="обмеження" open><summary><h2><span class="ht">Що обмежує і чому</span> <span class="n">4</span></h2></summary><div class="sb"><div class="card"><ul class="lim"><li class="clamp">Поверхи ЕС 3–5 не почато: бракує 15 креслеників «1хТЕС - UA» (15 ЕС, 3 750 МВт).</li><li class="clamp">Кварцових кристалів поруч вистачить лише на 7 креслеників (4 582 у потязі).</li><li class="clamp">Права прохідна колія зі станціями на кінцях не збудована; станційна колія ТЕС-1 поки закінчується буферною зупинкою.</li><li class="clamp">Не перевірено: сходи на техповерх (у цьому зрізі сейва їх не видно). Плити під ТЕС-2…5 на озері (z 157,4, z 158,5, z 162,8) я не розбирав.</li></ul></div></div></details>
+<details class="sec" data-k="дії" open><summary><h2><span class="ht">Що зробити</span> <span class="n">5</span></h2></summary><div class="sb"><ol class="todo"><li><b>Поверхи ЕС 3–5: 15 креслеників «1хТЕС - UA»</b><div class="why">Чому: Лишилось 15 із 20 ЕС</div><div class="num">+3 750 МВт; висоту техповерхів між поверхами ЕС ще не вирішено</div></li><li><b>Довезти Кварцові кристали з вихідного контейнера кварцу</b><div class="why">Чому: У потязі 4 582 з 8 880, а контейнер (a 53,7; c −178,4) повний і стримує виробництво</div><div class="num">4 582 + 4 800 = 9 382 ≥ 8 880</div></li><li><b>Довезти Залізну плиту 1 010 і Гуму 150 із Хабу</b><div class="why">Чому: Потяг і контейнери ТПЗ дають менше, ніж треба на поверхи 3–5</div><div class="num">Плита 7 945 з 8 955; Гума 600 з 750; у Хабі Плити 3 787, Гуми 23 526</div></li><li><b>Поставити Підіймач для працівників</b><div class="why">Чому: Рішення 03.11: підіймач у кожній ТЕС, сходи лише на техповерх</div><div class="num">Кабіна + зупинки на поверхах 1 і ЕС 2–5</div></li><li><b>Вежа Турбопалива й прохідна колія — коли дійдеш</b><div class="why">Чому: Вежі поруч ще нема: зараз буфером служать 4 цистерни на техповерсі</div><div class="num">Майданчик під вежу — 48 × 48 м (орієнтир)</div></li></ol></div></details>
+<details class="sec"><summary><h2><span class="ht">Що стоїть за висотами</span></h2></summary><div class="sb"><div class="card"><div>Плита повернута на 30° до сітки (a, c), ЕС стоять під кутами 40°, −140° і −50°. Висоти поверху й техповерху тут задані тим, що ти збудував: поверх 1 — 26 м, основа кресленика — на 7,5 м вище плити техповерху, цистерни (13 м, верх z 196,4) уміщаються під підлогою кресленика (z 198,9).</div></div><div class="tw"><table><thead><tr><th>Рівень</th><th>z</th><th>Що є</th><th>Стан</th></tr></thead><tbody><tr><td data-l="Рівень">Нижня плита</td><td data-l="z">150,4</td><td data-l="Що є">157 фундаментів; поруч буферна зупинка нижньої колії</td><td data-l="Стан"><span class="st ok">✓ є</span></td></tr><tr><td data-l="Рівень">Поверх 1</td><td data-l="z">157,4</td><td data-l="Що є">Плита 15 × 10; станція «ТЕС-1» z 158,4, 1 платформа для рідини, 4 порожні</td><td data-l="Стан"><span class="st ok">✓ є</span></td></tr><tr><td data-l="Рівень">Техповерх</td><td data-l="z">183,4</td><td data-l="Що є">Плита 150 фундаментів (15 × 10), 4 Промислові цистерни</td><td data-l="Стан"><span class="st ok">✓ є</span></td></tr><tr><td data-l="Рівень">Поверх ЕС 2</td><td data-l="z">190,9…227,9</td><td data-l="Що є">5 креслеників; ЕС на z 199,9; дах 125 фундаментів на z 227,9</td><td data-l="Стан"><span class="st ok">✓ є</span></td></tr><tr><td data-l="Рівень">Поверхи ЕС 3–5</td><td data-l="z">—</td><td data-l="Що є">Нема</td><td data-l="Стан"><span class="st bad">✖ нема</span></td></tr></tbody></table></div></div></details>
+<footer>Дані: сейв 04.11 00:34 (autosave_0): фундаменти.js, станції й платформи, ЕС (продуктивність за 5 хв), цистерни (mFluidBox), потяги, запаси. Перша перевірка ТЕС-1, мін–макс зʼявиться з наступних сейвів. · згенеровано tools\інфо\інфо.js</footer>
+</div><script>
+document.addEventListener('click',function(e){var n=document.querySelector('nav.menu.mn-open');if(n&&!n.contains(e.target)){n.classList.remove('mn-open');n.querySelector('.mn-btn').setAttribute('aria-expanded',false);}});document.addEventListener('keydown',function(e){var n=document.querySelector('nav.menu.mn-open');if(n&&e.key==='Escape'){n.classList.remove('mn-open');n.querySelector('.mn-btn').setAttribute('aria-expanded',false);}});
+if(innerWidth<=640){var mp=document.querySelector('details.sec[data-k="карта"]');if(mp)mp.open=false;}
+document.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('.clamp,.clamp1');if(c&&!e.target.closest('a'))c.classList.toggle('x');});
+// Клієнт спільних коментарів (з 23.10, п. 18): коментар = issue репозиторію сайту на GitHub (відкрито / закрито).
+// Вбудовується в сторінки стану (tools\інфо\інфо.js) і схеми (tools\схема\схема.js) через tools\інфо\меню.js (MENU.gh) — один код, window.GHC.
+//   GHC.newUrl(назва, текст)  — адреса форми нового issue з уже вписаними назвою й текстом (мітки через URL чужим не ставляться — мітка в назві: «[<ключ схеми або сторінка> · <елемент>] …»)
+//   GHC.load(cb)              — читає issues (відкриті й закриті) через API без входу, кеш у sessionStorage на 5 хв; без інтернету — тихо нічого (cb не викликається)
+//   GHC.list                  — розібрані issues після load: {n, scope, el, text, key, body, who, at, state, url, comments}
+//   key — машинний ключ елемента схеми («n:id», «e:a→b», «i:id», «f:N»), береться з посилання «#к=…» у тексті issue (його кладе движок схем)
+// Секретів тут нема й бути не повинно: усе публічне, вхід робить сам GitHub, ключів доступу тут нема.
+(function () {
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'ghc:issues', TTL = 5 * 60 * 1000;
+  var G = window.GHC = { repo: REPO, site: SITE, list: null, _w: [], _f: [], _busy: false };
+  var enc = encodeURIComponent;
+  G.NOTE = 'Репозиторій публічний — не вписуй сюди секретів і адрес.';
+  G.parse = function (i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), b = i.body || '', k = /#к=([^\s)>\]]+)/.exec(b), body = b.indexOf('\n---') >= 0 ? b.slice(b.indexOf('\n---') + 4) : b;
+    var key = ''; if (k) { try { key = decodeURIComponent(k[1]); } catch (e) { key = k[1]; } }
+    return m ? { n: i.number, scope: m[1], el: m[2], text: m[3], key: key, body: body.replace(/^\s+|\s+$/g, ''), who: i.user && i.user.login, at: i.created_at, state: i.state, url: i.html_url, comments: i.comments } : null;
+  };
+  G.newUrl = function (title, body) { return 'https://github.com/' + REPO + '/issues/new?title=' + enc(title) + '&body=' + enc(String(body).slice(0, 3000)); };
+  G.date = function (iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); };
+  G.onSite = function () { return /github\.io$/.test(location.hostname) && location.pathname.indexOf('/ukronatsysty/') === 0; };
+  G.pagePath = function (fallback) { if (!G.onSite()) return fallback; var q = location.pathname.slice('/ukronatsysty/'.length); return q || 'index.html'; };   // шлях сторінки на сайті
+  G.pageUrl = function (fallback) { return G.onSite() ? location.origin + location.pathname : (fallback || SITE); };
+  function done(raw) { G.list = raw.map(G.parse).filter(Boolean); G._busy = false; var w = G._w; G._w = []; w.forEach(function (f) { try { f(G.list); } catch (e) {} }); }
+  function fail() { G._busy = false; var f = G._f; G._f = []; G._w = []; f.forEach(function (x) { try { x(); } catch (e) {} }); }
+  G.load = function (cb, bad) {
+    if (G.list) { cb(G.list); return; }
+    G._w.push(cb); if (bad) G._f.push(bad); if (G._busy) return; G._busy = true;
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { done(c.d); return; } } catch (e) {}
+    if (!window.fetch) { fail(); return; }
+    var all = [];
+    (function next(p) {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&per_page=100&page=' + p, { cache: 'no-cache', headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (a) {
+          all = all.concat(a.filter(function (i) { return !i.pull_request; }));
+          if (a.length === 100 && p < 3) return next(p + 1);
+          var slim = all.map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 2000), user: i.user && { login: i.user.login }, created_at: i.created_at, state: i.state, html_url: i.html_url, comments: i.comments }; });
+          try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+          done(slim);
+        })
+        .catch(fail);   // без інтернету / ліміт API — тихо нічого
+    })(1);
+  };
+  // «Коментар до сторінки» у шапці-меню (id="mn-cmt", data-path — шлях сторінки на сайті; на сайті шлях беремо з адреси)
+  function pageBtn() {
+    var a = document.getElementById('mn-cmt'); if (!a) return;
+    var p = G.pagePath(a.getAttribute('data-path') || ''), u = G.pageUrl(G.site + encodeURI(p));
+    a.href = G.newUrl('[сторінка · ' + p + '] ', 'Сторінка: ' + u + '\n' + G.NOTE + '\n---\n\n');
+    G.load(function (L) {
+      var o = L.filter(function (i) { return i.scope === 'сторінка' && i.el === p && i.state === 'open'; });
+      if (o.length) { a.textContent = '💬 Коментар до сторінки · ' + o.length + ' відкрито'; a.title = 'Відкриті коментарі до цієї сторінки: ' + o.map(function (i) { return '#' + i.n; }).join(', ') + ' — github.com/' + REPO + '/issues'; }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pageBtn); else pageBtn();
+})();
+
+(function(){var b=document.getElementById('th'),r=document.documentElement,k='info-theme';
+try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){}
+b.onclick=function(){var dark=r.getAttribute('data-theme')?r.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();
+</script><script data-km>window.__КМ={"шлях":"vyrobnytstva/tes1.html","назва":"ТЕС-1"};
+// Плаваюча кнопка «💬 Коментар» для сторінок сайту (п. 31, 27.10). Вставляє її лише tools\поділитись.js у копії сайт\ — генератори сторінок не чіпаються.
+// Читає з window.__КМ = { шлях: "stan/mam.html", назва: "…" } (виставляє поділитись.js перед цим скриптом).
+//   кнопка → github.com/<репозиторій>/issues/new?title=[сторінка · <шлях>] <назва>&body=Сторінка: <адреса>\nМісце: …\n---\n\n   (той самий формат, що в п. 18 → tools\коментарі.js їх розбирає)
+//   «N» поруч — список відкритих коментарів цієї сторінки (публічний api.github.com без входу, кеш 5 хв, помилка/ліміт → «не вдалося завантажити», сторінка працює далі)
+//   window.коментар({ місце, текст }) — хук для мапи: запамʼятати місце (напр. «точка a=12; c=-40»), відкрити панель, підставити текст у чернетку; відправляє людина кнопкою на GitHub.
+// Усе в тексті — textContent; посилання лише на github.com/<репозиторій>/issues/…; секретів і ключів доступу тут нема й бути не повинно.
+(function () {
+  if (window.__КМ_ЖИВИЙ) return; window.__КМ_ЖИВИЙ = 1;
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'km:open:v1', TTL = 5 * 60 * 1000, enc = encodeURIComponent;
+  var C = window.__КМ || {}, PATH = String(C.шлях || 'index.html'), NAME = String(C.назва || document.title || PATH).replace(/\s+/g, ' ').trim().slice(0, 80);
+  var place = '', draft = '', open = false, list = null;
+  var css = '.km{position:fixed;left:50%;transform:translateX(-50%);bottom:8px;z-index:1500;font:13px/1.35 var(--f-body,system-ui,sans-serif);color:var(--ink,#1F2328);max-width:calc(100vw - 20px);width:max-content}' +
+    '.km *{box-sizing:border-box}.km-bar{display:flex;gap:0;box-shadow:0 2px 8px rgba(0,0,0,.25);border-radius:999px;overflow:hidden;border:1px solid var(--line,#D9D6CF);background:var(--card,#fff)}' +
+    '.km-b{display:inline-block;padding:7px 12px;color:var(--ink,#1F2328);text-decoration:none;border:0;background:none;font:inherit;cursor:pointer;white-space:nowrap}' +
+    '.km-b:hover{background:var(--box,#F3F1EC)}.km-n{border-left:1px solid var(--line,#D9D6CF);color:var(--acc,#2F6FB5);font-weight:600}' +
+    '.km-p{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 8px);width:min(340px,calc(100vw - 20px));max-height:min(60vh,420px);overflow:auto;background:var(--card,#fff);border:1px solid var(--line,#D9D6CF);border-radius:10px;padding:10px;box-shadow:0 4px 16px rgba(0,0,0,.3)}' +
+    '.km-p[hidden]{display:none}.km-h{font-weight:600;margin-bottom:6px}.km-m{color:var(--mut,#6B7078);font-size:12px}' +
+    '.km-pl{background:var(--box,#F3F1EC);border:1px solid var(--line,#D9D6CF);border-radius:6px;padding:4px 8px;margin:6px 0;word-break:break-word}' +
+    '.km-t{width:100%;min-height:54px;margin:4px 0;padding:6px;border:1px solid var(--line,#D9D6CF);border-radius:6px;background:var(--bg,#F4F2EE);color:inherit;font:inherit;resize:vertical}' +
+    '.km-i{display:block;padding:6px 0;border-top:1px solid var(--line,#D9D6CF);color:inherit;text-decoration:none}.km-i:hover b{text-decoration:underline}.km-i b{display:block;word-break:break-word}' +
+    '@media (max-width:600px){.km{bottom:6px}.km-b{padding:7px 10px}.km-l{display:none}}@media print{.km{display:none}}';
+  var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  var pageUrl = SITE + PATH;
+  function newUrl() {
+    var body = 'Сторінка: ' + pageUrl + '\nМісце: ' + (place || '—') + '\n---\n\n' + draft;
+    return 'https://github.com/' + REPO + '/issues/new?title=' + enc('[сторінка · ' + PATH + '] ' + NAME) + '&body=' + enc(body.slice(0, 3000));
+  }
+  var root = el('div', 'km'), panel = el('div', 'km-p'), bar = el('div', 'km-bar'),
+      add = el('a', 'km-b'), cnt = el('button', 'km-b km-n', '▾');
+  panel.hidden = true; add.target = '_blank'; add.rel = 'noopener'; add.title = 'Відкриє на GitHub форму нового коментаря до цієї сторінки (потрібен акаунт GitHub)';
+  var addL = el('span', '', '💬 '), addT = el('span', 'km-l', 'Коментар'); add.appendChild(addL); add.appendChild(addT);
+  cnt.type = 'button'; cnt.title = 'Відкриті коментарі до цієї сторінки'; cnt.setAttribute('aria-label', 'Коментарі до сторінки');
+  bar.appendChild(add); bar.appendChild(cnt); root.appendChild(panel); root.appendChild(bar);
+
+  var head = el('div', 'km-h', 'Коментарі до цієї сторінки'), plc = el('div', 'km-pl'), ta = el('textarea', 'km-t'), send = el('a', 'km-b', 'Написати на GitHub ↗'), note = el('div', 'km-m', 'Репозиторій публічний — не пиши секретів і адрес.'), lst = el('div');
+  ta.placeholder = 'Твій коментар (за бажанням — його можна дописати вже на GitHub)'; send.target = '_blank'; send.rel = 'noopener'; send.style.cssText = 'border:1px solid var(--line,#D9D6CF);border-radius:999px;margin:2px 0 6px';
+  [head, plc, ta, send, note, lst].forEach(function (x) { panel.appendChild(x); });
+
+  function sync() {
+    plc.textContent = 'Місце: ' + (place || '— (не вказано)'); plc.style.display = place ? '' : 'none';
+    add.href = send.href = newUrl();
+    cnt.textContent = (list ? list.length + ' ' : '') + (open ? '▴' : '▾'); panel.hidden = !open;
+  }
+  ta.addEventListener('input', function () { draft = ta.value; sync(); });
+  cnt.addEventListener('click', function () { open = !open; sync(); if (open && !list) load(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) { open = false; sync(); } });
+
+  function show(msg) { lst.textContent = ''; lst.appendChild(el('div', 'km-m', msg)); }
+  function render() {
+    lst.textContent = '';
+    if (!list.length) { show('Відкритих коментарів до цієї сторінки нема.'); return; }
+    list.forEach(function (i) {
+      var a = el('a', 'km-i'); a.href = i.url; a.target = '_blank'; a.rel = 'noopener';
+      a.appendChild(el('b', '', '#' + i.n + ' · ' + (i.text || i.title)));
+      a.appendChild(el('span', 'km-m', (i.who || '') + ' · ' + i.date + (i.comments ? ' · відповідей ' + i.comments : '')));
+      lst.appendChild(a);
+    });
+  }
+  // issue належить сторінці: заголовок «[сторінка · <шлях>]» з нашим шляхом, або в тексті є адреса сторінки (так пишуть схеми для коментаря до елемента)
+  function mine(i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || '');
+    if (m && m[1] === 'сторінка') return m[2] === PATH;
+    var b = i.body || '', k = b.indexOf(pageUrl);
+    return k >= 0 && !/[\w.\-\/]/.test(b.charAt(k + pageUrl.length));
+  }
+  function date(iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  function fin(raw) {
+    list = raw.filter(mine).map(function (i) {
+      var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), u = String(i.html_url || '');
+      return { n: i.number, title: i.title || '', text: m ? m[3] : '', who: i.user && i.user.login || '', date: date(i.created_at), comments: i.comments | 0, url: u.indexOf('https://github.com/' + REPO + '/issues/') === 0 ? u : 'https://github.com/' + REPO + '/issues/' + (i.number | 0) };
+    });
+    render(); sync();
+  }
+  function load() {
+    show('Завантажую…');
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { fin(c.d); return; } } catch (e) {}
+    if (!window.fetch) { show('Не вдалося завантажити коментарі.'); return; }
+    fetch('https://api.github.com/repos/' + REPO + '/issues?state=open&per_page=100', { headers: { Accept: 'application/vnd.github+json' } })
+      .then(function (r) {
+        if (r.status === 403 || r.status === 429) return Promise.reject('ліміт');
+        return r.ok ? r.json() : Promise.reject('помилка');
+      })
+      .then(function (a) {
+        var slim = a.filter(function (i) { return !i.pull_request; }).map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 1500), user: i.user && { login: i.user.login }, created_at: i.created_at, html_url: i.html_url, comments: i.comments }; });
+        try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+        fin(slim);
+      })
+      .catch(function (why) { show(why === 'ліміт' ? 'Не вдалося завантажити: ліміт запитів GitHub, спробуй за годину.' : 'Не вдалося завантажити коментарі (немає звʼязку з GitHub).'); });
+  }
+
+  // хук для мапи й інших сторінок
+  window['коментар'] = function (o) {
+    o = o || {}; if (o.місце != null) place = String(o.місце).replace(/\s+/g, ' ').slice(0, 200);
+    if (o.текст != null) { draft = String(o.текст).slice(0, 1500); ta.value = draft; }
+    open = true; sync(); if (!list) load(); return newUrl();
+  };
+  window['коментар'].url = newUrl;
+  sync();
+  (document.body || document.documentElement).appendChild(root);
+  // кількість відкритих — одразу, щоб було видно на кнопці (кеш на 5 хв спільний для сторінок вкладки → ≈ 1 запит на 5 хв)
+  load();
+})();
+</script></body></html>
