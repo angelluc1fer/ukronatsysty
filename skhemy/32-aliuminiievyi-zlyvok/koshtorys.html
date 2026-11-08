@@ -1,0 +1,313 @@
+<!doctype html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Алюмінієвий зливок</title>
+<style>:root{--bg:#F4F2EE;--card:#FFFFFF;--ink:#1F2328;--mut:#6B7078;--line:#D9D6CF;--box:#F3F1EC;--ok:#2E8B57;--warn:#C77700;--bad:#C8382C;--acc:#2F6FB5;--okbg:#E6F3EB;--warnbg:#FBF0DC;--badbg:#FAE6E3;--f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--f-mono:ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15181B;--card:#1E2226;--ink:#E6E3DD;--mut:#9AA0A8;--line:#33383E;--box:#262B30;--ok:#4CC27F;--warn:#E8A33A;--bad:#F06A5C;--acc:#6EA8F0;--okbg:#1B2E24;--warnbg:#33290F;--badbg:#38201D;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+header>div:first-child{min-width:0;flex:1}h1{margin:0;font-size:22px;line-height:1.2}.sub{color:var(--mut);font-size:13px;margin-top:2px}
+.clamp1:not(.x){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clamp1,.clamp{cursor:pointer}.clamp:not(.x){display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+h2{font-size:16px;margin:0;display:flex;align-items:center;gap:8px;min-width:0}h2 .ht{min-width:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}h2 .n{flex:none}details.sec>summary{min-width:0}h2 .n{font:600 12px var(--f-mono);color:var(--mut);background:var(--box);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+button.theme{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alert{border-radius:12px;padding:10px 14px;margin:0 0 8px;border:1px solid var(--bad);background:var(--badbg)}.alert b{color:var(--bad)}.alert .why{color:var(--mut);font-size:13px;margin-top:2px}
+.alert.warn{border-color:var(--warn);background:var(--warnbg)}
+.more{margin:0 0 8px}.more>summary{cursor:pointer;padding:6px 14px;border:1px dashed var(--bad);border-radius:12px;color:var(--bad);font-weight:600;font-size:13.5px;list-style:none;margin-bottom:8px}.more>summary::-webkit-details-marker{display:none}.more[open]>summary{margin-bottom:8px}.tmore{margin-top:8px}.tmore>summary{border-color:var(--line);color:var(--mut);margin-bottom:0}.tmore[open]>summary{margin-bottom:8px}
+/* розділи-<details> (25.10): відкрито лише головне */
+details.sec{margin:14px 0 0}details.sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;padding:8px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px}details.sec>summary::-webkit-details-marker{display:none}details.sec>summary::before{content:'▸';color:var(--mut);margin-right:8px;transition:transform .15s}details.sec[open]>summary::before{transform:rotate(90deg)}details.sec[open]>summary{margin-bottom:8px}details.sec>summary:hover{border-color:var(--mut)}.alert.warn b{color:var(--warn)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(max(150px,calc((100% - 40px)/6)),1fr));gap:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;border-top:4px solid var(--mut)}
+.tile.ok{border-top-color:var(--ok)}.tile.warn{border-top-color:var(--warn)}.tile.bad{border-top-color:var(--bad)}
+.tile{min-width:0}.tile .l{color:var(--mut);font-size:12.5px;line-height:1.3}.tile .v{font:700 24px/1.2 var(--f-mono)}.tile .v .vv{white-space:nowrap}.tile .v small{font:500 12.5px var(--f-body);color:var(--mut)}.tile .p{font-size:12.5px;color:var(--mut);line-height:1.3;margin-top:2px}
+.tile .clamp:not(.x),.alert .at.clamp:not(.x){-webkit-line-clamp:3}ul.lim li.clamp:not(.x){-webkit-line-clamp:4}.tile .v2{font-size:20px}.tile .v3{font-size:17px}.tile .v4{font-size:14.5px}.tile .v5{font-size:12px}.tile .v6{font-size:13px}.tile .v6 .vv{white-space:normal;overflow-wrap:anywhere}
+.st{font-weight:600;white-space:nowrap}.st.ok{color:var(--ok)}.st.warn{color:var(--warn)}.st.bad{color:var(--bad)}.st.mut{color:var(--mut)}
+.ic{display:inline-block;width:28px;height:28px;background-size:contain;background-repeat:no-repeat;background-position:center;flex:none;vertical-align:middle}.ic.s{width:20px;height:20px}
+.ic.none{border:1px dashed var(--line);border-radius:6px}
+.chain{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:34px 1fr minmax(160px,300px);gap:6px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.arrow{text-align:center;color:var(--mut);font-size:13px;line-height:1.1;padding:2px 0}
+.step .nm{font-weight:600}.step .meta{color:var(--mut);font-size:12.5px}
+.rate{font:600 13px var(--f-mono);display:flex;justify-content:space-between;gap:8px}
+.bar{height:8px;border-radius:999px;background:var(--box);border:1px solid var(--line);overflow:hidden;margin-top:3px}.bar i{display:block;height:100%;background:var(--ok)}.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}.bar.mut i{background:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
+.buf .t{display:flex;gap:8px;align-items:center}.buf .t b{flex:1}.buf .num{font:600 13px var(--f-mono);margin-top:6px}.buf .note{color:var(--mut);font-size:12.5px;margin-top:4px}
+table{width:100%;border-collapse:collapse;font-size:14px}.tile .iw,.iw{min-width:0}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600;font-size:12.5px}
+td.num,th.num{text-align:right;font-family:var(--f-mono);white-space:nowrap}.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px}.tw table{min-width:560px}
+tr.bad td:first-child{box-shadow:inset 4px 0 var(--bad)}tr.warn td:first-child{box-shadow:inset 4px 0 var(--warn)}tr.ok td:first-child{box-shadow:inset 4px 0 var(--ok)}
+.iw{display:flex;gap:8px;align-items:center}
+ul.lim{margin:0;padding-left:4px;list-style:none}ul.lim li{margin:5px 0}ul.lim li::before{content:"• ";color:var(--mut)}
+ol.todo{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.todo li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 48px;position:relative}
+ol.todo li:before{content:counter(s);position:absolute;left:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);font:700 13px/26px var(--f-mono);text-align:center}
+ol.todo .why{color:var(--mut);font-size:13.5px;margin-top:2px}ol.todo .num{font:600 12.5px var(--f-mono);margin-top:3px;color:var(--acc)}
+.series{display:grid;grid-template-columns:minmax(150px,1.2fr) auto minmax(180px,2fr);gap:6px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.series .mm{font:600 12.5px var(--f-mono);color:var(--mut);white-space:nowrap}.series .mm b{color:var(--ink)}
+svg.sp{width:100%;height:auto;display:block}svg.sp .ax{stroke:var(--line)}svg.sp .ln{fill:none;stroke:var(--acc);stroke-width:2;stroke-linejoin:round}svg.sp .dot{fill:var(--acc)}svg.sp text{fill:var(--mut);font:10px var(--f-mono)}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}.tile.pg .v{font:600 15px/1.3 var(--f-body)}.tile.pg .p{margin-top:1px}
+footer{margin-top:28px;color:var(--mut);font-size:12.5px}
+@media (max-width:640px){.wrap{padding:10px 10px calc(24px + env(safe-area-inset-bottom,0px))}.st{white-space:normal}.step{grid-template-columns:34px minmax(0,1fr)}.step>div{min-width:0;overflow-wrap:anywhere}.step .rt{grid-column:1/-1}.series{grid-template-columns:minmax(0,1fr)}.series .mm{white-space:normal}h1{font-size:19px}
+.tw{background:none;border:none;border-radius:0;overflow:visible}.tw table,.tw tbody,.tw tr,.tw td{display:block;min-width:0}.tw thead{display:none}.tw table{min-width:0}.tw tr{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 12px;margin-bottom:8px}.tw tr.bad{border-left:4px solid var(--bad)}.tw tr.warn{border-left:4px solid var(--warn)}.tw tr.ok{border-left:4px solid var(--ok)}.tw tr.bad td:first-child,.tw tr.warn td:first-child,.tw tr.ok td:first-child{box-shadow:none}
+.tw td{display:flex;gap:10px;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:5px 0;overflow-wrap:anywhere}.tw td:last-child{border-bottom:none}.tw td[data-l]::before{content:attr(data-l);flex:none;max-width:38%;color:var(--mut);font-size:12px}.tw td>*{min-width:0}.tw td.num{text-align:right}}
+
+:root{--k-rail:#7a4fb5;--k-truck:#d9822b;--k-drone:#2a79b8;--k-hand:#8b5a2b;--k-none:var(--bad)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}}
+:root[data-theme="dark"]{--k-rail:#a98ae0;--k-truck:#e8923a;--k-drone:#5aa9e6;--k-hand:#c99a62}
+
+/* карта перевезень, питання з варіантами, вид транспорту (23.10) */
+.by{display:inline-block;padding:0 7px;border-radius:4px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap}
+.by.rail{background:var(--k-rail)}.by.truck{background:var(--k-truck)}.by.drone{background:var(--k-drone)}.by.hand{background:var(--k-hand)}.by.none{background:var(--k-none)}
+.tile .v{overflow-wrap:anywhere}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--mut);margin-bottom:10px}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}.legend i.d{border-top-style:dashed}
+.legend em{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px}
+.mapbox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+svg.map{display:block;min-width:760px;width:100%;height:auto}svg.map text{fill:var(--ink);font-family:var(--f-body)}
+.nd{cursor:pointer}.nd:focus{outline:none}.nd:focus circle,.nd:hover circle,.nd:focus rect,.nd:hover rect{stroke-width:4}
+.lbl{font-size:12px;font-weight:500}svg.map .lbl2{font-size:10.5px;fill:var(--mut)}
+.edge{fill:none;stroke-width:3}.elabel{font-size:10.5px;font-weight:500}
+.detail{margin:10px 0 0;font-size:13.5px;min-height:3.2em}
+.card.q{margin-bottom:8px}.card.q h3{font-size:14.5px;margin:0 0 8px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.opt{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--box);min-width:0}
+.opt.rec{border-color:var(--ok);background:var(--okbg)}.opt h4{margin:0 0 4px;font-size:14px}.opt p{margin:0 0 4px;font-size:13px}
+.opt .tag{font-size:11.5px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em}
+.opt ul{list-style:none;margin:4px 0 0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.pm{font-weight:700}.pm.ok{color:var(--ok)}.pm.bad{color:var(--bad)}
+
+svg.map text{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+@media (max-width:640px){.tile .v{font-size:20px}.tile .v2{font-size:18px}.tile .v3{font-size:16px}.tile .v4{font-size:14px}.tile .v5,.tile .v6{font-size:12px}}
+
+/* план складу (п. 38, 30.10): вкладка на поверх, сховища в масштабі, колір рамки — група */
+.ptabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px}
+.ptab{flex:none;font:inherit;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:9px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.ptab small{color:var(--mut);margin-left:6px;font-size:12px}.ptab.on{background:var(--ink);color:var(--bg)}.ptab.on small{color:inherit;opacity:.75}
+.pfl[hidden]{display:none}.pw{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.pl-note{font-size:13px;margin:0 0 8px}
+svg.plan{display:block;width:100%;height:auto}svg.plan text{fill:var(--ink);font-family:var(--f-body)}
+.pl-s{cursor:pointer}.pl-s .pl-t{fill:var(--c);opacity:.12}.pl-s .pl-f{fill:none;stroke:var(--c);stroke-width:2}.pl-s.emp .pl-f{stroke-dasharray:5 4;opacity:.6}
+.pl-s:hover .pl-f,.pl-s:focus .pl-f,.pl-s.sel .pl-f{stroke-width:4}.pl-s:focus{outline:none}.pl-s.dim{opacity:.18}
+svg.plan .pl-n{font-size:11px;font-weight:700}svg.plan .pl-c{font-size:12px;font-weight:600;font-family:var(--f-mono)}svg.plan .pl-m{font-size:10px;fill:var(--mut)}
+.pl-bar{fill:var(--box)}.pl-bf{fill:var(--c)}.pl-noic{fill:none;stroke:var(--mut);stroke-dasharray:3 2}
+.pl-lift rect{fill:var(--box);stroke:var(--ink);stroke-width:2}
+.plg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.pgc{display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:12.5px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer}
+.pgc i{width:12px;height:12px;border-radius:3px;border:2px solid var(--c);background:var(--c);background-clip:padding-box;opacity:.9}.pgc small{color:var(--mut)}.pgc.on{background:var(--ink);color:var(--bg)}.pgc.on small{color:inherit}
+.pl-detail{font-size:14px;min-height:3.4em}.pl-items{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 16px}
+.pl-items li{display:flex;align-items:center;gap:8px;min-width:0}.pl-items li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pl-items li b{font-family:var(--f-mono);font-size:13px}
+svg.plan .pl-s.emp .pl-m{font-size:9px}
+.pl-ib{fill:var(--ink);opacity:.14}
+
+/* картка контейнера в плані складу (30.10): біля контейнера поверх плану, на телефоні — знизу на всю ширину */
+.plc{position:absolute;z-index:100;width:340px;max-width:calc(100vw - 16px);max-height:80vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.35);padding:12px 14px;font-size:14px;line-height:1.4}
+.plc[hidden]{display:none}.plc:focus{outline:none}
+.plc.mob{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-width:none;max-height:72vh;border-radius:14px 14px 0 0;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.plc-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}.plc-h>i{flex:none;width:6px;align-self:stretch;border-radius:3px;background:var(--c)}.plc-h>div{flex:1;min-width:0}.plc-h b{display:block;font-size:15px}.plc-h small{color:var(--mut);font-size:13px}
+.plc-x{flex:none;font:inherit;font-size:14px;width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:var(--box);color:var(--ink);cursor:pointer}
+.plc-d{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0 0 10px}.plc-d dt{color:var(--mut);font-size:13px}.plc-d dd{margin:0;min-width:0}
+.plc-bar{display:block;height:6px;border-radius:3px;background:var(--box);margin-top:4px;overflow:hidden}.plc-bar i{display:block;height:100%;background:var(--c)}
+.plc-it{list-style:none;margin:0 0 8px;padding:0}.plc-it li{display:grid;grid-template-columns:28px 1fr auto;gap:0 8px;align-items:center;padding:4px 0;border-top:1px solid var(--line)}
+.plc-it .ic{width:28px;height:28px;grid-row:1/3;border-radius:6px;background-color:rgba(127,127,127,.18)}.plc-it .pn{min-width:0;overflow:hidden;text-overflow:ellipsis}.plc-it b{font-family:var(--f-mono);font-size:13px;text-align:right}.plc-it small{grid-column:2/4;color:var(--mut);font-size:12px}
+.plc-b{font-size:13px;color:var(--mut)}.plc-b span{color:var(--ink);font-weight:600;margin-right:6px}.plc-e{padding:6px 0}.pl-hint{font-size:12.5px;margin:0}
+
+/*mn:start*/
+/* шапка-меню (23.10; по кнопці — 25.10; одна на всіх сторінках, 30.10 п. 37): на всю ширину вгорі, поза .wrap; усі розміри в px — не залежать від шрифту й масштабу сторінки; tools/інфо/меню.js.
+   Селектор :root nav.menu.menu — вищий за будь-які старі перевизначення (.shell>nav.menu у схемах) — у старих сторінках сайту меню теж стає таким самим. Між першим і останнім рядком (mn:start / mn:end) tools/поділитись.js підміняє блок на поточний. */
+:root nav.menu.menu{position:sticky;top:0;z-index:40;flex:none;display:block;box-sizing:border-box;width:100%;margin:0;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:var(--card);color:var(--ink);font:14px/1.3 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:left}
+nav.menu *{box-sizing:border-box}
+nav.menu .mn-bar{display:flex;align-items:center;gap:12px;height:48px;padding:0 16px}
+nav.menu .mn-btn{display:inline-flex;align-items:center;gap:6px;flex:none;height:32px;margin:0;font:600 14px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--box);border:1px solid var(--line);border-radius:8px;padding:0 12px;cursor:pointer}
+nav.menu .mn-btn:hover,nav.menu.mn-open .mn-btn{background:var(--ink);color:var(--bg)}
+nav.menu .mn-t{flex:1 1 0;min-width:60px;font-weight:600;font-size:15px;line-height:1.3;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.menu .mn-sv{flex:none;color:var(--mut);font-size:13px;white-space:nowrap}nav.menu .mn-sv b{color:var(--ink);font-weight:600}
+nav.menu:not(.mn-open)>.mn-pan{display:none}
+:root nav.menu.menu.mn-open{z-index:2000}   /* відкрите меню — над мапою Leaflet (шари до 1000) і схемами */
+nav.menu .mn-pan{position:absolute;z-index:30;left:0;right:0;top:100%;display:flex;flex-direction:column;max-height:calc(100vh - 48px);background:var(--card);border:0;border-bottom:1px solid var(--line);border-top:1px dashed var(--line);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+nav.menu .mn{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:4px 18px;padding:10px 16px 6px;overflow:auto;flex:1 1 auto;min-height:0}
+nav.menu .mn-meta{flex:none;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:8px 16px 10px;border-top:1px solid var(--line);color:var(--mut);font-size:13px}
+nav.menu .mn-g{display:flex;flex-direction:column;gap:1px;min-width:0}nav.menu .mn-g>b{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);padding:4px 8px 2px}
+nav.menu .mn-i{display:block;padding:5px 8px;border-radius:7px;color:var(--ink);font-size:14px;line-height:1.3;font-weight:400;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+nav.menu a.mn-i.mn-sub,nav.menu .mn-i.mn-sub{padding-left:24px;font-size:13px}nav.menu a.mn-i:hover{background:var(--box);text-decoration:none}nav.menu .mn-i.cur{background:var(--ink);color:var(--bg);font-weight:600}nav.menu .mn-i.off{color:var(--mut);opacity:.5;cursor:default}
+nav.menu a.mn-map,nav.menu a.mn-site{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:1px 9px;font-size:13px;color:var(--ink);text-decoration:none}nav.menu a.mn-cmt:hover,nav.menu a.mn-map:hover{background:var(--box);text-decoration:none}
+@media (max-width:640px){nav.menu .mn-bar{gap:8px;height:44px;padding:0 8px}nav.menu .mn-sv{font-size:12px}nav.menu .mn-pan{max-height:calc(100vh - 44px)}nav.menu .mn{grid-template-columns:1fr;padding:8px}nav.menu .mn-meta{padding:8px}}
+/*mn:end*/
+
+</style></head><body>
+<nav class="menu" aria-label="Меню сторінок"><div class="mn-bar"><button type="button" class="mn-btn" aria-expanded="false" onclick="var n=this.closest('nav');this.setAttribute('aria-expanded',n.classList.toggle('mn-open'))">☰ Меню</button><span class="mn-t">Кошторис</span><span class="mn-sv">Сейв <b>09.11 01:16</b></span></div><div class="mn-pan"><div class="mn"><div class="mn-g"><b>Сторінки</b><a class="mn-i" href="../../index.html">Головна</a><a class="mn-i" href="../../stan/stan-hry.html">Стан гри</a><a class="mn-i" href="../../stan/enerhosystema.html">Енергосистема</a><a class="mn-i" href="../../stan/lohistyka.html">Логістика</a><a class="mn-i" href="../../stan/mapa.html">Мапа</a><a class="mn-i" href="../../stan/blok-skhema-zavodiv.html">Блок-схема</a><a class="mn-i" href="../../stan/plan-vykonannia.html">План виконання</a><a class="mn-i" href="../../stan/mam.html">МАМ</a></div><div class="mn-g"><b>Виробництва</b><a class="mn-i" href="../../vyrobnytstva/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../../vyrobnytstva/turbopalyvo.html">Турбопаливо</a><a class="mn-i" href="../../vyrobnytstva/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../../vyrobnytstva/stal.html">Сталь</a><a class="mn-i" href="../../vyrobnytstva/naftokhimiia.html">Нафтохімія</a><a class="mn-i" href="../../vyrobnytstva/aliuminii.html">Алюміній</a></div><div class="mn-g"><b>Схеми</b><a class="mn-i" href="../02-enerhetyka/naftova-enerhetyka.html">Нафтова енергетика</a><a class="mn-i" href="../02-enerhetyka/turbopalyvo.html">Турбопаливо — огляд</a><a class="mn-i mn-sub" href="../02-enerhetyka/turbopalyvo-a.html">ПЗ · Паливний завод + полімер</a><a class="mn-i mn-sub" href="../02-enerhetyka/turbopalyvo-b.html">ТПЗ · Турбопаливний переробний завод</a><a class="mn-i mn-sub" href="../02-enerhetyka/turbopalyvo-enerhostantsiia.html">ТЕС · 5 однакових по 20 ЕС</a><a class="mn-i" href="../04-avanpost-druha/modulni-ramy.html">Модульні рами</a><a class="mn-i" href="../07-stal/stal.html">Сталь</a><a class="mn-i" href="../09-naftokhimiia/naftokhimiia.html">Нафтохімія</a><a class="mn-i" href="../10-tsentr/detali-pidiimacha.html">Деталі підіймача</a><a class="mn-i" href="../11-aliuminii/aliuminii.html">Алюміній</a><a class="mn-i" href="../13-zakhid/plyty-i-poroshok.html">Плити й порошок</a><a class="mn-i" href="../16-elektronika/elektronika.html">Електроніка</a><a class="mn-i" href="../17-vazhki-modulni-ramy/vazhki-modulni-ramy.html">Важкі модульні рами</a><a class="mn-i" href="../18-dvyhuny/dvyhuny.html">Двигуни</a><a class="mn-i" href="../19-presovane-vuhillia/presovane-vuhillia.html">Пресоване вугілля</a><a class="mn-i" href="../20-kvartsovi-ostsyliatory/kvartsovi-ostsyliatory.html">Кварцові осцилятори</a><a class="mn-i" href="../21-zaliznyi-avanpost/midnyi-poroshok-i-diamanty.html">Мідний порошок і діаманти</a><a class="mn-i" href="../22-zalizna-plyta/zalizna-plyta-i-stryzhen.html">Залізна плита й стрижень</a><a class="mn-i" href="../23-systema-okholodzhennia/systema-okholodzhennia-i-splavlena-rama.html">Система охолодження й Сплавлена рама</a><a class="mn-i" href="../25-iaderna-sumish/iaderna-sumish.html">Ядерна суміш</a><a class="mn-i" href="../27-systema-upravlinnia-zbirkoiu/systema-upravlinnia-zbirkoiu.html">Система управління збіркою</a><a class="mn-i" href="../29-zaliznyi-zlyvok/zaliznyi-zlyvok.html">Залізний зливок</a><a class="mn-i" href="../31-kateriievyi-zlyvok/kateriievyi-zlyvok.html">Катерієвий зливок</a><a class="mn-i" href="aliuminiievyi-zlyvok.html">Алюмінієвий зливок</a><a class="mn-i" href="../33-plastyk-i-huma/plastyk-i-huma.html">Пластик і Гума</a><a class="mn-i" href="../34-beton/beton.html">Бетон</a><a class="mn-i" href="../35-kvartsovi-krystaly/kvartsovi-krystaly.html">Кварцові кристали</a></div></div><div class="mn-meta"><span>сесія: Проєктувальник · Алюмінієвий зливок</span></div></div></nav>
+<div class="wrap">
+<header><div><h1>Алюмінієвий зливок</h1><div class="sub clamp1" title="Кошторис, список справ і час будівництва плоскої схеми (варіант А: 2 Ливарні по 60 %). Запаси — зі стану гри (стан\останній.json, сейв 09.11, 01:16) — це усі сховища разом, не лише Склад-Ц.">Кошторис, список справ і час будівництва плоскої схеми (варіант А: 2 Ливарні по 60 %). Запаси — зі стану гри (стан\останній.json, сейв 09.11, 01:16) — це усі сховища разом, не лише Склад-Ц.</div></div><button class="theme" id="th" type="button">◐ тема</button></header>
+
+<div class="tiles"><div class="tile mut"><div class="l">Будівель</div><div class="v"><span class="vv">22</span></div><div class="p clamp">машин 5 · видобувачів 3 · розгалужувачів і зʼєднувачів 5 · станція, платформи, контейнери, ДИВО 7</div></div><div class="tile ok"><div class="l">Кошторис</div><div class="v"><span class="vv">✓ усе є</span></div><div class="p clamp">16 позицій; ✖ — де на складах менше, ніж треба</div></div><div class="tile mut"><div class="l">Час будівництва</div><div class="v v4"><span class="vv">≈ 1 год 49 хв</span></div><div class="p clamp">оцінка за конфіг.json (не перевірено); без гілки колії й плит</div></div><div class="tile mut"><div class="l">Стрічки / труби</div><div class="v v2"><span class="vv">911 / 287</span> <small>м</small></div><div class="p clamp">за шляхами на схемі; без підйомів з плато</div></div></div>
+<details class="sec" data-k="обмеження" open><summary><h2><span class="ht">Що обмежує і чому</span> <span class="n">5</span></h2></summary><div class="sb"><div class="card"><ul class="lim"><li class="clamp">Фундаменти, вежа ЛЕП, гілка колії, вагони й потяг — не тут: фундаменти рахуються після габариту Олександра (крок Г), ЛЕП — Енергосистема, колія й потяг — Логістика.</li><li class="clamp">Стрічки й труби — оцінка: Mk1 — 1 Залізна плита на м, Mk2 — 1 Армована залізна плита на м, труба — 1 Мідний лист на м; перевір у грі (рецепти без перерахунку на довжину відрізка).</li><li class="clamp">Двигун: треба 30, у межах «Резервів» вільно 1 542 ✓</li><li class="clamp">Ротор: треба 32, у межах «Резервів» вільно 37 917 ✓</li><li class="clamp">Модульна рама: треба 40, у межах «Резервів» вільно 21 739 ✓</li></ul></div></div></details>
+<details class="sec" data-k="дії" open><summary><h2><span class="ht">Що зробити</span> <span class="n">2</span></h2></summary><div class="sb"><ol class="todo"><li><b>Додати в список справ у грі (повними стеками): Залізна плита × 693 · Дріт × 400 · Мідний лист × 358 · Армована залізна плита × 255 · Бетон × 235 · Сталева труба × 160 · Пластик × 100 · Промислова балка × 70 · Сталева балка × 60 · Кабель × 42 · Модульна рама × 40 · Ротор × 32 · Двигун × 30 · Залізний стрижень × 4 · Переносний бурильник × 4 · Обмежувач ШІ × 1</b><div class="why">Чому: усе, що треба для всіх будівель цієї схеми; у Хабі є не все — ✖ у таблиці</div><div class="num">16 позицій</div></li><li><b>Кресленики робить Олександр; після назв — розкладка (крок В)</b><div class="why">Чому: Будівники, Ливарні, Переробні заводи й вузли — по кресленику</div><div class="num">машин 5</div></li></ol></div></details>
+<details class="sec" open><summary><h2><span class="ht">Кошторис ✓ / ✖ зі складів</span></h2></summary><div class="sb"><div class="tw"><table><thead><tr><th>Предмет</th><th>Треба</th><th>Є на складах</th><th></th></tr></thead><tbody><tr><td data-l="Предмет">Залізна плита</td><td data-l="Треба">693</td><td data-l="Є на складах">45 595</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Дріт</td><td data-l="Треба">400</td><td data-l="Є на складах">78 539</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Мідний лист</td><td data-l="Треба">358</td><td data-l="Є на складах">19 394</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Армована залізна плита</td><td data-l="Треба">255</td><td data-l="Є на складах">7 656</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Бетон</td><td data-l="Треба">235</td><td data-l="Є на складах">58 813</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Сталева труба</td><td data-l="Треба">160</td><td data-l="Є на складах">49 642</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Пластик</td><td data-l="Треба">100</td><td data-l="Є на складах">52 804</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Промислова балка</td><td data-l="Треба">70</td><td data-l="Є на складах">19 488</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Сталева балка</td><td data-l="Треба">60</td><td data-l="Є на складах">20 221</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Кабель</td><td data-l="Треба">42</td><td data-l="Є на складах">39 413</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Модульна рама</td><td data-l="Треба">40</td><td data-l="Є на складах">22 230</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Ротор</td><td data-l="Треба">32</td><td data-l="Є на складах">38 073</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Двигун</td><td data-l="Треба">30</td><td data-l="Є на складах">4 100</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Залізний стрижень</td><td data-l="Треба">4</td><td data-l="Є на складах">47 981</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Переносний бурильник</td><td data-l="Треба">4</td><td data-l="Є на складах">15</td><td><span class="st ok">✓ </span></td></tr><tr><td data-l="Предмет">Обмежувач ШІ</td><td data-l="Треба">1</td><td data-l="Є на складах">151</td><td><span class="st ok">✓ </span></td></tr></tbody></table></div></div></details>
+<details class="sec"><summary><h2><span class="ht">Звідки береться вартість: будівля × кількість</span></h2></summary><div class="sb"><div class="tw"><table><thead><tr><th>Будівля</th><th>Шт.</th><th>Вартість</th></tr></thead><tbody><tr><td data-l="Будівля">Будівник</td><td data-l="Шт.">1</td><td data-l="Вартість">Армована залізна плита × 2 · Кабель × 8</td></tr><tr><td data-l="Будівля">Розумний розгалужувач</td><td data-l="Шт.">1</td><td data-l="Вартість">Армована залізна плита × 2 · Ротор × 2 · Обмежувач ШІ × 1</td></tr><tr><td data-l="Будівля">Промисловий контейнер</td><td data-l="Шт.">3</td><td data-l="Вартість">Сталева балка × 60 · Сталева труба × 60</td></tr><tr><td data-l="Будівля">ДИВО-передавач</td><td data-l="Шт.">1</td><td data-l="Вартість">Армована залізна плита × 15 · Кабель × 30 · Бетон × 45</td></tr><tr><td data-l="Будівля">Конвеєрний з’єднувач</td><td data-l="Шт.">2</td><td data-l="Вартість">Залізна плита × 4 · Залізний стрижень × 4</td></tr><tr><td data-l="Будівля">Ливарня</td><td data-l="Шт.">2</td><td data-l="Вартість">Модульна рама × 20 · Ротор × 20 · Бетон × 40</td></tr><tr><td data-l="Будівля">Конвеєрний розгалужувач</td><td data-l="Шт.">2</td><td data-l="Вартість">Залізна плита × 4 · Кабель × 4</td></tr><tr><td data-l="Будівля">Переробний завод</td><td data-l="Шт.">2</td><td data-l="Вартість">Двигун × 20 · Промислова балка × 20 · Сталева труба × 60 · Мідний лист × 40</td></tr><tr><td data-l="Будівля">Т-подібне перехрестя трубопроводу</td><td data-l="Шт.">2</td><td data-l="Вартість">Мідний лист × 10</td></tr><tr><td data-l="Будівля">Бурильник 2</td><td data-l="Шт.">2</td><td data-l="Вартість">Переносний бурильник × 4 · Промислова балка × 20 · Сталева труба × 40 · Модульна рама × 20</td></tr><tr><td data-l="Будівля">Водяна помпа</td><td data-l="Шт.">1</td><td data-l="Вартість">Мідний лист × 20 · Армована залізна плита × 10 · Ротор × 10</td></tr><tr><td data-l="Будівля">Залізнична станція</td><td data-l="Шт.">1</td><td data-l="Вартість">Промислова балка × 10 · Пластик × 50 · Бетон × 50 · Дріт × 200</td></tr><tr><td data-l="Будівля">Вантажна платформа</td><td data-l="Шт.">2</td><td data-l="Вартість">Двигун × 10 · Промислова балка × 20 · Пластик × 50 · Бетон × 100 · Дріт × 200</td></tr></tbody></table></div></div></details>
+<details class="sec"><summary><h2><span class="ht">Час будівництва (оцінка за конфіг.json)</span></h2></summary><div class="sb"><div class="card"><div>Без гілки колії ≥ 880 м, ЛЕП до плато й вузлів Кремнію (проєкт 35) — їх рахують Логістика й Енергосистема.</div></div><div class="tw"><table><thead><tr><th>Що</th><th>Хв</th></tr></thead><tbody><tr><td data-l="Що">Машини (5 × 1.5)</td><td data-l="Хв">8</td></tr><tr><td data-l="Що">Видобувачі (3 × 2)</td><td data-l="Хв">6</td></tr><tr><td data-l="Що">Станція, платформи, контейнери, ДИВО (7 × 1)</td><td data-l="Хв">7</td></tr><tr><td data-l="Що">Розгалужувачі, зʼєднувачі, перехрестя (7 × 0.5)</td><td data-l="Хв">4</td></tr><tr><td data-l="Що">Звʼязки (24 × 0.3)</td><td data-l="Хв">7</td></tr><tr><td data-l="Що">Стрічки (911 м × 0.05)</td><td data-l="Хв">46</td></tr><tr><td data-l="Що">Труби (287 м × 0.05)</td><td data-l="Хв">14</td></tr><tr><td data-l="Що">Фундаменти (≈ 60 × 0.3)</td><td data-l="Хв">18</td></tr><tr><td data-l="Що">Разом</td><td data-l="Хв">1 год 49 хв</td></tr></tbody></table></div></div></details>
+<footer>Проєктувальник · Алюмінієвий зливок · сейв 09.11, 01:16 · вартість будівель — tools\схема\дані_гри.json; стрічки, труби, фундаменти — оцінка (не перевірено) · згенеровано tools\інфо\інфо.js</footer>
+</div><script>
+document.addEventListener('click',function(e){var n=document.querySelector('nav.menu.mn-open');if(n&&!n.contains(e.target)){n.classList.remove('mn-open');n.querySelector('.mn-btn').setAttribute('aria-expanded',false);}});document.addEventListener('keydown',function(e){var n=document.querySelector('nav.menu.mn-open');if(n&&e.key==='Escape'){n.classList.remove('mn-open');n.querySelector('.mn-btn').setAttribute('aria-expanded',false);}});
+if(innerWidth<=640){var mp=document.querySelector('details.sec[data-k="карта"]');if(mp)mp.open=false;}
+document.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('.clamp,.clamp1');if(c&&!e.target.closest('a'))c.classList.toggle('x');});
+// Клієнт спільних коментарів (з 23.10, п. 18): коментар = issue репозиторію сайту на GitHub (відкрито / закрито).
+// Вбудовується в сторінки стану (tools\інфо\інфо.js) і схеми (tools\схема\схема.js) через tools\інфо\меню.js (MENU.gh) — один код, window.GHC.
+//   GHC.newUrl(назва, текст)  — адреса форми нового issue з уже вписаними назвою й текстом (мітки через URL чужим не ставляться — мітка в назві: «[<ключ схеми або сторінка> · <елемент>] …»)
+//   GHC.load(cb)              — читає issues (відкриті й закриті) через API без входу, кеш у sessionStorage на 5 хв; без інтернету — тихо нічого (cb не викликається)
+//   GHC.list                  — розібрані issues після load: {n, scope, el, text, key, body, who, at, state, url, comments}
+//   key — машинний ключ елемента схеми («n:id», «e:a→b», «i:id», «f:N»), береться з посилання «#к=…» у тексті issue (його кладе движок схем)
+// Секретів тут нема й бути не повинно: усе публічне, вхід робить сам GitHub, ключів доступу тут нема.
+(function () {
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'ghc:issues', TTL = 5 * 60 * 1000;
+  var G = window.GHC = { repo: REPO, site: SITE, list: null, _w: [], _f: [], _busy: false };
+  var enc = encodeURIComponent;
+  G.NOTE = 'Репозиторій публічний — не вписуй сюди секретів і адрес.';
+  G.parse = function (i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), b = i.body || '', k = /#к=([^\s)>\]]+)/.exec(b), body = b.indexOf('\n---') >= 0 ? b.slice(b.indexOf('\n---') + 4) : b;
+    var key = ''; if (k) { try { key = decodeURIComponent(k[1]); } catch (e) { key = k[1]; } }
+    return m ? { n: i.number, scope: m[1], el: m[2], text: m[3], key: key, body: body.replace(/^\s+|\s+$/g, ''), who: i.user && i.user.login, at: i.created_at, state: i.state, url: i.html_url, comments: i.comments } : null;
+  };
+  G.newUrl = function (title, body) { return 'https://github.com/' + REPO + '/issues/new?title=' + enc(title) + '&body=' + enc(String(body).slice(0, 3000)); };
+  G.date = function (iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); };
+  G.onSite = function () { return /github\.io$/.test(location.hostname) && location.pathname.indexOf('/ukronatsysty/') === 0; };
+  G.pagePath = function (fallback) { if (!G.onSite()) return fallback; var q = location.pathname.slice('/ukronatsysty/'.length); return q || 'index.html'; };   // шлях сторінки на сайті
+  G.pageUrl = function (fallback) { return G.onSite() ? location.origin + location.pathname : (fallback || SITE); };
+  function done(raw) { G.list = raw.map(G.parse).filter(Boolean); G._busy = false; var w = G._w; G._w = []; w.forEach(function (f) { try { f(G.list); } catch (e) {} }); }
+  function fail() { G._busy = false; var f = G._f; G._f = []; G._w = []; f.forEach(function (x) { try { x(); } catch (e) {} }); }
+  G.load = function (cb, bad) {
+    if (G.list) { cb(G.list); return; }
+    G._w.push(cb); if (bad) G._f.push(bad); if (G._busy) return; G._busy = true;
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { done(c.d); return; } } catch (e) {}
+    if (!window.fetch) { fail(); return; }
+    var all = [];
+    (function next(p) {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=all&per_page=100&page=' + p, { cache: 'no-cache', headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function (a) {
+          all = all.concat(a.filter(function (i) { return !i.pull_request; }));
+          if (a.length === 100 && p < 3) return next(p + 1);
+          var slim = all.map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 2000), user: i.user && { login: i.user.login }, created_at: i.created_at, state: i.state, html_url: i.html_url, comments: i.comments }; });
+          try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+          done(slim);
+        })
+        .catch(fail);   // без інтернету / ліміт API — тихо нічого
+    })(1);
+  };
+  // «Коментар до сторінки» у шапці-меню (id="mn-cmt", data-path — шлях сторінки на сайті; на сайті шлях беремо з адреси)
+  function pageBtn() {
+    var a = document.getElementById('mn-cmt'); if (!a) return;
+    var p = G.pagePath(a.getAttribute('data-path') || ''), u = G.pageUrl(G.site + encodeURI(p));
+    a.href = G.newUrl('[сторінка · ' + p + '] ', 'Сторінка: ' + u + '\n' + G.NOTE + '\n---\n\n');
+    G.load(function (L) {
+      var o = L.filter(function (i) { return i.scope === 'сторінка' && i.el === p && i.state === 'open'; });
+      if (o.length) { a.textContent = '💬 Коментар до сторінки · ' + o.length + ' відкрито'; a.title = 'Відкриті коментарі до цієї сторінки: ' + o.map(function (i) { return '#' + i.n; }).join(', ') + ' — github.com/' + REPO + '/issues'; }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pageBtn); else pageBtn();
+})();
+
+(function(){var b=document.getElementById('th'),r=document.documentElement,k='info-theme';
+try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){}
+b.onclick=function(){var dark=r.getAttribute('data-theme')?r.getAttribute('data-theme')==='dark':matchMedia('(prefers-color-scheme:dark)').matches,n=dark?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();
+</script><script data-km>window.__КМ={"шлях":"skhemy/32-aliuminiievyi-zlyvok/koshtorys.html","назва":"Алюмінієвий зливок"};
+// Плаваюча кнопка «💬 Коментар» для сторінок сайту (п. 31, 27.10). Вставляє її лише tools\поділитись.js у копії сайт\ — генератори сторінок не чіпаються.
+// Читає з window.__КМ = { шлях: "stan/mam.html", назва: "…" } (виставляє поділитись.js перед цим скриптом).
+//   кнопка → github.com/<репозиторій>/issues/new?title=[сторінка · <шлях>] <назва>&body=Сторінка: <адреса>\nМісце: …\n---\n\n   (той самий формат, що в п. 18 → tools\коментарі.js їх розбирає)
+//   «N» поруч — список відкритих коментарів цієї сторінки (публічний api.github.com без входу, кеш 5 хв, помилка/ліміт → «не вдалося завантажити», сторінка працює далі)
+//   window.коментар({ місце, текст }) — хук для мапи: запамʼятати місце (напр. «точка a=12; c=-40»), відкрити панель, підставити текст у чернетку; відправляє людина кнопкою на GitHub.
+// Усе в тексті — textContent; посилання лише на github.com/<репозиторій>/issues/…; секретів і ключів доступу тут нема й бути не повинно.
+(function () {
+  if (window.__КМ_ЖИВИЙ) return; window.__КМ_ЖИВИЙ = 1;
+  var REPO = 'angelluc1fer/ukronatsysty', SITE = 'https://angelluc1fer.github.io/ukronatsysty/', KEY = 'km:open:v1', TTL = 5 * 60 * 1000, enc = encodeURIComponent;
+  var C = window.__КМ || {}, PATH = String(C.шлях || 'index.html'), NAME = String(C.назва || document.title || PATH).replace(/\s+/g, ' ').trim().slice(0, 80);
+  var place = '', draft = '', open = false, list = null;
+  var css = '.km{position:fixed;left:50%;transform:translateX(-50%);bottom:8px;z-index:1500;font:13px/1.35 var(--f-body,system-ui,sans-serif);color:var(--ink,#1F2328);max-width:calc(100vw - 20px);width:max-content}' +
+    '.km *{box-sizing:border-box}.km-bar{display:flex;gap:0;box-shadow:0 2px 8px rgba(0,0,0,.25);border-radius:999px;overflow:hidden;border:1px solid var(--line,#D9D6CF);background:var(--card,#fff)}' +
+    '.km-b{display:inline-block;padding:7px 12px;color:var(--ink,#1F2328);text-decoration:none;border:0;background:none;font:inherit;cursor:pointer;white-space:nowrap}' +
+    '.km-b:hover{background:var(--box,#F3F1EC)}.km-n{border-left:1px solid var(--line,#D9D6CF);color:var(--acc,#2F6FB5);font-weight:600}' +
+    '.km-p{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 8px);width:min(340px,calc(100vw - 20px));max-height:min(60vh,420px);overflow:auto;background:var(--card,#fff);border:1px solid var(--line,#D9D6CF);border-radius:10px;padding:10px;box-shadow:0 4px 16px rgba(0,0,0,.3)}' +
+    '.km-p[hidden]{display:none}.km-h{font-weight:600;margin-bottom:6px}.km-m{color:var(--mut,#6B7078);font-size:12px}' +
+    '.km-pl{background:var(--box,#F3F1EC);border:1px solid var(--line,#D9D6CF);border-radius:6px;padding:4px 8px;margin:6px 0;word-break:break-word}' +
+    '.km-t{width:100%;min-height:54px;margin:4px 0;padding:6px;border:1px solid var(--line,#D9D6CF);border-radius:6px;background:var(--bg,#F4F2EE);color:inherit;font:inherit;resize:vertical}' +
+    '.km-i{display:block;padding:6px 0;border-top:1px solid var(--line,#D9D6CF);color:inherit;text-decoration:none}.km-i:hover b{text-decoration:underline}.km-i b{display:block;word-break:break-word}' +
+    '@media (max-width:600px){.km{bottom:6px}.km-b{padding:7px 10px}.km-l{display:none}}@media print{.km{display:none}}';
+  var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
+
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  var pageUrl = SITE + PATH;
+  function newUrl() {
+    var body = 'Сторінка: ' + pageUrl + '\nМісце: ' + (place || '—') + '\n---\n\n' + draft;
+    return 'https://github.com/' + REPO + '/issues/new?title=' + enc('[сторінка · ' + PATH + '] ' + NAME) + '&body=' + enc(body.slice(0, 3000));
+  }
+  var root = el('div', 'km'), panel = el('div', 'km-p'), bar = el('div', 'km-bar'),
+      add = el('a', 'km-b'), cnt = el('button', 'km-b km-n', '▾');
+  panel.hidden = true; add.target = '_blank'; add.rel = 'noopener'; add.title = 'Відкриє на GitHub форму нового коментаря до цієї сторінки (потрібен акаунт GitHub)';
+  var addL = el('span', '', '💬 '), addT = el('span', 'km-l', 'Коментар'); add.appendChild(addL); add.appendChild(addT);
+  cnt.type = 'button'; cnt.title = 'Відкриті коментарі до цієї сторінки'; cnt.setAttribute('aria-label', 'Коментарі до сторінки');
+  bar.appendChild(add); bar.appendChild(cnt); root.appendChild(panel); root.appendChild(bar);
+
+  var head = el('div', 'km-h', 'Коментарі до цієї сторінки'), plc = el('div', 'km-pl'), ta = el('textarea', 'km-t'), send = el('a', 'km-b', 'Написати на GitHub ↗'), note = el('div', 'km-m', 'Репозиторій публічний — не пиши секретів і адрес.'), lst = el('div');
+  ta.placeholder = 'Твій коментар (за бажанням — його можна дописати вже на GitHub)'; send.target = '_blank'; send.rel = 'noopener'; send.style.cssText = 'border:1px solid var(--line,#D9D6CF);border-radius:999px;margin:2px 0 6px';
+  [head, plc, ta, send, note, lst].forEach(function (x) { panel.appendChild(x); });
+
+  function sync() {
+    plc.textContent = 'Місце: ' + (place || '— (не вказано)'); plc.style.display = place ? '' : 'none';
+    add.href = send.href = newUrl();
+    cnt.textContent = (list ? list.length + ' ' : '') + (open ? '▴' : '▾'); panel.hidden = !open;
+  }
+  ta.addEventListener('input', function () { draft = ta.value; sync(); });
+  cnt.addEventListener('click', function () { open = !open; sync(); if (open && !list) load(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) { open = false; sync(); } });
+
+  function show(msg) { lst.textContent = ''; lst.appendChild(el('div', 'km-m', msg)); }
+  function render() {
+    lst.textContent = '';
+    if (!list.length) { show('Відкритих коментарів до цієї сторінки нема.'); return; }
+    list.forEach(function (i) {
+      var a = el('a', 'km-i'); a.href = i.url; a.target = '_blank'; a.rel = 'noopener';
+      a.appendChild(el('b', '', '#' + i.n + ' · ' + (i.text || i.title)));
+      a.appendChild(el('span', 'km-m', (i.who || '') + ' · ' + i.date + (i.comments ? ' · відповідей ' + i.comments : '')));
+      lst.appendChild(a);
+    });
+  }
+  // issue належить сторінці: заголовок «[сторінка · <шлях>]» з нашим шляхом, або в тексті є адреса сторінки (так пишуть схеми для коментаря до елемента)
+  function mine(i) {
+    var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || '');
+    if (m && m[1] === 'сторінка') return m[2] === PATH;
+    var b = i.body || '', k = b.indexOf(pageUrl);
+    return k >= 0 && !/[\w.\-\/]/.test(b.charAt(k + pageUrl.length));
+  }
+  function date(iso) { var d = new Date(iso); return isNaN(d) ? '' : ('0' + d.getDate()).slice(-2) + '.' + ('0' + (d.getMonth() + 1)).slice(-2) + ' ' + ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+  function fin(raw) {
+    list = raw.filter(mine).map(function (i) {
+      var m = /^\[(.+?) · (.+?)\]\s*([\s\S]*)$/.exec(i.title || ''), u = String(i.html_url || '');
+      return { n: i.number, title: i.title || '', text: m ? m[3] : '', who: i.user && i.user.login || '', date: date(i.created_at), comments: i.comments | 0, url: u.indexOf('https://github.com/' + REPO + '/issues/') === 0 ? u : 'https://github.com/' + REPO + '/issues/' + (i.number | 0) };
+    });
+    render(); sync();
+  }
+  function load() {
+    show('Завантажую…');
+    try { var c = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (c && Date.now() - c.t < TTL) { fin(c.d); return; } } catch (e) {}
+    if (!window.fetch) { show('Не вдалося завантажити коментарі.'); return; }
+    fetch('https://api.github.com/repos/' + REPO + '/issues?state=open&per_page=100', { headers: { Accept: 'application/vnd.github+json' } })
+      .then(function (r) {
+        if (r.status === 403 || r.status === 429) return Promise.reject('ліміт');
+        return r.ok ? r.json() : Promise.reject('помилка');
+      })
+      .then(function (a) {
+        var slim = a.filter(function (i) { return !i.pull_request; }).map(function (i) { return { number: i.number, title: i.title, body: (i.body || '').slice(0, 1500), user: i.user && { login: i.user.login }, created_at: i.created_at, html_url: i.html_url, comments: i.comments }; });
+        try { sessionStorage.setItem(KEY, JSON.stringify({ t: Date.now(), d: slim })); } catch (e) {}
+        fin(slim);
+      })
+      .catch(function (why) { show(why === 'ліміт' ? 'Не вдалося завантажити: ліміт запитів GitHub, спробуй за годину.' : 'Не вдалося завантажити коментарі (немає звʼязку з GitHub).'); });
+  }
+
+  // хук для мапи й інших сторінок
+  window['коментар'] = function (o) {
+    o = o || {}; if (o.місце != null) place = String(o.місце).replace(/\s+/g, ' ').slice(0, 200);
+    if (o.текст != null) { draft = String(o.текст).slice(0, 1500); ta.value = draft; }
+    open = true; sync(); if (!list) load(); return newUrl();
+  };
+  window['коментар'].url = newUrl;
+  sync();
+  (document.body || document.documentElement).appendChild(root);
+  // кількість відкритих — одразу, щоб було видно на кнопці (кеш на 5 хв спільний для сторінок вкладки → ≈ 1 запит на 5 хв)
+  load();
+})();
+</script></body></html>
